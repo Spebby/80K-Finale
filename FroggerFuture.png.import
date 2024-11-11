@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://dm8lnofnlxfqf"
-path="res://.godot/imported/Frog_Past.png-6603b3dc46f98957e287dd04dbd2f722.ctex"
+uid="uid://c15r1ln0hq5kt"
+path="res://.godot/imported/FroggerFuture.png-4a56e50e28f8a8809761386425a1d045.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://Frog_Past.png"
-dest_files=["res://.godot/imported/Frog_Past.png-6603b3dc46f98957e287dd04dbd2f722.ctex"]
+source_file="res://FroggerFuture.png"
+dest_files=["res://.godot/imported/FroggerFuture.png-4a56e50e28f8a8809761386425a1d045.ctex"]
 
 [params]
 
