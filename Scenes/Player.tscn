@@ -1,23 +1,29 @@
-[gd_scene load_steps=5 format=3 uid="uid://ckjx4d1rclmw4"]
+[gd_scene load_steps=6 format=3 uid="uid://ckjx4d1rclmw4"]
 
 [ext_resource type="Script" path="res://Scripts/Player.cs" id="1_v6ity"]
 [ext_resource type="Script" path="res://Scripts/FroggerCamera.cs" id="2_ey3jt"]
+[ext_resource type="SpriteFrames" uid="uid://bixa8nwklivf4" path="res://FroggerPastSheet.tres" id="3_02mhj"]
 [ext_resource type="SpriteFrames" uid="uid://mivbftf60h2g" path="res://FroggerFutureSheet.tres" id="3_idijp"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_jutfs"]
 size = Vector2(22, 22)
 
-[node name="Player" type="CharacterBody2D"]
+[node name="Player" type="CharacterBody2D" node_paths=PackedStringArray("_sprite")]
+up_direction = Vector2(0, 1)
 script = ExtResource("1_v6ity")
+_sprite = NodePath("Sprite")
+SPEED = 64.0
+FUTURE_SHEET = ExtResource("3_idijp")
+PAST_SHEET = ExtResource("3_02mhj")
 
 [node name="Camera2D" type="Camera2D" parent="."]
-zoom = Vector2(1.5, 1.5)
+zoom = Vector2(3, 3)
 script = ExtResource("2_ey3jt")
 
 [node name="Sprite" type="AnimatedSprite2D" parent="."]
 z_index = 5
 sprite_frames = ExtResource("3_idijp")
-animation = &"Idle"
+animation = &"Move"
 autoplay = "Idle"
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]

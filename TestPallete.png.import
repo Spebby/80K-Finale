@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://dm8lnofnlxfqf"
-path="res://.godot/imported/FroggerPast.png-775c2dbd15bdc0997a7a69443971b31f.ctex"
+uid="uid://dkeoykq3vjrur"
+path="res://.godot/imported/TestPallete.png-1c2d8c5de4e1d2db88aaab0c9bcdf976.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://FroggerPast.png"
-dest_files=["res://.godot/imported/FroggerPast.png-775c2dbd15bdc0997a7a69443971b31f.ctex"]
+source_file="res://TestPallete.png"
+dest_files=["res://.godot/imported/TestPallete.png-1c2d8c5de4e1d2db88aaab0c9bcdf976.ctex"]
 
 [params]
 

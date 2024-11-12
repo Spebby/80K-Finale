@@ -1,0 +1,68 @@
+[gd_resource type="SpriteFrames" load_steps=9 format=3 uid="uid://bixa8nwklivf4"]
+
+[ext_resource type="Texture2D" uid="uid://c15r1ln0hq5kt" path="res://FroggerSheet.png" id="1_kh8ja"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_fbvqb"]
+atlas = ExtResource("1_kh8ja")
+region = Rect2(0, 32, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_20mhd"]
+atlas = ExtResource("1_kh8ja")
+region = Rect2(32, 32, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_hl2su"]
+atlas = ExtResource("1_kh8ja")
+region = Rect2(64, 32, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_5bq1r"]
+atlas = ExtResource("1_kh8ja")
+region = Rect2(96, 32, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_pg75t"]
+atlas = ExtResource("1_kh8ja")
+region = Rect2(128, 32, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_y0u66"]
+atlas = ExtResource("1_kh8ja")
+region = Rect2(160, 32, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_huk7a"]
+atlas = ExtResource("1_kh8ja")
+region = Rect2(192, 32, 32, 32)
+
+[resource]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_fbvqb")
+}],
+"loop": true,
+"name": &"Idle",
+"speed": 5.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_fbvqb")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_20mhd")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_hl2su")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_5bq1r")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_pg75t")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_y0u66")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_huk7a")
+}],
+"loop": false,
+"name": &"Move",
+"speed": 24.0
+}]

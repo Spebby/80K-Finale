@@ -1,22 +1,14 @@
 [gd_resource type="SpriteFrames" load_steps=9 format=3 uid="uid://mivbftf60h2g"]
 
-[ext_resource type="Texture2D" uid="uid://c15r1ln0hq5kt" path="res://FroggerFuture.png" id="1_i1daj"]
+[ext_resource type="Texture2D" uid="uid://c15r1ln0hq5kt" path="res://FroggerSheet.png" id="1_i1daj"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_akta2"]
 atlas = ExtResource("1_i1daj")
 region = Rect2(0, 0, 32, 32)
 
-[sub_resource type="AtlasTexture" id="AtlasTexture_6c1ok"]
-atlas = ExtResource("1_i1daj")
-region = Rect2(128, 0, 32, 32)
-
 [sub_resource type="AtlasTexture" id="AtlasTexture_rldi7"]
 atlas = ExtResource("1_i1daj")
 region = Rect2(32, 0, 32, 32)
-
-[sub_resource type="AtlasTexture" id="AtlasTexture_hqv8t"]
-atlas = ExtResource("1_i1daj")
-region = Rect2(192, 0, 32, 32)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_o7nde"]
 atlas = ExtResource("1_i1daj")
@@ -26,9 +18,17 @@ region = Rect2(64, 0, 32, 32)
 atlas = ExtResource("1_i1daj")
 region = Rect2(96, 0, 32, 32)
 
+[sub_resource type="AtlasTexture" id="AtlasTexture_6c1ok"]
+atlas = ExtResource("1_i1daj")
+region = Rect2(128, 0, 32, 32)
+
 [sub_resource type="AtlasTexture" id="AtlasTexture_p3eh5"]
 atlas = ExtResource("1_i1daj")
 region = Rect2(160, 0, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_hqv8t"]
+atlas = ExtResource("1_i1daj")
+region = Rect2(192, 0, 32, 32)
 
 [resource]
 animations = [{
@@ -38,30 +38,6 @@ animations = [{
 }],
 "loop": true,
 "name": &"Idle",
-"speed": 5.0
-}, {
-"frames": [{
-"duration": 1.0,
-"texture": SubResource("AtlasTexture_6c1ok")
-}],
-"loop": true,
-"name": &"MoveDown",
-"speed": 10.0
-}, {
-"frames": [{
-"duration": 1.0,
-"texture": SubResource("AtlasTexture_rldi7")
-}],
-"loop": true,
-"name": &"MoveLeft",
-"speed": 10.0
-}, {
-"frames": [{
-"duration": 1.0,
-"texture": SubResource("AtlasTexture_hqv8t")
-}],
-"loop": true,
-"name": &"MoveRight",
 "speed": 5.0
 }, {
 "frames": [{
@@ -87,6 +63,6 @@ animations = [{
 "texture": SubResource("AtlasTexture_hqv8t")
 }],
 "loop": true,
-"name": &"MoveUp",
+"name": &"Move",
 "speed": 10.0
 }]

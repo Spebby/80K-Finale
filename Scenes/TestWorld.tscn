@@ -1,0 +1,31 @@
+[gd_scene load_steps=5 format=4 uid="uid://breyy1oi0hki3"]
+
+[ext_resource type="Texture2D" uid="uid://dkeoykq3vjrur" path="res://TestPallete.png" id="1_7pt5q"]
+[ext_resource type="PackedScene" uid="uid://ckjx4d1rclmw4" path="res://Scenes/Player.tscn" id="1_v74hx"]
+
+[sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_h2col"]
+texture = ExtResource("1_7pt5q")
+texture_region_size = Vector2i(32, 32)
+0:0/0 = 0
+1:0/0 = 0
+2:0/0 = 0
+3:0/0 = 0
+0:1/0 = 0
+1:1/0 = 0
+2:1/0 = 0
+3:1/0 = 0
+
+[sub_resource type="TileSet" id="TileSet_2c5a3"]
+tile_size = Vector2i(32, 32)
+sources/0 = SubResource("TileSetAtlasSource_h2col")
+
+[node name="TestWorld" type="Node2D"]
+
+[node name="TileMaps" type="Node2D" parent="."]
+
+[node name="Ground" type="TileMapLayer" parent="TileMaps"]
+tile_map_data = PackedByteArray("AAAAAP//AAAAAAAAAAD/////AAAAAAAAAAD+////AAAAAAAAAAD+/wAAAAAAAAAAAAD//wAAAAAAAAAAAAAAAAAAAAAAAAAAAAABAP//AAAAAAAAAAABAAAAAAAAAAAAAAABAP7/AAABAAAAAAACAP3/AAABAAAAAAACAP7/AAABAAAAAAADAP7/AAABAAAAAAADAP3/AAABAAAAAAADAPz/AAABAAAAAAAEAPz/AAABAAAAAAAEAP3/AAABAAAAAAAEAP7/AAABAAAAAAAFAP7/AAABAAAAAAAFAP3/AAABAAAAAAAFAPz/AAABAAAAAAACAPz/AAADAAAAAAABAPz/AAADAAAAAAAAAPz/AAADAAAAAAAAAP3/AAADAAAAAAAAAP7/AAADAAAAAAABAP3/AAADAAAAAAD///3/AAADAAAAAAD///7/AAADAAAAAAA=")
+tile_set = SubResource("TileSet_2c5a3")
+
+[node name="Player" parent="." instance=ExtResource("1_v74hx")]
+position = Vector2(16, -16)

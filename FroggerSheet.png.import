@@ -3,15 +3,15 @@
 importer="texture"
 type="CompressedTexture2D"
 uid="uid://c15r1ln0hq5kt"
-path="res://.godot/imported/FroggerFuture.png-4a56e50e28f8a8809761386425a1d045.ctex"
+path="res://.godot/imported/FroggerSheet.png-d28631f8e34e9d74fa5f7cb8adcb6014.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://FroggerFuture.png"
-dest_files=["res://.godot/imported/FroggerFuture.png-4a56e50e28f8a8809761386425a1d045.ctex"]
+source_file="res://FroggerSheet.png"
+dest_files=["res://.godot/imported/FroggerSheet.png-d28631f8e34e9d74fa5f7cb8adcb6014.ctex"]
 
 [params]
 
