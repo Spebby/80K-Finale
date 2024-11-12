@@ -11,8 +11,8 @@ size = Vector2(22, 22)
 [node name="Player" type="CharacterBody2D" node_paths=PackedStringArray("_sprite")]
 up_direction = Vector2(0, 1)
 script = ExtResource("1_v6ity")
+SPEED = 96.0
 _sprite = NodePath("Sprite")
-SPEED = 64.0
 FUTURE_SHEET = ExtResource("3_idijp")
 PAST_SHEET = ExtResource("3_02mhj")
 
