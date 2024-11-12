@@ -11,6 +11,7 @@ size = Vector2(22, 22)
 script = ExtResource("1_v6ity")
 
 [node name="Camera2D" type="Camera2D" parent="."]
+zoom = Vector2(1.5, 1.5)
 script = ExtResource("2_ey3jt")
 
 [node name="Sprite" type="AnimatedSprite2D" parent="."]

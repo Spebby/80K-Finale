@@ -1,4 +1,4 @@
-﻿using Godot;
+using Godot;
 
 public partial class Player : CharacterBody2D {
 	[Signal] public delegate void playerHitEventHandler();
@@ -9,19 +9,16 @@ public partial class Player : CharacterBody2D {
 	[Export] Sprite2D _sprite;
 	
 	[Export] public float Speed = 300.0f;
-	public override void _PhysicsProcess(double delta)
-	{
+	public override void _PhysicsProcess(double delta)  {
 		Vector2 velocity = Velocity;
 
 		// Get the input direction and handle the movement/deceleration.
 		// As good practice, you should replace UI actions with custom gameplay actions.
 		Vector2 direction = Input.GetVector("ui_left", "ui_right", "ui_up", "ui_down");
-		if (direction != Vector2.Zero)
-		{
+		if (direction != Vector2.Zero) {
 			velocity.X = direction.X * Speed;
 		}
-		else
-		{
+		else {
 			velocity.X = Mathf.MoveToward(Velocity.X, 0, Speed);
 		}
 
@@ -30,6 +27,10 @@ public partial class Player : CharacterBody2D {
 	}
 	
 	public override void _Ready() {
+		
+	}
+
+	public override void _Process(double delta) {
 		
 	}
 	

@@ -11,8 +11,9 @@ public partial class FroggerCamera : Camera2D {
     Vector2 _originalLocalAnchorPos;
 
     public override void _Ready() {
-        _player = (Player)GetParent().GetParent();
-        _tween = GetNode<Tween>("PositionTween");
+        _player = GetParent<Player>();
+        _tween  = GetTree().CreateTween();
+        _tween.Pause();
     }
 
     public async void Transition(Room oldRoom, Room newRoom) {
