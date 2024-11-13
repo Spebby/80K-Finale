@@ -7,7 +7,6 @@ enum AnimationState {
 }
 
 public partial class Player : CharacterBody2D {
-	[Signal] public delegate void PlayerHitEventHandler();
 	// due to how simple our game is, we likely do not need to keep track of much state.
 	// prioritise writing code quickly over it being pretty; realistically we are very unlikely
 	// to reference any of this code in our futures!
@@ -15,7 +14,7 @@ public partial class Player : CharacterBody2D {
 	const float TOLERANCE = 0.1f;
 
 	// godot doesn't care for readonly's on exposed variables.
-	[Export] float SPEED = 2.0f;
+	[Export] float SPEED = 64f;
 	[Export] int POSITION_INCREMENT = 32;
 
 	[ExportGroup("Animation Properties")]
@@ -27,6 +26,12 @@ public partial class Player : CharacterBody2D {
 	Vector2 _nextMove;
 	RayCast2D _ray;
 
+	Vector2 _lastCheckpoint;
+	
+	// this is my attempt at recreating the Event Channel pattern that I used commonly in Unity.
+	[ExportGroup("Event Channels")]
+	[Export] EventChannel OnPlayerDeath;
+	
 	public override void _Ready() {
 		_nextMove			= Position;
 		_sprite.Animation = "Idle";
@@ -34,6 +39,9 @@ public partial class Player : CharacterBody2D {
 		_sprite.SetSpriteFrames(PAST_SHEET);
 		_ray = GetChild<RayCast2D>(3, true);
 		_ray.Enabled = true;
+		if (OnPlayerDeath == null) {
+			GD.PrintErr($"Player Death Event Channel not configured!");
+		}
 	}
 
 	/*
@@ -149,5 +157,10 @@ public partial class Player : CharacterBody2D {
 		SetPhysicsProcess(true);
 		SetProcessUnhandledInput(true);
 		_sprite.Play();
+	}
+
+	// KILL THE FROG!
+	public void Kill() {
+		OnPlayerDeath.TriggerEvent();
 	}
 }

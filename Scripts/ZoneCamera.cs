@@ -6,9 +6,13 @@ public partial class ZoneCamera : Camera2D {
     Tween _tween;
     Vector2 _orgAnchor;
 
+    [ExportGroup("Event Channels")]
+    [Export] EventChannel OnPlayerDeath;
+
     public override void _Ready() {
-        _player    = GetParent<Player>();
-        _orgAnchor = GlobalPosition;
+        _player                      =  GetParent<Player>();
+        _orgAnchor                   =  GlobalPosition;
+        //OnPlayerDeath.OnEventTrigger += test;
     }
 
     public async void Transition(Room newRoom) {

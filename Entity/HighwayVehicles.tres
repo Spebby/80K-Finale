@@ -1,0 +1,7 @@
+[gd_resource type="Resource" load_steps=2 format=3 uid="uid://6incnm885h52"]
+
+[ext_resource type="Script" path="res://Scripts/VehicleContainer.cs" id="1_vbjxy"]
+
+[resource]
+script = ExtResource("1_vbjxy")
+Vehicles = Array[Node2D]([])

@@ -1,8 +1,9 @@
-[gd_scene load_steps=6 format=3 uid="uid://ckjx4d1rclmw4"]
+[gd_scene load_steps=7 format=3 uid="uid://ckjx4d1rclmw4"]
 
 [ext_resource type="Script" path="res://Scripts/Player.cs" id="1_v6ity"]
 [ext_resource type="SpriteFrames" uid="uid://bixa8nwklivf4" path="res://FroggerPastSheet.tres" id="3_02mhj"]
 [ext_resource type="SpriteFrames" uid="uid://mivbftf60h2g" path="res://FroggerFutureSheet.tres" id="3_idijp"]
+[ext_resource type="Resource" uid="uid://c8myi2dxn2r0g" path="res://Scenes/OnPlayerDeath.tres" id="4_fi7xx"]
 [ext_resource type="Script" path="res://Scripts/ZoneCamera.cs" id="4_ox61e"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_jutfs"]
@@ -16,6 +17,7 @@ SPEED = 96.0
 _sprite = NodePath("Sprite")
 FUTURE_SHEET = ExtResource("3_idijp")
 PAST_SHEET = ExtResource("3_02mhj")
+OnPlayerDeath = ExtResource("4_fi7xx")
 
 [node name="Sprite" type="AnimatedSprite2D" parent="."]
 z_index = 5
@@ -28,6 +30,7 @@ zoom = Vector2(3, 3)
 position_smoothing_enabled = true
 position_smoothing_speed = 3.0
 script = ExtResource("4_ox61e")
+OnPlayerDeath = ExtResource("4_fi7xx")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
 z_index = 5
