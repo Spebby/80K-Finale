@@ -16,13 +16,18 @@ public partial class FroggerCamera : Camera2D {
         _tween.Pause();
     }
 
-    public async void Transition(Room oldRoom, Room newRoom) {
+    Room prevRoom;
+    Room currRoom;
+    public async void Transition(Room newRoom) {
         TransitionSetup();
 
         // Find closest camera anchors in both previous and current room and use
         // their positions as interpolation points for camera position.
-        Vector2 oldGlobalPos = oldRoom.GetClosestCameraAnchor(_player);
-        Vector2 newGlobalPos = newRoom.GetClosestCameraAnchor(_player);
+        prevRoom = currRoom ?? newRoom; // if currRoom was unset, both should be newRoom!
+        currRoom = newRoom;
+        
+        Vector2 oldGlobalPos = prevRoom.GetClosestCameraAnchor(_player);
+        Vector2 newGlobalPos = currRoom.GetClosestCameraAnchor(_player);
         InterpolateCameraPos(oldGlobalPos, newGlobalPos);
 
         // Wait until the tween has started to avoid jitter.
@@ -42,9 +47,10 @@ public partial class FroggerCamera : Camera2D {
         LimitRight = (int)(room.GlobalPosition.X + roomDims.X);
         LimitTop = (int)room.GlobalPosition.Y;
         LimitBottom = (int)(room.GlobalPosition.Y + roomDims.Y);
+        GD.Print(this.LimitTop, this.LimitBottom, this.LimitLeft, this.LimitRight);
     }
 
-    private void TransitionSetup() {
+    void TransitionSetup() {
         // Pause player processing (physics and input processing, animations, state timers, etc.)
         _player.Pause();
 
@@ -55,7 +61,7 @@ public partial class FroggerCamera : Camera2D {
         PositionSmoothingEnabled = false;
     }
 
-    private void TransitionTeardown(Room room) {
+    void TransitionTeardown(Room room) {
         // Restore local camera position to the original anchor point.
         Position = _originalLocalAnchorPos;
 
@@ -69,7 +75,7 @@ public partial class FroggerCamera : Camera2D {
         _player.Unpause();
     }
 
-    private void InterpolateCameraPos(Vector2 oldGlobalPos, Vector2 newGlobalPos) {
+    void InterpolateCameraPos(Vector2 oldGlobalPos, Vector2 newGlobalPos) {
         const string               property = "position";
         const float                duration = 0.50f;
         const Tween.TransitionType trans    = Tween.TransitionType.Quad;
@@ -84,7 +90,7 @@ public partial class FroggerCamera : Camera2D {
         _tween.Play();
     }
     
-    private void RemoveCameraLimits() {
+    void RemoveCameraLimits() {
         LimitLeft   = -10000000;
         LimitRight  =  10000000;
         LimitTop    = -10000000;

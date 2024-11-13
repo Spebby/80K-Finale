@@ -1,0 +1,21 @@
+[gd_scene load_steps=3 format=3 uid="uid://402hri6i1y0e"]
+
+[ext_resource type="Script" path="res://Scripts/Room.cs" id="1_nys6f"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_x5pac"]
+size = Vector2(418, 248)
+
+[node name="Room" type="Area2D"]
+collision_layer = 16
+script = ExtResource("1_nys6f")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+shape = SubResource("RectangleShape2D_x5pac")
+
+[node name="CameraAnchors" type="Node2D" parent="."]
+
+[node name="Left" type="Marker2D" parent="CameraAnchors"]
+position = Vector2(-200, 0)
+
+[node name="Right" type="Marker2D" parent="CameraAnchors"]
+position = Vector2(200, 0)
