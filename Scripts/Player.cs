@@ -28,11 +28,11 @@ public partial class Player : CharacterBody2D {
 	RayCast2D _ray;
 
 	public override void _Ready() {
-		_nextMove			= this.Position;
+		_nextMove			= Position;
 		_sprite.Animation = "Idle";
 		_isFuture			= false;
 		_sprite.SetSpriteFrames(PAST_SHEET);
-		_ray = this.GetChild<RayCast2D>(3, true);
+		_ray = GetChild<RayCast2D>(3, true);
 		_ray.Enabled = true;
 	}
 
@@ -84,11 +84,11 @@ public partial class Player : CharacterBody2D {
 		}
 
 		// if we want to use radians, use "SetRotation" function.
-		float prevRotation = this.RotationDegrees;
+		float prevRotation = RotationDegrees;
 
 		// Physics changes are not instant for performance reasons & instead accumulate. B/c Frogger
 		// is rotating 90 degrees instantly, we need to update physics immediately.
-		if (Mathf.Abs((this.RotationDegrees = angle) - prevRotation) > Mathf.Epsilon)
+		if (Mathf.Abs((RotationDegrees = angle) - prevRotation) > Mathf.Epsilon)
 			_ray.ForceRaycastUpdate();
 
 		if (_ray.IsColliding()) {
@@ -100,12 +100,11 @@ public partial class Player : CharacterBody2D {
 		// will eventually need to revise this code to be more consistent when players jump while moving
 		// some frogger games can be pretty inconsistent w/ this so we'll want to make sure we have it down.
 		_nextMove = new Vector2(
-			Mathf.RoundToInt(this.Position.X + (mov.X * POSITION_INCREMENT)),
-			Mathf.RoundToInt(this.Position.Y + (mov.Y * POSITION_INCREMENT))
+			Mathf.RoundToInt(Position.X + (mov.X * POSITION_INCREMENT)),
+			Mathf.RoundToInt(Position.Y + (mov.Y * POSITION_INCREMENT))
 		);
 		// update animation state here b/c won't be called as much
 		SetAnimationState(AnimationState.Moving);
-		//GD.Print(_nextMove);
 	}
 
 	void SetAnimationState(AnimationState state) {
@@ -127,18 +126,14 @@ public partial class Player : CharacterBody2D {
 				 */
 		
 		// get position
-		if (this.Position.DistanceTo(_nextMove) < TOLERANCE) {
+		if (Position.DistanceTo(_nextMove) < TOLERANCE) {
 			SetAnimationState(AnimationState.Idle);
 			UpdateMovementVector();
 		}
 
 		// this is more snappy, more satisfying but may be too jarring w/ the camera
-		this.Position = this.Position.Lerp(_nextMove, SPEED * (float)delta * 0.175f);
-		//this.Position = this.Position.MoveToward(_nextMove, SPEED * (float)delta);
-	}
-
-	public override void _PhysicsProcess(double delta) {
-		
+		Position = Position.Lerp(_nextMove, SPEED * (float)delta * 0.175f);
+		//Position = Position.MoveToward(_nextMove, SPEED * (float)delta);
 	}
 
 	public void Pause() {
@@ -150,9 +145,9 @@ public partial class Player : CharacterBody2D {
 
 	public void Unpause() {
 		// implement me
+		SetProcess(true);
 		SetPhysicsProcess(true);
 		SetProcessUnhandledInput(true);
-		SetProcess(true);
 		_sprite.Play();
 	}
 }
