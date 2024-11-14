@@ -1,8 +1,9 @@
-[gd_scene load_steps=6 format=4 uid="uid://breyy1oi0hki3"]
+[gd_scene load_steps=7 format=4 uid="uid://bq28e7yswo1pa"]
 
 [ext_resource type="Texture2D" uid="uid://dkeoykq3vjrur" path="res://TestPallete.png" id="1_7pt5q"]
 [ext_resource type="PackedScene" uid="uid://ckjx4d1rclmw4" path="res://Scenes/Player.tscn" id="1_v74hx"]
-[ext_resource type="PackedScene" uid="uid://402hri6i1y0e" path="res://Scenes/room.tscn" id="3_n7778"]
+[ext_resource type="PackedScene" uid="uid://523v7p3a4uka" path="res://Scenes/room.tscn" id="3_n7778"]
+[ext_resource type="PackedScene" uid="uid://dekgivxs2n3ow" path="res://Scenes/water_lane.tscn" id="4_immql"]
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_h2col"]
 texture = ExtResource("1_7pt5q")
@@ -47,3 +48,6 @@ position = Vector2(517, 305)
 
 [node name="Room2" parent="." instance=ExtResource("3_n7778")]
 position = Vector2(742, 0)
+
+[node name="WaterLane" parent="." instance=ExtResource("4_immql")]
+position = Vector2(2, -43)

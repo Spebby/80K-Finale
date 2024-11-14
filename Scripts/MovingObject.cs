@@ -1,6 +1,6 @@
 ﻿using Godot;
 
-public partial class MovingObject : Node2D {
+public partial class MovingObject : Area2D {
 	[ExportGroup("Vehicle Properties")]
 	[Export] protected float Speed = 64f;
 	[Export] protected CollisionShape2D Bounds;

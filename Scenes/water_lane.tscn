@@ -1,0 +1,9 @@
+[gd_scene load_steps=3 format=3 uid="uid://dekgivxs2n3ow"]
+
+[ext_resource type="Script" path="res://Scripts/water_lane.gd" id="1_7p8tv"]
+[ext_resource type="Texture2D" uid="uid://ble7bph2y0qc5" path="res://Entity/Platforms/boat.png" id="2_r8ujc"]
+
+[node name="WaterLane" type="Node2D"]
+position = Vector2(0, 364)
+script = ExtResource("1_7p8tv")
+boat_texture = ExtResource("2_r8ujc")
