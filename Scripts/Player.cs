@@ -104,17 +104,31 @@ public partial class Player : CharacterBody2D {
 			// allow players to jump into water, for example.
 			return;
 		}
-		
+
+		// don't update us about platform movements anymore
+		if (platform != null) {
+			platform.Moved -= OnPlatformMoved;
+			platform       =  null;
+		}
 		// will eventually need to revise this code to be more consistent when players jump while moving
 		// some frogger games can be pretty inconsistent w/ this so we'll want to make sure we have it down.
+
+		
+		// Snap player to next appropriate tile.
 		_nextMove = new Vector2(
-			Mathf.RoundToInt(Position.X + (mov.X * POSITION_INCREMENT)),
-			Mathf.RoundToInt(Position.Y + (mov.Y * POSITION_INCREMENT))
-		);
+			Mathf.RoundToInt(Position.X / POSITION_INCREMENT) * POSITION_INCREMENT,
+			Mathf.RoundToInt(Position.Y / POSITION_INCREMENT) * POSITION_INCREMENT
+		) + (mov * POSITION_INCREMENT);
+
 		// update animation state here b/c won't be called as much
 		SetAnimationState(AnimationState.Moving);
 	}
 
+	public void EnteredPlatform(MovingObject platform) {
+		this.platform  =  platform;
+		this.platform.Moved += OnPlatformMoved;
+	}
+	
 	void SetAnimationState(AnimationState state) {
 		// ReSharper disable once ArrangeMethodOrOperatorBody
 		_sprite.Animation = state switch {
@@ -126,13 +140,20 @@ public partial class Player : CharacterBody2D {
 		_sprite.Play();
 	}
 
+	MovingObject platform;
+	void OnPlatformMoved(Vector2 mov) {
+		GlobalPosition += mov;
+		_nextMove      += mov;
+	}
+
 	// Use me for input iff you need constant updates.
-	public override void _Process(double delta) {
+	public override void _PhysicsProcess(double delta) {
 		/*	TODO: figure out a better way to trigger animation changes. Investigate signals.
 				 *	Mr. Gippity recommends using an animation tree to return to idle when animations are
 				 *	done instead of explicitly calling an animation change.
 				 */
-		
+
+		// update this check to account for being moved by a platform
 		// get position
 		if (Position.DistanceTo(_nextMove) < TOLERANCE) {
 			SetAnimationState(AnimationState.Idle);
@@ -142,6 +163,7 @@ public partial class Player : CharacterBody2D {
 		// this is more snappy, more satisfying but may be too jarring w/ the camera
 		Position = Position.Lerp(_nextMove, SPEED * (float)delta * 0.175f);
 		//Position = Position.MoveToward(_nextMove, SPEED * (float)delta);
+		MoveAndSlide();
 	}
 
 	public void Pause() {

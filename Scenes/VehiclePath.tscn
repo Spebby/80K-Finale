@@ -1,12 +1,20 @@
-[gd_scene load_steps=2 format=3 uid="uid://c5vh10k46y3rw"]
+[gd_scene load_steps=4 format=3 uid="uid://bwlp7oh8hhpuh"]
+
+[ext_resource type="Script" path="res://Scripts/VehicleManager.cs" id="1_xf81k"]
+[ext_resource type="Resource" uid="uid://6incnm885h52" path="res://Entity/HighwayVehicles.tres" id="2_kcg67"]
 
 [sub_resource type="Curve2D" id="Curve2D_nxodb"]
 _data = {
-"points": PackedVector2Array(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 40, 0)
+"points": PackedVector2Array(0, 0, 0, 0, -150, 0, 0, 0, 0, 0, 150, 0)
 }
 point_count = 2
 
-[node name="VehiclePath" type="Node2D"]
+[node name="VehiclePath" type="Node2D" node_paths=PackedStringArray("path")]
+script = ExtResource("1_xf81k")
+vehicles = ExtResource("2_kcg67")
+count = 3
+interval = 1.5
+path = NodePath("Path2D")
 
 [node name="Path2D" type="Path2D" parent="."]
 curve = SubResource("Curve2D_nxodb")

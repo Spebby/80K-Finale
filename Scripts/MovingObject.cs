@@ -1,21 +1,32 @@
 ﻿using Godot;
 
-public partial class MovingObject : Area2D {
-	[ExportGroup("Vehicle Properties")]
-	[Export] protected float Speed = 64f;
-	[Export] protected CollisionShape2D Bounds;
-	[Export] protected bool CanStandOn;
-	readonly protected Path2D Path;
-	
-	protected MovingObject(Path2D path, float? speed = null) {
-		Path = path;
-		// override SPEED if we define a new speed.
-		Speed = speed ?? Speed;
-	}
+public partial class MovingObject : PathFollow2D {
+	const float TOLERANCE = 0.1f;
+	[Export] protected float Speed = 32f;
+	[Export] protected Area2D Bounds;
+
+	[Signal] public delegate void MovedEventHandler(Vector2 mov);
 
 	public override void _Ready() {
-		Bounds ??= GetNode<CollisionShape2D>("Bounds");
+		Bounds             ??= GetNode<Area2D>("Bounds");
+		Bounds.BodyEntered +=  StandingOn;
+		prevPos            =   Position;
 	}
-	
-	
+
+	float progress = 1f;
+	Vector2 prevPos;
+	public override void _PhysicsProcess(double delta) {
+		ProgressRatio += (float)delta * Speed * progress * 0.175f;
+		if (!Loop && ProgressRatio is >= 1.0f or <= 0f) {
+			progress = -progress;
+		}
+
+		EmitSignal(SignalName.Moved, Position - prevPos);
+		prevPos = Position;
+	}
+
+	void StandingOn(Node2D body) {
+		if (body is not Player player) return;
+		player.EnteredPlatform(this);
+	}
 }
