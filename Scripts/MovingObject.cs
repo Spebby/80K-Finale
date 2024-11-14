@@ -25,8 +25,10 @@ public partial class MovingObject : PathFollow2D {
 		prevPos = Position;
 	}
 
-	void StandingOn(Node2D body) {
+	async void StandingOn(Node2D body) {
 		if (body is not Player player) return;
+		await ToSignal(player, Player.SignalName.PlayerNotMoving);
+		GD.Print("Not moving!");
 		player.EnteredPlatform(this);
 	}
 }

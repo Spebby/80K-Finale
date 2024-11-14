@@ -10,6 +10,8 @@ public partial class Player : CharacterBody2D {
 	// due to how simple our game is, we likely do not need to keep track of much state.
 	// prioritise writing code quickly over it being pretty; realistically we are very unlikely
 	// to reference any of this code in our futures!
+
+	[Signal] public delegate void PlayerNotMovingEventHandler();
 	
 	const float TOLERANCE = 0.1f;
 
@@ -113,7 +115,7 @@ public partial class Player : CharacterBody2D {
 		// will eventually need to revise this code to be more consistent when players jump while moving
 		// some frogger games can be pretty inconsistent w/ this so we'll want to make sure we have it down.
 
-		
+
 		// Snap player to next appropriate tile.
 		_nextMove = new Vector2(
 			Mathf.RoundToInt(Position.X / POSITION_INCREMENT) * POSITION_INCREMENT,
@@ -128,7 +130,7 @@ public partial class Player : CharacterBody2D {
 		this.platform  =  platform;
 		this.platform.Moved += OnPlatformMoved;
 	}
-	
+
 	void SetAnimationState(AnimationState state) {
 		// ReSharper disable once ArrangeMethodOrOperatorBody
 		_sprite.Animation = state switch {
@@ -156,6 +158,7 @@ public partial class Player : CharacterBody2D {
 		// update this check to account for being moved by a platform
 		// get position
 		if (Position.DistanceTo(_nextMove) < TOLERANCE) {
+			EmitSignal(SignalName.PlayerNotMoving);
 			SetAnimationState(AnimationState.Idle);
 			UpdateMovementVector();
 		}
@@ -163,9 +166,11 @@ public partial class Player : CharacterBody2D {
 		// this is more snappy, more satisfying but may be too jarring w/ the camera
 		Position = Position.Lerp(_nextMove, SPEED * (float)delta * 0.175f);
 		//Position = Position.MoveToward(_nextMove, SPEED * (float)delta);
-		MoveAndSlide();
 	}
 
+	Marker2D checkpoint;
+	public void SetCheckpoint(Marker2D point) => checkpoint = point;
+	
 	public void Pause() {
 		SetPhysicsProcess(false);
 		SetProcessUnhandledInput(false);
@@ -184,5 +189,7 @@ public partial class Player : CharacterBody2D {
 	// KILL THE FROG!
 	public void Kill() {
 		OnPlayerDeath.TriggerEvent();
+		_nextMove      = checkpoint.GlobalPosition;
+		GlobalPosition = checkpoint.GlobalPosition;
 	}
 }
