@@ -18,6 +18,7 @@ public partial class Player : CharacterBody2D {
 	// godot doesn't care for readonly's on exposed variables.
 	[Export] float SPEED = 64f;
 	[Export] int POSITION_INCREMENT = 32;
+	bool moving = false;
 
 	[ExportGroup("Animation Properties")]
 	[Export] AnimatedSprite2D _sprite;
@@ -107,15 +108,11 @@ public partial class Player : CharacterBody2D {
 			return;
 		}
 
-		// don't update us about platform movements anymore
-		if (platform != null) {
-			platform.Moved -= OnPlatformMoved;
-			platform       =  null;
-		}
+		// platform shouldn't affect us while we're moving
+		moving = false;
 		// will eventually need to revise this code to be more consistent when players jump while moving
 		// some frogger games can be pretty inconsistent w/ this so we'll want to make sure we have it down.
-
-
+		
 		// Snap player to next appropriate tile.
 		_nextMove = new Vector2(
 			Mathf.RoundToInt(Position.X / POSITION_INCREMENT) * POSITION_INCREMENT,
@@ -126,9 +123,18 @@ public partial class Player : CharacterBody2D {
 		SetAnimationState(AnimationState.Moving);
 	}
 
-	public void EnteredPlatform(MovingObject platform) {
-		this.platform  =  platform;
-		this.platform.Moved += OnPlatformMoved;
+	public void EnteredPlatform(MovingObject _platform) {
+		//await ToSignal(this, SignalName.PlayerNotMoving);
+		platform  =  _platform;
+		_platform.Moved += OnPlatformMoved;
+	}
+
+	// if make enteredplatform async again, add signal to this function so we don't get as many weird interleavings
+	public void ExitPlatform(MovingObject _platform) {
+		if (platform == _platform) {
+			platform.Moved -= OnPlatformMoved;
+			platform       =  null;
+		}
 	}
 
 	void SetAnimationState(AnimationState state) {
@@ -144,6 +150,7 @@ public partial class Player : CharacterBody2D {
 
 	MovingObject platform;
 	void OnPlatformMoved(Vector2 mov) {
+		if (moving) return;
 		GlobalPosition += mov;
 		_nextMove      += mov;
 	}
@@ -158,6 +165,7 @@ public partial class Player : CharacterBody2D {
 		// update this check to account for being moved by a platform
 		// get position
 		if (Position.DistanceTo(_nextMove) < TOLERANCE) {
+			moving = false;
 			EmitSignal(SignalName.PlayerNotMoving);
 			SetAnimationState(AnimationState.Idle);
 			UpdateMovementVector();
@@ -191,5 +199,6 @@ public partial class Player : CharacterBody2D {
 		OnPlayerDeath.TriggerEvent();
 		_nextMove      = checkpoint.GlobalPosition;
 		GlobalPosition = checkpoint.GlobalPosition;
+		moving         = false;
 	}
 }

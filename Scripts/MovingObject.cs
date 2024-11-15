@@ -10,6 +10,7 @@ public partial class MovingObject : PathFollow2D {
 	public override void _Ready() {
 		Bounds             ??= GetNode<Area2D>("Bounds");
 		Bounds.BodyEntered +=  StandingOn;
+		Bounds.BodyExited  +=  NotStandingOn;
 		prevPos            =   Position;
 	}
 
@@ -25,10 +26,13 @@ public partial class MovingObject : PathFollow2D {
 		prevPos = Position;
 	}
 
-	async void StandingOn(Node2D body) {
+	void StandingOn(Node2D body) {
 		if (body is not Player player) return;
-		await ToSignal(player, Player.SignalName.PlayerNotMoving);
-		GD.Print("Not moving!");
 		player.EnteredPlatform(this);
+	}
+
+	void NotStandingOn(Node2D body) {
+		if (body is not Player player) return;
+		player.ExitPlatform(this);
 	}
 }

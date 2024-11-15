@@ -3,8 +3,8 @@
 [ext_resource type="Script" path="res://Scripts/MovingObject.cs" id="1_m2seb"]
 [ext_resource type="Texture2D" uid="uid://ble7bph2y0qc5" path="res://Entity/Platforms/boat.png" id="2_kfohi"]
 
-[sub_resource type="RectangleShape2D" id="RectangleShape2D_qtegf"]
-size = Vector2(62, 16)
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_prfgr"]
+size = Vector2(32, 16)
 
 [node name="Boat" type="PathFollow2D" node_paths=PackedStringArray("Bounds")]
 loop = false
@@ -17,7 +17,7 @@ collision_layer = 2
 collision_mask = 2
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Bounds"]
-shape = SubResource("RectangleShape2D_qtegf")
+shape = SubResource("RectangleShape2D_prfgr")
 
 [node name="Sprite2D" type="Sprite2D" parent="."]
 scale = Vector2(0.5, 0.5)
