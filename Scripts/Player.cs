@@ -30,6 +30,7 @@ public partial class Player : CharacterBody2D {
 	Vector2 _nextMove;
 	RayCast2D _ray;
 
+	uint orgCollisionLayer;
 	Vector2 _lastCheckpoint;
 	
 	// this is my attempt at recreating the Event Channel pattern that I used commonly in Unity.
@@ -37,15 +38,17 @@ public partial class Player : CharacterBody2D {
 	[Export] EventChannel OnPlayerDeath;
 	
 	public override void _Ready() {
-		_nextMove			= Position;
+		_nextMove         = GlobalPosition;
 		_sprite.Animation = "Idle";
-		_isFuture			= false;
+		_isFuture         = false;
 		//_sprite.SetSpriteFrames(PAST_SPRITE);
 		_ray = GetChild<RayCast2D>(3, true);
 		_ray.Enabled = true;
 		if (OnPlayerDeath == null) {
 			GD.PrintErr($"Player Death Event Channel not configured!");
 		}
+
+		orgCollisionLayer = CollisionLayer;
 	}
 
 	/*
@@ -102,13 +105,14 @@ public partial class Player : CharacterBody2D {
 
 		// platform shouldn't affect us while we're moving
 		moving = false;
+		SetCollision(false);
 		// will eventually need to revise this code to be more consistent when players jump while moving
 		// some frogger games can be pretty inconsistent w/ this so we'll want to make sure we have it down.
 		
 		// Snap player to next appropriate tile.
 		_nextMove = new Vector2(
-			Mathf.RoundToInt(Position.X / POSITION_INCREMENT) * POSITION_INCREMENT,
-			Mathf.RoundToInt(Position.Y / POSITION_INCREMENT) * POSITION_INCREMENT
+			Mathf.RoundToInt((GlobalPosition.X / POSITION_INCREMENT) * POSITION_INCREMENT),
+			Mathf.RoundToInt((GlobalPosition.Y / POSITION_INCREMENT) * POSITION_INCREMENT)
 		) + (mov * POSITION_INCREMENT);
 
 		// update animation state here b/c won't be called as much
@@ -162,8 +166,9 @@ public partial class Player : CharacterBody2D {
 
 		// update this check to account for being moved by a platform
 		// get position
-		if (Position.DistanceTo(_nextMove) < TOLERANCE) {
+		if (GlobalPosition.DistanceTo(_nextMove) < TOLERANCE) {
 			moving = false;
+			SetCollision(true);
 			EmitSignal(SignalName.PlayerNotMoving);
 			SetAnimationState(AnimationState.Idle);
 			UpdateMovementVector();
@@ -174,8 +179,8 @@ public partial class Player : CharacterBody2D {
 		}
 
 		// this is more snappy, more satisfying but may be too jarring w/ the camera
-		Position = Position.Lerp(_nextMove, SPEED * (float)delta * 0.175f);
-		//Position = Position.MoveToward(_nextMove, SPEED * (float)delta);
+		GlobalPosition = GlobalPosition.Lerp(_nextMove, SPEED * (float)delta * 0.175f);
+		//GlobalPosition = GlobalPosition.MoveToward(_nextMove, SPEED * (float)delta);
 	}
 
 	Marker2D checkpoint;
@@ -202,5 +207,14 @@ public partial class Player : CharacterBody2D {
 		_nextMove      = checkpoint.GlobalPosition;
 		GlobalPosition = checkpoint.GlobalPosition;
 		moving         = false;
+		SetCollision(true);
+	}
+	
+	void SetCollision(bool val) {
+		if (val) {
+			CollisionLayer = orgCollisionLayer;
+		} else {
+			CollisionLayer = 0b10000;
+		}
 	}
 }

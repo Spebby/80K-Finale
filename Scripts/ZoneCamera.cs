@@ -69,6 +69,7 @@ public partial class ZoneCamera : Camera2D {
         //GD.Print($"Dims:   {roomDims}, {room.GetDiagonal()}");
         //GD.Print($"Global: {room.GlobalPosition}");
 
+        // TODO: Adjust.
         LimitTop    = (int)(room.GlobalPosition.Y - roomDims.Y);
         LimitBottom = (int)(room.GlobalPosition.Y + roomDims.Y);
 

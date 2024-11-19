@@ -22,8 +22,8 @@ public partial class MovingObject : PathFollow2D {
 			progress = -progress;
 		}
 
-		EmitSignal(SignalName.Moved, Position - prevPos);
-		prevPos = Position;
+		EmitSignal(SignalName.Moved, GlobalPosition - prevPos);
+		prevPos = GlobalPosition;
 	}
 
 	void StandingOn(Node2D body) {
