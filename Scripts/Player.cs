@@ -12,6 +12,7 @@ public partial class Player : CharacterBody2D {
 	// to reference any of this code in our futures!
 
 	[Signal] public delegate void PlayerNotMovingEventHandler();
+	[Signal] public delegate void PlayerChangeTimeEventHandler(bool isFuture);
 	
 	const float TOLERANCE = 0.1f;
 
@@ -22,8 +23,8 @@ public partial class Player : CharacterBody2D {
 
 	[ExportGroup("Animation Properties")]
 	[Export] AnimatedSprite2D _sprite;
-	[Export] SpriteFrames FUTURE_SHEET;
-	[Export] SpriteFrames PAST_SHEET;
+	[Export] SpriteFrames FUTURE_SPRITE;
+	[Export] SpriteFrames PAST_SPRITE;
 	bool _isFuture;
 
 	Vector2 _nextMove;
@@ -39,7 +40,7 @@ public partial class Player : CharacterBody2D {
 		_nextMove			= Position;
 		_sprite.Animation = "Idle";
 		_isFuture			= false;
-		_sprite.SetSpriteFrames(PAST_SHEET);
+		//_sprite.SetSpriteFrames(PAST_SPRITE);
 		_ray = GetChild<RayCast2D>(3, true);
 		_ray.Enabled = true;
 		if (OnPlayerDeath == null) {
@@ -63,15 +64,6 @@ public partial class Player : CharacterBody2D {
 		if (Input.IsActionPressed("right")) {
 			position.X += speed * (float)delta;
 		}
-	}
-
-	public override void _UnhandledInput(InputEvent @event) {
-		GD.Print(@event.AsText(); // debug
-		if (@event is InputEventKey eventKey) {
-		 	if (eventKey.pressed && eventKey.Keycode == Key.Escape) {
-		 		GetTree().Quit();
-			}
-		 }
 	}
 	*/
 
@@ -155,6 +147,12 @@ public partial class Player : CharacterBody2D {
 		_nextMove      += mov;
 	}
 
+	void ShiftTime() {
+		//_sprite.SetSpriteFrames(_isFuture ? PAST_SPRITE : FUTURE_SPRITE); // breaks everything atm
+		_isFuture = !_isFuture;
+		EmitSignal(SignalName.PlayerChangeTime, _isFuture);
+	}
+	
 	// Use me for input iff you need constant updates.
 	public override void _PhysicsProcess(double delta) {
 		/*	TODO: figure out a better way to trigger animation changes. Investigate signals.
@@ -169,6 +167,10 @@ public partial class Player : CharacterBody2D {
 			EmitSignal(SignalName.PlayerNotMoving);
 			SetAnimationState(AnimationState.Idle);
 			UpdateMovementVector();
+		}
+
+		if (!moving && Input.IsActionPressed("timeShift")) {
+			ShiftTime();
 		}
 
 		// this is more snappy, more satisfying but may be too jarring w/ the camera

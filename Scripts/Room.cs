@@ -12,7 +12,11 @@ public partial class Room : Area2D {
     
     // anchors
     Node2D ANCHORS;
-    
+    Node2D TILESETS;
+
+    [Export] TileSet PAST_TILESET;
+    [Export] TileSet FUTURE_TILESET;
+
     public override void _Ready() {
         ANCHORS = GetNode<Node2D>("CameraAnchors");
         if (ANCHORS == null) {
@@ -21,8 +25,19 @@ public partial class Room : Area2D {
             GD.PrintErr($"{this.Name} {ANCHORS.Name} is missing anchor positions!");
         }
 
-        // When entered, call this script
-        BodyEntered += Area2D_BodyEntered;
+        TILESETS = GetNode<Node2D>("Tilesets");
+        if (TILESETS == null) {
+            GD.PrintErr($"{this.Name} is missing child 'Tileset'!");
+        }
+
+        Node player = GetTree().GetFirstNodeInGroup("Player");
+        if (player is not Player playerCast) {
+            GD.PrintErr($"{player.Name} in group 'Player' is not type Player!");
+            return;
+        }
+
+        playerCast.PlayerChangeTime += TimeShiftChange;
+        BodyEntered                 += Area2D_BodyEntered;
     }
 
     // called via signal. 
@@ -41,6 +56,17 @@ public partial class Room : Area2D {
     // use List<T>.
     public List<Vector2> GetCameraAnchors() => 
         (from Node2D anchor in ANCHORS.GetChildren() select anchor.GlobalPosition).ToList();
+
+    void TimeShiftChange(bool isFuture) {
+        TileSet newSet = isFuture ? FUTURE_TILESET : PAST_TILESET;
+        SetTilesets(newSet);
+    }
+    
+    void SetTilesets(TileSet set) {
+        foreach (TileMapLayer tile in TILESETS.GetChildren()) {
+            tile.SetTileSet(set);
+        }
+    }
 
     public Vector2 GetClosestCameraAnchor(Player player) {
         Vector2 playerPos = player.GlobalPosition;
