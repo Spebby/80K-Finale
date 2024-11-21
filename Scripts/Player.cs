@@ -1,3 +1,4 @@
+using System;
 using System.Runtime.CompilerServices;
 using Godot;
 
@@ -10,16 +11,15 @@ public partial class Player : CharacterBody2D {
 	// due to how simple our game is, we likely do not need to keep track of much state.
 	// prioritise writing code quickly over it being pretty; realistically we are very unlikely
 	// to reference any of this code in our futures!
-
-	[Signal] public delegate void PlayerNotMovingEventHandler();
-	[Signal] public delegate void PlayerChangeTimeEventHandler(bool isFuture);
-	
 	const float TOLERANCE = 0.1f;
 
+	[ExportGroup("Movement & Collision")]
 	// godot doesn't care for readonly's on exposed variables.
 	[Export] float SPEED = 64f;
 	[Export] int POSITION_INCREMENT = 32;
-	bool moving = false;
+	bool moving;
+	
+	[Export(PropertyHint.Layers2DPhysics)] uint _movingCollisionLayers { get; set; } = 0;
 
 	[ExportGroup("Animation Properties")]
 	[Export] AnimatedSprite2D _sprite;
@@ -30,25 +30,44 @@ public partial class Player : CharacterBody2D {
 	Vector2 _nextMove;
 	RayCast2D _ray;
 
-	uint orgCollisionLayer;
+	uint _orgCollisionLayer;
 	Vector2 _lastCheckpoint;
+
+	// There is definitely a better way of doing this, but working > proper when there's a deadline.
+	[ExportGroup("Sounds")]
+	[Export] AudioStreamPlayer2D walkSFX;
+	[Export] AudioStream groundSFX;
+	[Export] AudioStream platformSFX;
+	[Export] AudioStream timeShiftSFX;
+	[Export] AudioStream declineSFX;
+
+	[ExportGroup("Time Shift")]
+	[Export] double timeShiftCooldown = 8f;
+	double _cooldown = 0;
 	
 	// this is my attempt at recreating the Event Channel pattern that I used commonly in Unity.
 	[ExportGroup("Event Channels")]
 	[Export] EventChannel OnPlayerDeath;
+	[Export] BoolEventChannel OnTimeShift;
 	
 	public override void _Ready() {
 		_nextMove         = GlobalPosition;
 		_sprite.Animation = "Idle";
 		_isFuture         = false;
+		_cooldown         = timeShiftCooldown;
+
 		//_sprite.SetSpriteFrames(PAST_SPRITE);
-		_ray = GetChild<RayCast2D>(3, true);
+		_ray         = GetNode<RayCast2D>("RayCast2D");
 		_ray.Enabled = true;
 		if (OnPlayerDeath == null) {
-			GD.PrintErr($"Player Death Event Channel not configured!");
+			throw new Exception($"{Name} -- OnPlayerDeath Event Channel not configured!");
 		}
 
-		orgCollisionLayer = CollisionLayer;
+		if (OnTimeShift == null) {
+			throw new Exception($"{Name} -- OnTimeChange Event Channel missing. Assign now!");
+		}
+
+		_orgCollisionLayer = CollisionLayer;
 	}
 
 	/*
@@ -56,18 +75,6 @@ public partial class Player : CharacterBody2D {
 	// https://docs.godotengine.org/en/stable/tutorials/inputs/input_examples.html
 
 	// these are all examples for future reference. We're not actually using these!
-
-	// Use me when you need to do an action once
-	public override void _Input(InputEvent @event) {
-		GD.Print(@event.AsText()); // debug
-	}
-
-	/*
-	public override void _PhysicsProcess(double delta) {
-		if (Input.IsActionPressed("right")) {
-			position.X += speed * (float)delta;
-		}
-	}
 	*/
 
 	// tell JIT compiler that this should be inlined
@@ -104,32 +111,35 @@ public partial class Player : CharacterBody2D {
 		}
 
 		// platform shouldn't affect us while we're moving
-		moving = false;
+		moving = true;
 		SetCollision(false);
+		PlayStepAudio(groundSFX);
 		// will eventually need to revise this code to be more consistent when players jump while moving
 		// some frogger games can be pretty inconsistent w/ this so we'll want to make sure we have it down.
 		
 		// Snap player to next appropriate tile.
 		_nextMove = new Vector2(
-			Mathf.RoundToInt((GlobalPosition.X / POSITION_INCREMENT) * POSITION_INCREMENT),
-			Mathf.RoundToInt((GlobalPosition.Y / POSITION_INCREMENT) * POSITION_INCREMENT)
+			Mathf.RoundToInt(GlobalPosition.X / POSITION_INCREMENT) * POSITION_INCREMENT,
+			Mathf.RoundToInt(GlobalPosition.Y / POSITION_INCREMENT) * POSITION_INCREMENT
 		) + (mov * POSITION_INCREMENT);
 
 		// update animation state here b/c won't be called as much
 		SetAnimationState(AnimationState.Moving);
 	}
 
-	public void EnteredPlatform(MovingObject _platform) {
+	public void EnteredPlatform(MovingObject platform) {
 		//await ToSignal(this, SignalName.PlayerNotMoving);
-		platform  =  _platform;
-		_platform.Moved += OnPlatformMoved;
+		if (_platform != null) return;
+		PlayStepAudio(platformSFX);
+		_platform  =  platform;
+		platform.Moved += OnPlatformMoved;
 	}
 
 	// if make enteredplatform async again, add signal to this function so we don't get as many weird interleavings
-	public void ExitPlatform(MovingObject _platform) {
-		if (platform == _platform) {
-			platform.Moved -= OnPlatformMoved;
-			platform       =  null;
+	public void ExitPlatform(MovingObject platform) {
+		if (_platform == platform) {
+			_platform.Moved -= OnPlatformMoved;
+			_platform       =  null;
 		}
 	}
 
@@ -144,7 +154,7 @@ public partial class Player : CharacterBody2D {
 		_sprite.Play();
 	}
 
-	MovingObject platform;
+	MovingObject _platform;
 	void OnPlatformMoved(Vector2 mov) {
 		if (moving) return;
 		GlobalPosition += mov;
@@ -152,9 +162,24 @@ public partial class Player : CharacterBody2D {
 	}
 
 	void ShiftTime() {
-		//_sprite.SetSpriteFrames(_isFuture ? PAST_SPRITE : FUTURE_SPRITE); // breaks everything atm
+		GD.Print(_cooldown);
+		if (_cooldown > 0) {
+			PlayStepAudio(declineSFX, 0.6f, 1.1f);
+			return;
+		}
+		
 		_isFuture = !_isFuture;
-		EmitSignal(SignalName.PlayerChangeTime, _isFuture);
+		_sprite.SpriteFrames = _isFuture ? PAST_SPRITE : FUTURE_SPRITE;
+		OnTimeShift.TriggerEvent(_isFuture);
+		PlayStepAudio(timeShiftSFX, 1, 1);
+		_cooldown = timeShiftCooldown;
+	}
+	
+	public override void _Input(InputEvent @event) {
+		if (!moving && @event.IsActionPressed("timeShift")) {
+			//GD.Print("Action 'ui_accept' triggered via specific input: " + @event);
+			ShiftTime();
+		}
 	}
 	
 	// Use me for input iff you need constant updates.
@@ -167,20 +192,14 @@ public partial class Player : CharacterBody2D {
 		// update this check to account for being moved by a platform
 		// get position
 		if (GlobalPosition.DistanceTo(_nextMove) < TOLERANCE) {
-			moving = false;
+			_cooldown -= delta;
+			moving   =  false;
 			SetCollision(true);
-			EmitSignal(SignalName.PlayerNotMoving);
 			SetAnimationState(AnimationState.Idle);
 			UpdateMovementVector();
 		}
 
-		if (!moving && Input.IsActionPressed("timeShift")) {
-			ShiftTime();
-		}
-
-		// this is more snappy, more satisfying but may be too jarring w/ the camera
 		GlobalPosition = GlobalPosition.Lerp(_nextMove, SPEED * (float)delta * 0.175f);
-		//GlobalPosition = GlobalPosition.MoveToward(_nextMove, SPEED * (float)delta);
 	}
 
 	Marker2D checkpoint;
@@ -194,7 +213,6 @@ public partial class Player : CharacterBody2D {
 	}
 
 	public void Unpause() {
-		// implement me
 		SetProcess(true);
 		SetPhysicsProcess(true);
 		SetProcessUnhandledInput(true);
@@ -203,18 +221,23 @@ public partial class Player : CharacterBody2D {
 
 	// KILL THE FROG!
 	public void Kill() {
+		GD.Print("I should be dead right now!");
 		OnPlayerDeath.TriggerEvent();
 		_nextMove      = checkpoint.GlobalPosition;
 		GlobalPosition = checkpoint.GlobalPosition;
 		moving         = false;
 		SetCollision(true);
 	}
+
+	RandomNumberGenerator random = new RandomNumberGenerator();
+	void PlayStepAudio(AudioStream sample, float minPitch = 0.8f, float maxPitch = 1.2f) {
+		random.Randomize();
+		walkSFX.PitchScale = random.RandfRange(minPitch, maxPitch);
+		walkSFX.Stream     = sample;
+		walkSFX.Play();
+	}
 	
 	void SetCollision(bool val) {
-		if (val) {
-			CollisionLayer = orgCollisionLayer;
-		} else {
-			CollisionLayer = 0b10000;
-		}
+		CollisionLayer = val ? _orgCollisionLayer : _movingCollisionLayers;
 	}
 }

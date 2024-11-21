@@ -4,7 +4,7 @@
 [ext_resource type="Texture2D" uid="uid://ble7bph2y0qc5" path="res://Entity/Platforms/boat.png" id="2_kfohi"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_prfgr"]
-size = Vector2(32, 16)
+size = Vector2(64, 16)
 
 [node name="Boat" type="PathFollow2D" node_paths=PackedStringArray("Bounds")]
 loop = false

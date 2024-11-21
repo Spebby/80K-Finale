@@ -1,24 +1,38 @@
-[gd_scene load_steps=7 format=3 uid="uid://ckjx4d1rclmw4"]
+[gd_scene load_steps=13 format=3 uid="uid://ckjx4d1rclmw4"]
 
 [ext_resource type="Script" path="res://Scripts/Player.cs" id="1_v6ity"]
 [ext_resource type="SpriteFrames" uid="uid://mivbftf60h2g" path="res://FroggerFutureSheet.tres" id="3_idijp"]
 [ext_resource type="SpriteFrames" uid="uid://bixa8nwklivf4" path="res://FroggerPastSheet.tres" id="3_wj2aw"]
 [ext_resource type="Resource" uid="uid://c8myi2dxn2r0g" path="res://Scenes/OnPlayerDeath.tres" id="4_fi7xx"]
 [ext_resource type="Script" path="res://Scripts/ZoneCamera.cs" id="4_ox61e"]
+[ext_resource type="AudioStream" uid="uid://pln10hx8a5vy" path="res://Audio/jump.wav" id="4_qcoa8"]
+[ext_resource type="AudioStream" uid="uid://w4mcfrhcqyqm" path="res://Audio/Wood.wav" id="5_3dlni"]
+[ext_resource type="AudioStream" uid="uid://dl22p3bhd4hry" path="res://Audio/TimeShift.wav" id="6_7cwdl"]
+[ext_resource type="AudioStream" uid="uid://c7aqnpem7pbc7" path="res://Audio/hitHurt.wav" id="7_msob3"]
+[ext_resource type="Resource" uid="uid://3vu64pc40tin" path="res://Scenes/OnTimeShift.tres" id="7_nbdm5"]
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_wqf0h"]
 
-[node name="Player" type="CharacterBody2D" node_paths=PackedStringArray("_sprite") groups=["Player"]]
-position = Vector2(16, 16)
-collision_layer = 19
+[sub_resource type="AudioStream" id="AudioStream_oxhm3"]
+
+[node name="Player" type="CharacterBody2D" node_paths=PackedStringArray("_sprite", "walkSFX") groups=["Player"]]
+collision_layer = 31
 collision_mask = 19
 up_direction = Vector2(0, 1)
 script = ExtResource("1_v6ity")
 SPEED = 96.0
+_movingCollisionLayers = 24
 _sprite = NodePath("Sprite")
 FUTURE_SPRITE = ExtResource("3_idijp")
 PAST_SPRITE = ExtResource("3_wj2aw")
+walkSFX = NodePath("AudioStreamPlayer2D")
+groundSFX = ExtResource("4_qcoa8")
+platformSFX = ExtResource("5_3dlni")
+timeShiftSFX = ExtResource("6_7cwdl")
+declineSFX = ExtResource("7_msob3")
+timeShiftCooldown = 4.0
 OnPlayerDeath = ExtResource("4_fi7xx")
+OnTimeShift = ExtResource("7_nbdm5")
 
 [node name="Sprite" type="AnimatedSprite2D" parent="."]
 z_index = 5
@@ -39,3 +53,9 @@ shape = SubResource("CircleShape2D_wqf0h")
 
 [node name="RayCast2D" type="RayCast2D" parent="."]
 target_position = Vector2(0, -32)
+
+[node name="AudioListener2D" type="AudioListener2D" parent="."]
+current = true
+
+[node name="AudioStreamPlayer2D" type="AudioStreamPlayer2D" parent="."]
+stream = SubResource("AudioStream_oxhm3")

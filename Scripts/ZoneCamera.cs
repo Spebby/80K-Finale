@@ -16,7 +16,7 @@ public partial class ZoneCamera : Camera2D {
     }
 
     public async void Transition(Room newRoom) {
-        TransitionSetup();
+        TransitionSetup(newRoom);
 
         // Find closest camera anchors in both previous and current room and use
         // their positions as interpolation points for camera position.
@@ -41,8 +41,9 @@ public partial class ZoneCamera : Camera2D {
         
     }
     
-    void TransitionSetup() {
+    void TransitionSetup(Room room) {
         // Pause player processing (physics and input processing, animations, state timers, etc.)
+        room.Pause();
         _player.Pause();
 
         // Save the original local position of the camera relative to the anchor.
@@ -61,6 +62,7 @@ public partial class ZoneCamera : Camera2D {
         PositionSmoothingEnabled = true;
 
         // Restore player processing.
+        room.Unpause();
         _player.Unpause();
     }
     

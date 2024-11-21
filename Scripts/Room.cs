@@ -1,5 +1,4 @@
 ﻿using Godot;
-using System;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -7,15 +6,17 @@ public partial class Room : Area2D {
     // Get global positions of all camera anchors in each room. During a transition,
     // the player camera will interpolate its position from the closest anchor in
     // the old room to the closest anchor in the new room.
-
-    Node2D movingPlatforms;
+    MovingPlatformManager movingPlatforms;
     
     // anchors
     Node2D ANCHORS;
     Node2D TILESETS;
 
-    [Export] TileSet PAST_TILESET;
-    [Export] TileSet FUTURE_TILESET;
+    [Export] CompressedTexture2D PAST_TILESET;
+    [Export] CompressedTexture2D FUTURE_TILESET;
+
+    [ExportGroup("Event Groups")]
+    [Export] BoolEventChannel onTimeShift;
 
     public override void _Ready() {
         ANCHORS = GetNode<Node2D>("CameraAnchors");
@@ -36,8 +37,10 @@ public partial class Room : Area2D {
             return;
         }
 
-        playerCast.PlayerChangeTime += TimeShiftChange;
-        BodyEntered                 += Area2D_BodyEntered;
+        movingPlatforms = GetNode<MovingPlatformManager>("MovingPlatforms");
+
+        onTimeShift.OnEventTrigger += TimeShiftChange;
+        BodyEntered                += Area2D_BodyEntered;
     }
 
     // called via signal. 
@@ -58,13 +61,17 @@ public partial class Room : Area2D {
         (from Node2D anchor in ANCHORS.GetChildren() select anchor.GlobalPosition).ToList();
 
     void TimeShiftChange(bool isFuture) {
-        TileSet newSet = isFuture ? FUTURE_TILESET : PAST_TILESET;
+        CompressedTexture2D newSet = isFuture ? FUTURE_TILESET : PAST_TILESET;
         SetTilesets(newSet);
     }
     
-    void SetTilesets(TileSet set) {
-        foreach (TileMapLayer tile in TILESETS.GetChildren()) {
-            tile.SetTileSet(set);
+    void SetTilesets(CompressedTexture2D newTexture) {
+        foreach (var node in TILESETS.GetChildren()) {
+            // may break at some point.
+            TileSetSource tile = ((TileMapLayer)node).TileSet.GetSource(0);
+            if (tile is TileSetAtlasSource) {
+                (tile as TileSetAtlasSource).Texture = newTexture;
+            }
         }
     }
 
@@ -76,23 +83,9 @@ public partial class Room : Area2D {
     }
 
     // Get room dimensions based on the CollisionShape2D's extents.
-    public Vector2 GetDiagonal() =>
-        GetNode<CollisionShape2D>("Bounds").Shape.GetRect().Size;
-    
-    public Vector2 GetHalfDiagonal() =>
-        GetNode<CollisionShape2D>("Bounds").Shape.GetRect().End;
+    public Vector2 GetDiagonal() => GetNode<CollisionShape2D>("Bounds").Shape.GetRect().Size;
+    public Vector2 GetHalfDiagonal() => GetNode<CollisionShape2D>("Bounds").Shape.GetRect().End;
 
-    public void Pause() {
-        // TODO: when implementing moving platforms, make them pause here.
-        foreach (var platform in movingPlatforms.GetChildren()) {
-            // todo
-        }
-    }
-
-    public void Resume() {
-        // do nothing for now
-        foreach (var platform in movingPlatforms.GetChildren()) {
-            // todo
-        }
-    }
+    public void Pause() => movingPlatforms.Pause();
+    public void Unpause() => movingPlatforms.Unpause();
 }

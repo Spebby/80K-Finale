@@ -1,0 +1,6 @@
+[gd_resource type="Resource" script_class="BoolEventChannel" load_steps=2 format=3 uid="uid://3vu64pc40tin"]
+
+[ext_resource type="Script" path="res://Scripts/BoolEventChannel.cs" id="1_8teko"]
+
+[resource]
+script = ExtResource("1_8teko")

@@ -9,6 +9,7 @@
 slide_on_ceiling = false
 
 [node name="Room" parent="." instance=ExtResource("3_n7778")]
+position = Vector2(16, 16)
 
 [node name="TL" type="Marker2D" parent="."]
 position = Vector2(-434, -305)
