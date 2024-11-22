@@ -30,33 +30,10 @@ public partial class ZoneCamera : Camera2D {
         // Previously, this code was using SDFs for calculations. But I needed to calculate the edge diffs
         // for secondary adjustments anyway... so unfortunately, the code is a lot less elegant than it was.
 
-        if (lDiff > 0 || rDiff > 0) { // entered from Left or Right
-            if (lDiff > 0) {          // Left Case
-                anchor.X += lDiff;
-            }  else if (rDiff > 0) { // Right Case
-                anchor.X -= rDiff;
-            }
-            
-            // are Cam's Y bounds outside Room's bounds?
-            if (uDiff > 0) { // too far right
-                anchor.Y -= uDiff;
-            } else if (dDiff > 0) { // too far left
-                anchor.Y += dDiff;
-            }
-        } else if (uDiff > 0 || dDiff > 0) { // entered from Top or Bottom
-            if (uDiff > 0) {                 // Up Case
-                anchor.Y -= uDiff;
-            } else if (dDiff > 0) { // Down Case
-                anchor.Y += dDiff;
-            }
-            
-            // are Cam's X bounds outside Room's bounds?
-            if (rDiff > 0) { // too far right
-                anchor.X -= rDiff;
-            } else if (lDiff > 0) { // too far left
-                anchor.X += lDiff;
-            }
-        }
+        if (lDiff > 0) anchor.X += lDiff;
+        if (rDiff > 0) anchor.X -= rDiff;
+        if (uDiff > 0) anchor.Y -= uDiff;
+        if (dDiff > 0) anchor.Y += dDiff;
 
         return anchor;
     }
