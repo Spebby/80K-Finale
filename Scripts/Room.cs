@@ -1,6 +1,4 @@
 ﻿using Godot;
-using System.Collections.Generic;
-using System.Linq;
 
 public partial class Room : Area2D {
     // Get global positions of all camera anchors in each room. During a transition,
@@ -8,9 +6,8 @@ public partial class Room : Area2D {
     // the old room to the closest anchor in the new room.
     MovingPlatformManager movingPlatforms;
     
-    // anchors
-    Node2D ANCHORS;
     Node2D TILESETS;
+    CollisionShape2D bounds;
 
     [Export] CompressedTexture2D PAST_TILESET;
     [Export] CompressedTexture2D FUTURE_TILESET;
@@ -19,13 +16,6 @@ public partial class Room : Area2D {
     [Export] BoolEventChannel onTimeShift;
 
     public override void _Ready() {
-        ANCHORS = GetNode<Node2D>("CameraAnchors");
-        if (ANCHORS == null) {
-            GD.PrintErr($"{this.Name} is missing child 'CameraAnchors'!");
-        } else if (GetCameraAnchors().Count == 0) {
-            GD.PrintErr($"{this.Name} {ANCHORS.Name} is missing anchor positions!");
-        }
-
         TILESETS = GetNode<Node2D>("Tilesets");
         if (TILESETS == null) {
             GD.PrintErr($"{this.Name} is missing child 'Tileset'!");
@@ -37,8 +27,8 @@ public partial class Room : Area2D {
             return;
         }
 
-        movingPlatforms = GetNode<MovingPlatformManager>("MovingPlatforms");
-
+        movingPlatforms            =  GetNode<MovingPlatformManager>("MovingPlatforms");
+        bounds                     =  GetNode<CollisionShape2D>("Bounds");
         onTimeShift.OnEventTrigger += TimeShiftChange;
         BodyEntered                += Area2D_BodyEntered;
     }
@@ -50,15 +40,7 @@ public partial class Room : Area2D {
         GD.Print("Player has entered the room!");
         ZoneCamera cam = body.GetNode<ZoneCamera>("Camera");
         cam.Transition(this);
-        // wanted to make my own signal; but I don't understand the Observer pattern well enough
-        // to make a well informed choice about its usage + I have limited time here and
-        // this works fine for our use case.
     }
-
-    // If we want to interface w/ engine we'll need to use Godot.Array, but for local things,
-    // use List<T>.
-    public List<Vector2> GetCameraAnchors() => 
-        (from Node2D anchor in ANCHORS.GetChildren() select anchor.GlobalPosition).ToList();
 
     void TimeShiftChange(bool isFuture) {
         CompressedTexture2D newSet = isFuture ? FUTURE_TILESET : PAST_TILESET;
@@ -75,17 +57,24 @@ public partial class Room : Area2D {
         }
     }
 
-    public Vector2 GetClosestCameraAnchor(Player player) {
-        Vector2 playerPos = player.GlobalPosition;
-        return GetCameraAnchors()
-               .OrderBy(anchor => playerPos.DistanceSquaredTo(anchor)) // Use squared distance for better performance
-               .FirstOrDefault();
-    }
-
-    // Get room dimensions based on the CollisionShape2D's extents.
-    public Vector2 GetDiagonal() => GetNode<CollisionShape2D>("Bounds").Shape.GetRect().Size;
-    public Vector2 GetHalfDiagonal() => GetNode<CollisionShape2D>("Bounds").Shape.GetRect().End;
+    public Vector2 GetDiagonal() => bounds.Shape.GetRect().Size;
+    public Vector2 GetHalfDiagonal() => bounds.Shape.GetRect().End;
 
     public void Pause() => movingPlatforms.Pause();
     public void Unpause() => movingPlatforms.Unpause();
+
+    public new Vector2 GetGlobalPosition() => bounds.GlobalPosition;
+    
+    /// <summary>
+    /// Returns Cardinal Bounds of the Room's bounds in order Top, Bottom, Left, Right. Useful for setting camera boundries.
+    /// </summary>
+    public Vector4 GetCardinalBounds() {
+        Vector2 roomDims    = GetHalfDiagonal();
+        Vector2 roomCenter  = GetGlobalPosition();
+        float limitTop    = roomCenter.Y - roomDims.Y;
+        float limitBottom = roomCenter.Y + roomDims.Y;
+        float limitLeft   = roomCenter.X - roomDims.X;
+        float limitRight  = roomCenter.X + roomDims.X;
+        return new Vector4(limitTop, limitBottom, limitLeft, limitRight);
+    }
 }

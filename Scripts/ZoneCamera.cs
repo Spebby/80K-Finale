@@ -1,4 +1,3 @@
-using System;
 using Godot;
 
 public partial class ZoneCamera : Camera2D {
@@ -15,15 +14,57 @@ public partial class ZoneCamera : Camera2D {
         //OnPlayerDeath.OnEventTrigger += test;
     }
 
+    Vector2 CalculateTransitionAnchor(Room room) {
+        Vector2 playerPos   = _player.GlobalPosition;
+        Vector2 camHalfDims = (GetViewportRect().Size / this.Zoom) / 2;
+        Vector2 bHalfDiag   = room.GetHalfDiagonal();
+        Vector2 bCent       = room.GetGlobalPosition();
+
+        // diffs are positive if outside range on that cardinal
+        float   uDiff  = (playerPos.Y + camHalfDims.Y) - (bCent.Y + bHalfDiag.Y);
+        float   dDiff  = (bCent.Y - bHalfDiag.Y) - (playerPos.Y - camHalfDims.Y);
+        float   lDiff  = (bCent.X - bHalfDiag.X) - (playerPos.X - camHalfDims.X);
+        float   rDiff  = (playerPos.X + camHalfDims.X) - (bCent.X + bHalfDiag.X);
+        Vector2 anchor = playerPos;
+        
+        // Previously, this code was using SDFs for calculations. But I needed to calculate the edge diffs
+        // for secondary adjustments anyway... so unfortunately, the code is a lot less elegant than it was.
+
+        if (lDiff > 0 || rDiff > 0) { // entered from Left or Right
+            if (lDiff > 0) {          // Left Case
+                anchor.X += lDiff;
+            }  else if (rDiff > 0) { // Right Case
+                anchor.X -= rDiff;
+            }
+            
+            // are Cam's Y bounds outside Room's bounds?
+            if (uDiff > 0) { // too far right
+                anchor.Y -= uDiff;
+            } else if (dDiff > 0) { // too far left
+                anchor.Y += dDiff;
+            }
+        } else if (uDiff > 0 || dDiff > 0) { // entered from Top or Bottom
+            if (uDiff > 0) {                 // Up Case
+                anchor.Y -= uDiff;
+            } else if (dDiff > 0) { // Down Case
+                anchor.Y += dDiff;
+            }
+            
+            // are Cam's X bounds outside Room's bounds?
+            if (rDiff > 0) { // too far right
+                anchor.X -= rDiff;
+            } else if (lDiff > 0) { // too far left
+                anchor.X += lDiff;
+            }
+        }
+
+        return anchor;
+    }
+
     public async void Transition(Room newRoom) {
         TransitionSetup(newRoom);
 
-        // Find closest camera anchors in both previous and current room and use
-        // their positions as interpolation points for camera position.
-        // prevRoom = currRoom ?? newRoom; // if currRoom was unset, both should be newRoom!
-        
-        Vector2     endPoint = newRoom.GetClosestCameraAnchor(_player);
-        GD.Print($"{GlobalPosition}, {endPoint}");
+        Vector2 endPoint = CalculateTransitionAnchor(newRoom);
         const float duration = 0.5f;
 
         _tween = CreateTween();
@@ -37,10 +78,6 @@ public partial class ZoneCamera : Camera2D {
         TransitionTeardown(newRoom);
     }
 
-    void InterpolateCamera(Vector2 endPoint) {
-        
-    }
-    
     void TransitionSetup(Room room) {
         // Pause player processing (physics and input processing, animations, state timers, etc.)
         room.Pause();
@@ -67,16 +104,12 @@ public partial class ZoneCamera : Camera2D {
     }
     
     void FitCameraLimitsToRoom(Room room) {
-        Vector2 roomDims = room.GetHalfDiagonal();
-        //GD.Print($"Dims:   {roomDims}, {room.GetDiagonal()}");
-        //GD.Print($"Global: {room.GlobalPosition}");
+        Vector4 limits = room.GetCardinalBounds();
+        LimitTop    = (int)limits.X;
+        LimitBottom = (int)limits.Y;
+        LimitLeft   = (int)limits.Z;
+        LimitRight  = (int)limits.W;
 
-        // TODO: Adjust.
-        LimitTop    = (int)(room.GlobalPosition.Y - roomDims.Y);
-        LimitBottom = (int)(room.GlobalPosition.Y + roomDims.Y);
-
-        LimitLeft  = (int)(room.GlobalPosition.X - roomDims.X);
-        LimitRight = (int)(room.GlobalPosition.X + roomDims.X);
         GD.Print($"(T: {LimitTop}, B: {LimitBottom}, L: {LimitLeft}, R: {LimitRight})");
     }
 
