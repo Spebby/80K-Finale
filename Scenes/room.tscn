@@ -1,4 +1,4 @@
-[gd_scene load_steps=20 format=4 uid="uid://402hri6i1y0e"]
+[gd_scene load_steps=21 format=4 uid="uid://402hri6i1y0e"]
 
 [ext_resource type="Script" path="res://Scripts/Room.cs" id="1_nys6f"]
 [ext_resource type="Texture2D" uid="uid://o20aq1o4bdfb" path="res://PastTileset.png" id="2_km6y2"]
@@ -11,6 +11,7 @@
 [ext_resource type="Resource" uid="uid://6incnm885h52" path="res://Entity/BoatCollection.tres" id="5_ovni6"]
 [ext_resource type="Script" path="res://Scripts/Checkpoint.cs" id="7_b5gxp"]
 [ext_resource type="PackedScene" uid="uid://bvomsu52de8ng" path="res://Entity/time_piece.tscn" id="11_4pkjr"]
+[ext_resource type="Texture2D" uid="uid://dkeoykq3vjrur" path="res://TestPallete.png" id="12_qjjkl"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_uwl4j"]
 size = Vector2(960, 544)
@@ -49,12 +50,14 @@ point_count = 5
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_lqoda"]
 
-[node name="Room" type="Area2D"]
+[node name="Room" type="Area2D" node_paths=PackedStringArray("PAST_OBJECTS", "FUTURE_OBJECTS")]
 collision_layer = 16
 collision_mask = 16
 script = ExtResource("1_nys6f")
 PAST_TILESET = ExtResource("2_km6y2")
 FUTURE_TILESET = ExtResource("3_fsu13")
+PAST_OBJECTS = NodePath("PAST_OBJECTS")
+FUTURE_OBJECTS = NodePath("FUTURE_OBJECTS")
 onTimeShift = ExtResource("3_akyfr")
 
 [node name="Bounds" type="CollisionShape2D" parent="."]
@@ -153,3 +156,16 @@ shape = SubResource("RectangleShape2D_lqoda")
 
 [node name="TimePiece" parent="." instance=ExtResource("11_4pkjr")]
 position = Vector2(113, -208)
+
+[node name="PAST_OBJECTS" type="Node2D" parent="."]
+
+[node name="Sprite2D" type="Sprite2D" parent="PAST_OBJECTS"]
+position = Vector2(-128, -176)
+scale = Vector2(0.34375, 0.3125)
+texture = ExtResource("2_km6y2")
+
+[node name="FUTURE_OBJECTS" type="Node2D" parent="."]
+
+[node name="Sprite2D" type="Sprite2D" parent="FUTURE_OBJECTS"]
+position = Vector2(-112, 112)
+texture = ExtResource("12_qjjkl")

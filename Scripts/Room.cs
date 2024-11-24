@@ -9,8 +9,11 @@ public partial class Room : Area2D {
     Node2D TILESETS;
     CollisionShape2D bounds;
 
+    [ExportGroup("Time Shift Settings")]
     [Export] CompressedTexture2D PAST_TILESET;
     [Export] CompressedTexture2D FUTURE_TILESET;
+    [Export] Node2D PAST_OBJECTS;
+    [Export] Node2D FUTURE_OBJECTS;
 
     [ExportGroup("Event Groups")]
     [Export] BoolEventChannel onTimeShift;
@@ -26,6 +29,9 @@ public partial class Room : Area2D {
             GD.PrintErr($"{player.Name} in group 'Player' is not type Player!");
             return;
         }
+
+        PAST_OBJECTS.Visible   = true;
+        FUTURE_OBJECTS.Visible = false;
 
         movingPlatforms            =  GetNode<MovingPlatformManager>("MovingPlatforms");
         bounds                     =  GetNode<CollisionShape2D>("Bounds");
@@ -45,6 +51,8 @@ public partial class Room : Area2D {
     void TimeShiftChange(bool isFuture) {
         CompressedTexture2D newSet = isFuture ? FUTURE_TILESET : PAST_TILESET;
         SetTilesets(newSet);
+        PAST_OBJECTS.Visible = !isFuture;
+        FUTURE_OBJECTS.Visible = isFuture;
     }
     
     void SetTilesets(CompressedTexture2D newTexture) {
