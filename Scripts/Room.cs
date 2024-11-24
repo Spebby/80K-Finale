@@ -5,40 +5,34 @@ public partial class Room : Area2D {
     // the player camera will interpolate its position from the closest anchor in
     // the old room to the closest anchor in the new room.
     MovingPlatformManager movingPlatforms;
-    
-    Node2D TILESETS;
     CollisionShape2D bounds;
 
     [ExportGroup("Time Shift Settings")]
+    Node2D TILESETS;
     [Export] CompressedTexture2D PAST_TILESET;
     [Export] CompressedTexture2D FUTURE_TILESET;
     [Export] Node2D PAST_OBJECTS;
     [Export] Node2D FUTURE_OBJECTS;
+    bool _isFuture;
 
     [ExportGroup("Event Groups")]
     [Export] BoolEventChannel onTimeShift;
 
     public override void _Ready() {
-        TILESETS = GetNode<Node2D>("Tilesets");
-        if (TILESETS == null) {
-            GD.PrintErr($"{this.Name} is missing child 'Tileset'!");
-        }
-
-        Node player = GetTree().GetFirstNodeInGroup("Player");
-        if (player is not Player playerCast) {
-            GD.PrintErr($"{player.Name} in group 'Player' is not type Player!");
-            return;
-        }
-
-        PAST_OBJECTS.Visible   = true;
-        PAST_OBJECTS.SetProcessMode(ProcessModeEnum.Inherit);
-        FUTURE_OBJECTS.Visible = false;
-        PAST_OBJECTS.SetProcessMode(ProcessModeEnum.Disabled);
+        PAST_OBJECTS.Visible = !_isFuture;
+        PAST_OBJECTS.SetProcessMode(!_isFuture  ? ProcessModeEnum.Inherit : ProcessModeEnum.Disabled);
+        FUTURE_OBJECTS.Visible = _isFuture;
+        FUTURE_OBJECTS.SetProcessMode(_isFuture ? ProcessModeEnum.Inherit : ProcessModeEnum.Disabled);
 
         movingPlatforms            =  GetNode<MovingPlatformManager>("MovingPlatforms");
+        TILESETS                   =  GetNode<Node2D>("Tilesets");
         bounds                     =  GetNode<CollisionShape2D>("Bounds");
         onTimeShift.OnEventTrigger += TimeShiftChange;
         BodyEntered                += Area2D_BodyEntered;
+        
+        if (TILESETS == null) {
+            GD.PrintErr($"{this.Name} is missing child 'Tileset'!");
+        }
     }
 
     // called via signal. 
@@ -51,12 +45,13 @@ public partial class Room : Area2D {
     }
 
     void TimeShiftChange(bool isFuture) {
-        CompressedTexture2D newSet = isFuture ? FUTURE_TILESET : PAST_TILESET;
+        _isFuture = isFuture;
+        CompressedTexture2D newSet = _isFuture ? FUTURE_TILESET : PAST_TILESET;
         SetTilesets(newSet);
-        PAST_OBJECTS.Visible = !isFuture;
-        PAST_OBJECTS.SetProcessMode(!isFuture  ? ProcessModeEnum.Inherit : ProcessModeEnum.Disabled);
-        FUTURE_OBJECTS.Visible = isFuture;
-        FUTURE_OBJECTS.SetProcessMode(isFuture ? ProcessModeEnum.Inherit : ProcessModeEnum.Disabled);
+        PAST_OBJECTS.Visible = !_isFuture;
+        PAST_OBJECTS.SetProcessMode(!_isFuture  ? ProcessModeEnum.Inherit : ProcessModeEnum.Disabled);
+        FUTURE_OBJECTS.Visible = _isFuture;
+        FUTURE_OBJECTS.SetProcessMode(_isFuture ? ProcessModeEnum.Inherit : ProcessModeEnum.Disabled);
     }
     
     void SetTilesets(CompressedTexture2D newTexture) {
