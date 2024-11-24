@@ -31,7 +31,9 @@ public partial class Room : Area2D {
         }
 
         PAST_OBJECTS.Visible   = true;
+        PAST_OBJECTS.SetProcessMode(ProcessModeEnum.Inherit);
         FUTURE_OBJECTS.Visible = false;
+        PAST_OBJECTS.SetProcessMode(ProcessModeEnum.Disabled);
 
         movingPlatforms            =  GetNode<MovingPlatformManager>("MovingPlatforms");
         bounds                     =  GetNode<CollisionShape2D>("Bounds");
@@ -52,7 +54,9 @@ public partial class Room : Area2D {
         CompressedTexture2D newSet = isFuture ? FUTURE_TILESET : PAST_TILESET;
         SetTilesets(newSet);
         PAST_OBJECTS.Visible = !isFuture;
+        PAST_OBJECTS.SetProcessMode(!isFuture  ? ProcessModeEnum.Inherit : ProcessModeEnum.Disabled);
         FUTURE_OBJECTS.Visible = isFuture;
+        FUTURE_OBJECTS.SetProcessMode(isFuture ? ProcessModeEnum.Inherit : ProcessModeEnum.Disabled);
     }
     
     void SetTilesets(CompressedTexture2D newTexture) {

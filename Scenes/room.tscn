@@ -1,4 +1,4 @@
-[gd_scene load_steps=21 format=4 uid="uid://402hri6i1y0e"]
+[gd_scene load_steps=23 format=4 uid="uid://402hri6i1y0e"]
 
 [ext_resource type="Script" path="res://Scripts/Room.cs" id="1_nys6f"]
 [ext_resource type="Texture2D" uid="uid://o20aq1o4bdfb" path="res://PastTileset.png" id="2_km6y2"]
@@ -49,6 +49,12 @@ point_count = 5
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_agoa4"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_lqoda"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_lfv4g"]
+size = Vector2(558.546, 204.8)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_w6g0i"]
+size = Vector2(128, 64)
 
 [node name="Room" type="Area2D" node_paths=PackedStringArray("PAST_OBJECTS", "FUTURE_OBJECTS")]
 collision_layer = 16
@@ -159,13 +165,28 @@ position = Vector2(113, -208)
 
 [node name="PAST_OBJECTS" type="Node2D" parent="."]
 
-[node name="Sprite2D" type="Sprite2D" parent="PAST_OBJECTS"]
-position = Vector2(-128, -176)
+[node name="Area2D" type="Area2D" parent="PAST_OBJECTS"]
+position = Vector2(0, -64)
 scale = Vector2(0.34375, 0.3125)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="PAST_OBJECTS/Area2D"]
+scale = Vector2(1, 1)
+shape = SubResource("RectangleShape2D_lfv4g")
+
+[node name="Sprite2D" type="Sprite2D" parent="PAST_OBJECTS/Area2D"]
+position = Vector2(0, 1.90735e-05)
+scale = Vector2(1.09091, 0.8)
 texture = ExtResource("2_km6y2")
 
 [node name="FUTURE_OBJECTS" type="Node2D" parent="."]
 
-[node name="Sprite2D" type="Sprite2D" parent="FUTURE_OBJECTS"]
-position = Vector2(-112, 112)
+[node name="Area2D" type="Area2D" parent="FUTURE_OBJECTS"]
+position = Vector2(80, 80)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="FUTURE_OBJECTS/Area2D"]
+position = Vector2(-16, -16)
+shape = SubResource("RectangleShape2D_w6g0i")
+
+[node name="Sprite2D" type="Sprite2D" parent="FUTURE_OBJECTS/Area2D"]
+position = Vector2(-16, -16)
 texture = ExtResource("12_qjjkl")
