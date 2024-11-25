@@ -93,7 +93,7 @@ public partial class Player : CharacterBody2D {
 	[MethodImpl(MethodImplOptions.AggressiveInlining)] void UpdateMovementVector() {
 		// As good practice, you should replace UI actions with custom gameplay actions. -Godot
 		Vector2 mov = Input.GetVector("ui_left", "ui_right", "ui_up", "ui_down");
-		if (mov.Length() == 0) 
+		if (mov.Length() == 0 || moving) 
 			return;
 
 		float angle;
@@ -135,6 +135,7 @@ public partial class Player : CharacterBody2D {
 
 		// platform shouldn't affect us while we're moving
 		moving = true;
+		SetAnimationState(AnimationState.Moving);
 		SetCollision(false);
 		PlayStepAudio(groundSFX);
 		// will eventually need to revise this code to be more consistent when players jump while moving
@@ -147,7 +148,6 @@ public partial class Player : CharacterBody2D {
 		) + (mov * POSITION_INCREMENT);
 
 		// update animation state here b/c won't be called as much
-		SetAnimationState(AnimationState.Moving);
 	}
 
 	public void EnteredPlatform(MovingObject platform) {
@@ -219,11 +219,14 @@ public partial class Player : CharacterBody2D {
 				Kill();
 				return;
 			}
-			_cooldown -= delta;
-			moving   =  false;
-			SetCollision(true);
+			
 			SetAnimationState(AnimationState.Idle);
 			UpdateMovementVector();
+			// we reset moving after, to prevent player from moving before we can do collision checks.
+			
+			moving    =  false;
+			_cooldown -= delta;
+			SetCollision(true);
 		}
 
 		GlobalPosition = GlobalPosition.Lerp(_nextMove, SPEED * (float)delta * 0.175f);
