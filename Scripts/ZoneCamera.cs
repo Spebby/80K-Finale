@@ -39,47 +39,49 @@ public partial class ZoneCamera : Camera2D {
     }
 
     public async void Transition(Room newRoom) {
-        TransitionSetup(newRoom);
+        // Setup
+        // Pause player processing (physics and input processing, animations, state timers, etc.)
+        newRoom.Pause();
+        _player.Pause();
+
+        // Save the local position of the camera, so after we move it, we can restore the "anchor" of it to a sensible place.
+        _orgAnchor = Position;
+        /* The "position" of the camera =/= where it appears to be b/c of camera limits.
+           we move the camera's position to where it "appears" to be, to prevent the camera snapping
+           to the player the moment limits are removed. */
+        Position   = ToLocal(GetScreenCenterPosition());
+
+        // Disable smoothing to avoid jitter during transition.
+        PositionSmoothingEnabled = false;
+        
+        // Main
 
         Vector2 endPoint = CalculateTransitionAnchor(newRoom);
-        const float duration = 0.5f;
+        const float duration = 0.75f;
 
+        RemoveCameraLimits();
+        
         _tween = CreateTween();
         _tween.TweenProperty(this, "global_position", endPoint, duration)
               .SetTrans(Tween.TransitionType.Quad)
               .SetEase(Tween.EaseType.InOut);
-        RemoveCameraLimits();
 
         await ToSignal(_tween, Tween.SignalName.Finished);
         _tween.Kill();
-        TransitionTeardown(newRoom);
-    }
-
-    void TransitionSetup(Room room) {
-        // Pause player processing (physics and input processing, animations, state timers, etc.)
-        room.Pause();
-        _player.Pause();
-
-        // Save the original local position of the camera relative to the anchor.
-        _orgAnchor = GlobalPosition;
-
-        // Disable smoothing to avoid jitter during transition.
-        PositionSmoothingEnabled = false;
-    }
-
-    void TransitionTeardown(Room room) {
+        
+        // Teardown
         // Restore local camera position to the original anchor point.
-        GlobalPosition = _orgAnchor;
+        Position = _orgAnchor;
 
         // Adjust camera limits to match room dimensions.
-        FitCameraLimitsToRoom(room);
+        FitCameraLimitsToRoom(newRoom);
         PositionSmoothingEnabled = true;
 
         // Restore player processing.
-        room.Unpause();
+        newRoom.Unpause();
         _player.Unpause();
     }
-    
+
     void FitCameraLimitsToRoom(Room room) {
         Vector4 limits = room.GetCardinalBounds();
         LimitTop    = (int)limits.X;

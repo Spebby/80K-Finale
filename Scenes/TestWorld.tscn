@@ -1,6 +1,7 @@
-[gd_scene load_steps=3 format=3 uid="uid://breyy1oi0hki3"]
+[gd_scene load_steps=4 format=3 uid="uid://breyy1oi0hki3"]
 
 [ext_resource type="PackedScene" uid="uid://ckjx4d1rclmw4" path="res://Scenes/Player.tscn" id="1_v74hx"]
+[ext_resource type="PackedScene" uid="uid://bj20fq6xks87p" path="res://Scenes/TallRoom.tscn" id="3_kxhoc"]
 [ext_resource type="PackedScene" uid="uid://402hri6i1y0e" path="res://Scenes/room.tscn" id="3_n7778"]
 
 [node name="TestWorld" type="Node2D"]
@@ -22,3 +23,6 @@ position = Vector2(464, -128)
 
 [node name="L" type="Marker2D" parent="."]
 position = Vector2(-496, -128)
+
+[node name="TallRoom" parent="." instance=ExtResource("3_kxhoc")]
+position = Vector2(240, -816)
