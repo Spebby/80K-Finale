@@ -67,7 +67,7 @@ size = Vector2(558.546, 204.8)
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_w6g0i"]
 size = Vector2(128, 64)
 
-[node name="Room" type="Area2D" node_paths=PackedStringArray("PAST_OBJECTS", "FUTURE_OBJECTS")]
+[node name="Room2" type="Area2D" node_paths=PackedStringArray("PAST_OBJECTS", "FUTURE_OBJECTS")]
 collision_layer = 16
 collision_mask = 16
 script = ExtResource("1_nys6f")

@@ -3,7 +3,7 @@
 [ext_resource type="Script" path="res://Scripts/Player.cs" id="1_v6ity"]
 [ext_resource type="SpriteFrames" uid="uid://mivbftf60h2g" path="res://FroggerFutureSheet.tres" id="3_idijp"]
 [ext_resource type="SpriteFrames" uid="uid://bixa8nwklivf4" path="res://FroggerPastSheet.tres" id="3_wj2aw"]
-[ext_resource type="Resource" uid="uid://c8myi2dxn2r0g" path="res://Scenes/OnPlayerDeath.tres" id="4_fi7xx"]
+[ext_resource type="Resource" path="res://Scenes/OnPlayerDeath.tres" id="4_fi7xx"]
 [ext_resource type="Script" path="res://Scripts/ZoneCamera.cs" id="4_ox61e"]
 [ext_resource type="AudioStream" uid="uid://pln10hx8a5vy" path="res://Audio/jump.wav" id="4_qcoa8"]
 [ext_resource type="AudioStream" uid="uid://w4mcfrhcqyqm" path="res://Audio/Wood.wav" id="5_3dlni"]

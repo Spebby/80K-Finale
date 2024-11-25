@@ -129,6 +129,9 @@ public partial class Player : CharacterBody2D {
 				return;
 			}
 		}
+		else {
+			markedForDeath = false;
+		}
 
 		// platform shouldn't affect us while we're moving
 		moving = true;
