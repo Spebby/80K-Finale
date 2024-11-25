@@ -53,6 +53,7 @@ shape = SubResource("CircleShape2D_wqf0h")
 
 [node name="RayCast2D" type="RayCast2D" parent="."]
 target_position = Vector2(0, -32)
+collision_mask = 5
 collide_with_areas = true
 
 [node name="AudioListener2D" type="AudioListener2D" parent="."]

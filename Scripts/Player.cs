@@ -7,6 +7,14 @@ enum AnimationState {
 	Moving
 }
 
+enum CollisionLayers : uint {
+	Wall = 1 << 0,
+	MovingPlatform = 1 << 1,
+	Water = 1 << 2,
+	Hazard = 1 << 3,
+	Room = 1 << 4
+}
+
 public partial class Player : CharacterBody2D {
 	// due to how simple our game is, we likely do not need to keep track of much state.
 	// prioritise writing code quickly over it being pretty; realistically we are very unlikely
@@ -18,6 +26,9 @@ public partial class Player : CharacterBody2D {
 	[Export] float SPEED = 64f;
 	[Export] int POSITION_INCREMENT = 32;
 	bool moving;
+	bool markedForDeath;
+
+	bool ShouldIDie => !moving && markedForDeath && (_platform == null);
 	
 	[Export(PropertyHint.Layers2DPhysics)] uint _movingCollisionLayers { get; set; } = 0;
 
@@ -104,10 +115,19 @@ public partial class Player : CharacterBody2D {
 		if (Mathf.Abs((RotationDegrees = angle) - prevRotation) > Mathf.Epsilon)
 			_ray.ForceRaycastUpdate();
 
-		if (_ray.IsColliding()) {
-			// if we can get which physics layer is collided w/ that may be helpful, since we should
-			// allow players to jump into water, for example.
-			return;
+		GodotObject hit = _ray.GetCollider();
+		GD.Print(hit);
+		if (hit is TileMapLayer target) {
+
+			// We don't want to kill player instantly if they're jumping onto water, so we "mark them"
+			// for death, and will kill them in Physics Process if they're not moving and still marked.
+			
+			// this is terrible but I don't care
+			if (target.HasMeta("KillPlayer")) {
+				markedForDeath = true;
+			} else {
+				return;
+			}
 		}
 
 		// platform shouldn't affect us while we're moving
@@ -181,7 +201,7 @@ public partial class Player : CharacterBody2D {
 			ShiftTime();
 		}
 	}
-	
+
 	// Use me for input iff you need constant updates.
 	public override void _PhysicsProcess(double delta) {
 		/*	TODO: figure out a better way to trigger animation changes. Investigate signals.
@@ -192,6 +212,10 @@ public partial class Player : CharacterBody2D {
 		// update this check to account for being moved by a platform
 		// get position
 		if (GlobalPosition.DistanceTo(_nextMove) < TOLERANCE) {
+			if (ShouldIDie) {
+				Kill();
+				return;
+			}
 			_cooldown -= delta;
 			moving   =  false;
 			SetCollision(true);
@@ -222,6 +246,7 @@ public partial class Player : CharacterBody2D {
 	// KILL THE FROG!
 	public void Kill() {
 		GD.Print("I should be dead right now!");
+		markedForDeath = false;
 		OnPlayerDeath.TriggerEvent();
 		_nextMove      = checkpoint.GlobalPosition;
 		GlobalPosition = checkpoint.GlobalPosition;
