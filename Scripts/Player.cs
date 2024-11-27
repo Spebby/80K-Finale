@@ -90,11 +90,13 @@ public partial class Player : CharacterBody2D {
 
 	// tell JIT compiler that this should be inlined
 	// helper for exec loop to calculate movement vector
-	[MethodImpl(MethodImplOptions.AggressiveInlining)] void UpdateMovementVector() {
+	[MethodImpl(MethodImplOptions.AggressiveInlining)]
+	bool UpdateMovementVector() {
 		// As good practice, you should replace UI actions with custom gameplay actions. -Godot
 		Vector2 mov = Input.GetVector("ui_left", "ui_right", "ui_up", "ui_down");
-		if (mov.Length() == 0 || moving) 
-			return;
+		if (mov.Length() == 0 || moving) {
+			return false;
+		}
 
 		float angle;
 		if (Mathf.Abs(mov.X) > Mathf.Abs((mov.Y))) {
@@ -126,7 +128,7 @@ public partial class Player : CharacterBody2D {
 			if (target.HasMeta("KillPlayer")) {
 				markedForDeath = true;
 			} else {
-				return;
+				return false;
 			}
 		}
 		else {
@@ -148,6 +150,7 @@ public partial class Player : CharacterBody2D {
 		) + (mov * POSITION_INCREMENT);
 
 		// update animation state here b/c won't be called as much
+		return true;
 	}
 
 	public void EnteredPlatform(MovingObject platform) {
@@ -208,9 +211,9 @@ public partial class Player : CharacterBody2D {
 	// Use me for input iff you need constant updates.
 	public override void _PhysicsProcess(double delta) {
 		/*	TODO: figure out a better way to trigger animation changes. Investigate signals.
-				 *	Mr. Gippity recommends using an animation tree to return to idle when animations are
-				 *	done instead of explicitly calling an animation change.
-				 */
+		 *	recommended to use an animation tree to return to idle when animations are
+		 *	done instead of explicitly calling an animation change.
+		 */
 
 		// update this check to account for being moved by a platform
 		// get position
@@ -221,12 +224,13 @@ public partial class Player : CharacterBody2D {
 			}
 			
 			SetAnimationState(AnimationState.Idle);
-			UpdateMovementVector();
 			// we reset moving after, to prevent player from moving before we can do collision checks.
 			
-			moving    =  false;
 			_cooldown -= delta;
-			SetCollision(true);
+			if (!UpdateMovementVector()) {
+				SetCollision(true);
+				moving = false;
+			}
 		}
 
 		GlobalPosition = GlobalPosition.Lerp(_nextMove, SPEED * (float)delta * 0.175f);
