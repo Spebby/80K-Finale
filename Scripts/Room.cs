@@ -24,7 +24,7 @@ public partial class Room : Area2D {
         FUTURE_OBJECTS.Visible = _isFuture;
         FUTURE_OBJECTS.SetProcessMode(_isFuture ? ProcessModeEnum.Inherit : ProcessModeEnum.Disabled);
 
-        movingPlatforms            =  GetNode<MovingPlatformManager>("MovingPlatforms");
+        movingPlatforms            =  GetNodeOrNull<MovingPlatformManager>("MovingPlatforms");
         TILESETS                   =  GetNode<Node2D>("Tilesets");
         bounds                     =  GetNode<CollisionShape2D>("Bounds");
         onTimeShift.OnEventTrigger += TimeShiftChange;
@@ -67,8 +67,8 @@ public partial class Room : Area2D {
     public Vector2 GetDiagonal() => bounds.Shape.GetRect().Size;
     public Vector2 GetHalfDiagonal() => bounds.Shape.GetRect().End;
 
-    public void Pause() => movingPlatforms.Pause();
-    public void Unpause() => movingPlatforms.Unpause();
+    public void Pause() => movingPlatforms?.Pause();
+    public void Unpause() => movingPlatforms?.Unpause();
 
     public new Vector2 GetGlobalPosition() => bounds.GlobalPosition;
     

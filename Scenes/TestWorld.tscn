@@ -1,12 +1,16 @@
-[gd_scene load_steps=4 format=3 uid="uid://breyy1oi0hki3"]
+[gd_scene load_steps=7 format=3 uid="uid://breyy1oi0hki3"]
 
 [ext_resource type="PackedScene" uid="uid://ckjx4d1rclmw4" path="res://Scenes/Player.tscn" id="1_v74hx"]
 [ext_resource type="PackedScene" uid="uid://bj20fq6xks87p" path="res://Scenes/TallRoom.tscn" id="3_kxhoc"]
 [ext_resource type="PackedScene" uid="uid://402hri6i1y0e" path="res://Scenes/room.tscn" id="3_n7778"]
+[ext_resource type="PackedScene" uid="uid://dhw0334v7pmxq" path="res://Scenes/starterRoom.tscn" id="4_kxxct"]
+[ext_resource type="PackedScene" uid="uid://de0hwg8lmfu5x" path="res://Scenes/Gauntlet_0.tscn" id="5_vb720"]
+[ext_resource type="PackedScene" uid="uid://kximdgaxk1nu" path="res://Scenes/Connector_2.tscn" id="6_gpn3j"]
 
 [node name="TestWorld" type="Node2D"]
 
 [node name="Player" parent="." instance=ExtResource("1_v74hx")]
+position = Vector2(1312, 256)
 slide_on_ceiling = false
 
 [node name="Room" parent="." instance=ExtResource("3_n7778")]
@@ -26,3 +30,12 @@ position = Vector2(-496, -128)
 
 [node name="TallRoom" parent="." instance=ExtResource("3_kxhoc")]
 position = Vector2(240, -816)
+
+[node name="StarterRoom" parent="." instance=ExtResource("4_kxxct")]
+position = Vector2(1328, 272)
+
+[node name="Guantlet_0" parent="." instance=ExtResource("5_vb720")]
+position = Vector2(1232, -208)
+
+[node name="Connector_2" parent="." instance=ExtResource("6_gpn3j")]
+position = Vector2(1232, -976)

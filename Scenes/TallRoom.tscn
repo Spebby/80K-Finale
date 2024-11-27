@@ -103,6 +103,7 @@ scale = Vector2(5, 5)
 shape = SubResource("RectangleShape2D_agoa4")
 
 [node name="RespawnPoint" type="Marker2D" parent="Checkpoints/Checkpoint_0"]
+position = Vector2(-15, -16)
 
 [node name="Checkpoint_1" type="Area2D" parent="Checkpoints" node_paths=PackedStringArray("Point")]
 position = Vector2(288, -192)
@@ -115,20 +116,21 @@ scale = Vector2(5, 5)
 shape = SubResource("RectangleShape2D_w6yfo")
 
 [node name="RespawnPoint" type="Marker2D" parent="Checkpoints/Checkpoint_1"]
+position = Vector2(17, 16)
 
-[node name="Checkpoint_1" type="Area2D" parent="Checkpoints/Checkpoint_1" node_paths=PackedStringArray("Point")]
-position = Vector2(-240, -256)
+[node name="Checkpoint_2" type="Area2D" parent="Checkpoints" node_paths=PackedStringArray("Point")]
+position = Vector2(65, -448)
 collision_layer = 0
 script = ExtResource("10_vccjg")
 Point = NodePath("RespawnPoint")
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="Checkpoints/Checkpoint_1/Checkpoint_1"]
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Checkpoints/Checkpoint_2"]
 position = Vector2(-32, 0)
 scale = Vector2(5, 5)
 shape = SubResource("RectangleShape2D_ldceg")
 
-[node name="RespawnPoint" type="Marker2D" parent="Checkpoints/Checkpoint_1/Checkpoint_1"]
-position = Vector2(-32, 0)
+[node name="RespawnPoint" type="Marker2D" parent="Checkpoints/Checkpoint_2"]
+position = Vector2(-48, -16)
 
 [node name="TimePiece" parent="." instance=ExtResource("11_yydfo")]
 visible = false

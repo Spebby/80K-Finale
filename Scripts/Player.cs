@@ -118,20 +118,23 @@ public partial class Player : CharacterBody2D {
 			_ray.ForceRaycastUpdate();
 
 		GodotObject hit = _ray.GetCollider();
-		GD.Print(hit);
-		if (hit is TileMapLayer target) {
+		// this is terrible but I don't care. I'll learn real collision detection later.
+		if (hit != null) {
+			if (hit is TileMapLayer target) {
 
-			// We don't want to kill player instantly if they're jumping onto water, so we "mark them"
-			// for death, and will kill them in Physics Process if they're not moving and still marked.
-			
-			// this is terrible but I don't care
-			if (target.HasMeta("KillPlayer")) {
-				markedForDeath = true;
+				// We don't want to kill player instantly if they're jumping onto water, so we "mark them"
+				// for death, and will kill them in Physics Process if they're not moving and still marked.
+
+				if (target.HasMeta("KillPlayer")) {
+					markedForDeath = true;
+				} else {
+					return false;
+				}
 			} else {
+				markedForDeath = false;
 				return false;
 			}
-		}
-		else {
+		} else {
 			markedForDeath = false;
 		}
 
@@ -215,6 +218,7 @@ public partial class Player : CharacterBody2D {
 		 *	done instead of explicitly calling an animation change.
 		 */
 
+		_cooldown -= delta;
 		// update this check to account for being moved by a platform
 		// get position
 		if (GlobalPosition.DistanceTo(_nextMove) < TOLERANCE) {
@@ -226,7 +230,6 @@ public partial class Player : CharacterBody2D {
 			SetAnimationState(AnimationState.Idle);
 			// we reset moving after, to prevent player from moving before we can do collision checks.
 			
-			_cooldown -= delta;
 			if (!UpdateMovementVector()) {
 				SetCollision(true);
 				moving = false;

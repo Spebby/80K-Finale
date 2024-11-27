@@ -1,4 +1,4 @@
-[gd_scene load_steps=26 format=4 uid="uid://402hri6i1y0e"]
+[gd_scene load_steps=28 format=4 uid="uid://402hri6i1y0e"]
 
 [ext_resource type="Script" path="res://Scripts/Room.cs" id="1_nys6f"]
 [ext_resource type="Texture2D" uid="uid://o20aq1o4bdfb" path="res://PastTileset.png" id="2_km6y2"]
@@ -61,6 +61,12 @@ size = Vector2(30.5, 96)
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_u6t0u"]
 size = Vector2(87.25, 112)
 
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_xnve4"]
+size = Vector2(30.5, 32)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_6rs2v"]
+size = Vector2(30.5, 32)
+
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_lfv4g"]
 size = Vector2(558.546, 204.8)
 
@@ -78,9 +84,10 @@ FUTURE_OBJECTS = NodePath("FUTURE_OBJECTS")
 onTimeShift = ExtResource("3_akyfr")
 
 [node name="Bounds" type="CollisionShape2D" parent="."]
-position = Vector2(-32, -143)
+position = Vector2(-32, -144)
 shape = SubResource("RectangleShape2D_uwl4j")
 debug_color = Color(0.395669, 0.469853, 1, 0.42)
+metadata/_edit_lock_ = true
 
 [node name="Tilesets" type="Node2D" parent="."]
 metadata/_edit_lock_ = true
@@ -182,6 +189,7 @@ scale = Vector2(2, 2)
 shape = SubResource("RectangleShape2D_lqoda")
 
 [node name="RespawnPoint" type="Marker2D" parent="Checkpoints/Checkpoint_1"]
+position = Vector2(17, -16)
 
 [node name="Checkpoint_2" type="Area2D" parent="Checkpoints" node_paths=PackedStringArray("Point")]
 position = Vector2(-112, -16)
@@ -207,6 +215,28 @@ scale = Vector2(2, 2)
 shape = SubResource("RectangleShape2D_u6t0u")
 
 [node name="RespawnPoint" type="Marker2D" parent="Checkpoints/Checkpoint_3"]
+
+[node name="Checkpoint_4" type="Area2D" parent="Checkpoints" node_paths=PackedStringArray("Point")]
+position = Vector2(113, -206)
+collision_layer = 0
+script = ExtResource("7_b5gxp")
+Point = NodePath("RespawnPoint")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Checkpoints/Checkpoint_4"]
+shape = SubResource("RectangleShape2D_xnve4")
+
+[node name="RespawnPoint" type="Marker2D" parent="Checkpoints/Checkpoint_4"]
+
+[node name="Checkpoint_5" type="Area2D" parent="Checkpoints" node_paths=PackedStringArray("Point")]
+position = Vector2(240, 16)
+collision_layer = 0
+script = ExtResource("7_b5gxp")
+Point = NodePath("RespawnPoint")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Checkpoints/Checkpoint_5"]
+shape = SubResource("RectangleShape2D_6rs2v")
+
+[node name="RespawnPoint" type="Marker2D" parent="Checkpoints/Checkpoint_5"]
 
 [node name="TimePiece" parent="." instance=ExtResource("11_4pkjr")]
 position = Vector2(113, -206)
