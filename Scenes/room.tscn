@@ -2,12 +2,12 @@
 
 [ext_resource type="Script" path="res://Scripts/Room.cs" id="1_nys6f"]
 [ext_resource type="Texture2D" uid="uid://o20aq1o4bdfb" path="res://PastTileset.png" id="2_km6y2"]
-[ext_resource type="TileSet" uid="uid://bly4ojx5jnbn8" path="res://PastTileset.tres" id="2_q7lab"]
+[ext_resource type="TileSet" uid="uid://bly4ojx5jnbn8" path="res://Tileset.tres" id="2_q7lab"]
 [ext_resource type="Resource" uid="uid://3vu64pc40tin" path="res://Scenes/OnTimeShift.tres" id="3_akyfr"]
 [ext_resource type="Script" path="res://Scripts/MovingPlatformManager.cs" id="3_dowoy"]
 [ext_resource type="Texture2D" uid="uid://bh741o7rtt1r3" path="res://FutureTileset.png" id="3_fsu13"]
 [ext_resource type="Script" path="res://Scripts/PathManager.cs" id="4_3s1ng"]
-[ext_resource type="Resource" uid="uid://ij18v8xdbwpk" path="res://Entity/WagonCollection.tres" id="4_h5b5d"]
+[ext_resource type="Resource" uid="uid://ij18v8xdbwpk" path="res://Entity/VehicleCollection.tres" id="4_h5b5d"]
 [ext_resource type="Resource" uid="uid://6incnm885h52" path="res://Entity/BoatCollection.tres" id="5_ovni6"]
 [ext_resource type="Script" path="res://Scripts/Checkpoint.cs" id="7_b5gxp"]
 [ext_resource type="PackedScene" uid="uid://bvomsu52de8ng" path="res://Entity/time_piece.tscn" id="11_4pkjr"]
@@ -73,14 +73,15 @@ size = Vector2(558.546, 204.8)
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_w6g0i"]
 size = Vector2(128, 64)
 
-[node name="Room2" type="Area2D" node_paths=PackedStringArray("PAST_OBJECTS", "FUTURE_OBJECTS")]
+[node name="Room" type="Area2D" node_paths=PackedStringArray("PAST_OBJECT_REFERENCE", "FUTURE_OBJECT_REFERENCE", "MiscTimeShifters")]
 collision_layer = 16
 collision_mask = 16
 script = ExtResource("1_nys6f")
 PAST_TILESET = ExtResource("2_km6y2")
 FUTURE_TILESET = ExtResource("3_fsu13")
-PAST_OBJECTS = NodePath("PAST_OBJECTS")
-FUTURE_OBJECTS = NodePath("FUTURE_OBJECTS")
+PAST_OBJECT_REFERENCE = NodePath("PAST_OBJECTS")
+FUTURE_OBJECT_REFERENCE = NodePath("FUTURE_OBJECTS")
+MiscTimeShifters = [NodePath("MovingPlatforms/Wagon"), NodePath("MovingPlatforms/BoatPath0"), NodePath("MovingPlatforms/BoatPath1"), NodePath("MovingPlatforms/BoatPath2"), NodePath("MovingPlatforms/BoatPath3")]
 onTimeShift = ExtResource("3_akyfr")
 
 [node name="Bounds" type="CollisionShape2D" parent="."]
@@ -133,7 +134,7 @@ vehicles = ExtResource("5_ovni6")
 count = 1
 speedMultipler = 1.5
 
-[node name="BoatPath2" type="Path2D" parent="MovingPlatforms"]
+[node name="BoatPath1" type="Path2D" parent="MovingPlatforms"]
 position = Vector2(272, -64)
 rotation = -1.5708
 curve = SubResource("Curve2D_mesv6")
@@ -141,20 +142,21 @@ script = ExtResource("4_3s1ng")
 vehicles = ExtResource("5_ovni6")
 count = 1
 
-[node name="BoatPath3" type="Path2D" parent="MovingPlatforms"]
+[node name="BoatPath2" type="Path2D" parent="MovingPlatforms"]
 position = Vector2(160, 48)
 curve = SubResource("Curve2D_axupc")
 script = ExtResource("4_3s1ng")
 vehicles = ExtResource("5_ovni6")
 count = 1
 
-[node name="BoatPath4" type="Path2D" parent="MovingPlatforms"]
+[node name="BoatPath3" type="Path2D" parent="MovingPlatforms"]
 position = Vector2(-208, -16)
 rotation = 1.5708
 curve = SubResource("Curve2D_seimi")
 script = ExtResource("4_3s1ng")
 vehicles = ExtResource("5_ovni6")
 count = 1
+overrideLoopBehavior = true
 Loop = true
 
 [node name="Checkpoints" type="Node2D" parent="."]

@@ -1,11 +1,12 @@
-[gd_scene load_steps=12 format=4 uid="uid://dhw0334v7pmxq"]
+[gd_scene load_steps=13 format=4 uid="uid://dhw0334v7pmxq"]
 
 [ext_resource type="Script" path="res://Scripts/Room.cs" id="1_7tbsu"]
 [ext_resource type="Texture2D" uid="uid://o20aq1o4bdfb" path="res://PastTileset.png" id="2_iol0f"]
 [ext_resource type="Texture2D" uid="uid://bh741o7rtt1r3" path="res://FutureTileset.png" id="3_80c4c"]
 [ext_resource type="Resource" uid="uid://3vu64pc40tin" path="res://Scenes/OnTimeShift.tres" id="4_lkk8o"]
-[ext_resource type="TileSet" uid="uid://bly4ojx5jnbn8" path="res://PastTileset.tres" id="5_3l5cm"]
-[ext_resource type="Texture2D" uid="uid://df5txc44qbnkn" path="res://Wagon.png" id="8_ylevl"]
+[ext_resource type="TileSet" uid="uid://bly4ojx5jnbn8" path="res://Tileset.tres" id="5_3l5cm"]
+[ext_resource type="Texture2D" uid="uid://df5txc44qbnkn" path="res://Entity/Platforms/Vehicle_Past.png" id="8_ylevl"]
+[ext_resource type="Texture2D" uid="uid://c3ed7pvi8rpru" path="res://Entity/CtrlPrompt.png" id="9_0xkqp"]
 [ext_resource type="Script" path="res://Scripts/Checkpoint.cs" id="10_auo4u"]
 [ext_resource type="PackedScene" uid="uid://bvomsu52de8ng" path="res://Entity/time_piece.tscn" id="11_8vd0h"]
 
@@ -18,14 +19,15 @@ size = Vector2(44.8, 32)
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_lfv4g"]
 size = Vector2(170.667, 96)
 
-[node name="StarterRoom" type="Area2D" node_paths=PackedStringArray("PAST_OBJECTS", "FUTURE_OBJECTS")]
+[node name="StarterRoom" type="Area2D" node_paths=PackedStringArray("PAST_OBJECT_REFERENCE", "FUTURE_OBJECT_REFERENCE", "MiscTimeShifters")]
 collision_layer = 16
 collision_mask = 16
 script = ExtResource("1_7tbsu")
 PAST_TILESET = ExtResource("2_iol0f")
 FUTURE_TILESET = ExtResource("3_80c4c")
-PAST_OBJECTS = NodePath("PAST_OBJECTS")
-FUTURE_OBJECTS = NodePath("FUTURE_OBJECTS")
+PAST_OBJECT_REFERENCE = NodePath("PAST_OBJECTS")
+FUTURE_OBJECT_REFERENCE = NodePath("FUTURE_OBJECTS")
+MiscTimeShifters = []
 onTimeShift = ExtResource("4_lkk8o")
 metadata/_edit_horizontal_guides_ = [176.0]
 
@@ -87,6 +89,10 @@ shape = SubResource("RectangleShape2D_lfv4g")
 position = Vector2(0, 6.86647e-06)
 texture = ExtResource("8_ylevl")
 
+[node name="Sprite2D" type="Sprite2D" parent="PAST_OBJECTS"]
+position = Vector2(-48, -192)
+scale = Vector2(1.5, 1.5)
+texture = ExtResource("9_0xkqp")
+
 [node name="FUTURE_OBJECTS" type="Node2D" parent="."]
-visible = false
 metadata/_edit_lock_ = true

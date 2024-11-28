@@ -2,7 +2,7 @@ using System;
 using Godot;
 using System.Collections.Generic;
 
-public partial class MovingPlatformManager : Node2D {
+public partial class MovingPlatformManager : Node2D, IPauseable {
 	// Called when the node enters the scene tree for the first time.
 	List<PathManager> pathManagers;
 	// keeping track of path managers is currently not needed, but in the future it might be.

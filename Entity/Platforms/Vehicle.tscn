@@ -1,0 +1,40 @@
+[gd_scene load_steps=7 format=3 uid="uid://bo7i4mclo41dp"]
+
+[ext_resource type="Script" path="res://Scripts/MovingObject.cs" id="1_s81nj"]
+[ext_resource type="Texture2D" uid="uid://df5txc44qbnkn" path="res://Entity/Platforms/Vehicle_Past.png" id="2_whid8"]
+[ext_resource type="Texture2D" uid="uid://dtrgq5bku2rjb" path="res://Entity/Platforms/Vehicle_Future.png" id="3_6k4y3"]
+[ext_resource type="Script" path="res://Scripts/Hazard.cs" id="4_s4vb5"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_prfgr"]
+size = Vector2(114, 60)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_lmths"]
+size = Vector2(118, 52)
+
+[node name="Vehicle" type="PathFollow2D" node_paths=PackedStringArray("Bounds")]
+loop = false
+script = ExtResource("1_s81nj")
+Speed = 1.0
+Bounds = NodePath("Collision")
+PAST_SPRITE = ExtResource("2_whid8")
+FUTURE_SPRITE = ExtResource("3_6k4y3")
+
+[node name="Collision" type="Area2D" parent="."]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Collision"]
+shape = SubResource("RectangleShape2D_prfgr")
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+z_index = 10
+texture = ExtResource("2_whid8")
+flip_h = true
+
+[node name="KillBox" type="Area2D" parent="."]
+position = Vector2(0, -2)
+collision_layer = 0
+collision_mask = 8
+script = ExtResource("4_s4vb5")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="KillBox"]
+position = Vector2(0, 2)
+shape = SubResource("RectangleShape2D_lmths")

@@ -15,7 +15,7 @@ enum CollisionLayers : uint {
 	Room = 1 << 4
 }
 
-public partial class Player : CharacterBody2D {
+public partial class Player : CharacterBody2D, IPauseable {
 	// due to how simple our game is, we likely do not need to keep track of much state.
 	// prioritise writing code quickly over it being pretty; realistically we are very unlikely
 	// to reference any of this code in our futures!
@@ -189,7 +189,7 @@ public partial class Player : CharacterBody2D {
 		GlobalPosition += mov;
 		_nextMove      += mov;
 	}
-
+	
 	void ShiftTime() {
 		GD.Print(_cooldown);
 		if (_cooldown > 0) {
@@ -218,6 +218,16 @@ public partial class Player : CharacterBody2D {
 		 *	done instead of explicitly calling an animation change.
 		 */
 
+		// TODO: kill player if they're inside now hostile terrain
+		/*
+		if (recheckCollision) {
+			recheckCollision = false;
+			if (_ray.IsColliding()) {
+				GD.Print("Inside something");
+				Kill();
+			}
+		}*/
+		
 		_cooldown -= delta;
 		// update this check to account for being moved by a platform
 		// get position

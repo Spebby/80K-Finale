@@ -1,74 +1,43 @@
-[gd_scene load_steps=22 format=4 uid="uid://kximdgaxk1nu"]
+[gd_scene load_steps=14 format=4 uid="uid://kximdgaxk1nu"]
 
 [ext_resource type="Script" path="res://Scripts/Room.cs" id="1_1rp3e"]
 [ext_resource type="Texture2D" uid="uid://o20aq1o4bdfb" path="res://PastTileset.png" id="2_aas30"]
 [ext_resource type="Texture2D" uid="uid://bh741o7rtt1r3" path="res://FutureTileset.png" id="3_34sm5"]
 [ext_resource type="Resource" uid="uid://3vu64pc40tin" path="res://Scenes/OnTimeShift.tres" id="4_m5lnm"]
-[ext_resource type="TileSet" uid="uid://bly4ojx5jnbn8" path="res://PastTileset.tres" id="5_lheta"]
+[ext_resource type="TileSet" uid="uid://bly4ojx5jnbn8" path="res://Tileset.tres" id="5_lheta"]
 [ext_resource type="Script" path="res://Scripts/MovingPlatformManager.cs" id="6_mgtsm"]
 [ext_resource type="Script" path="res://Scripts/PathManager.cs" id="7_lagke"]
-[ext_resource type="Resource" uid="uid://ij18v8xdbwpk" path="res://Entity/WagonCollection.tres" id="8_xbsts"]
-[ext_resource type="Resource" uid="uid://6incnm885h52" path="res://Entity/BoatCollection.tres" id="9_fhqyr"]
+[ext_resource type="Resource" uid="uid://ij18v8xdbwpk" path="res://Entity/VehicleCollection.tres" id="8_xbsts"]
 [ext_resource type="Script" path="res://Scripts/Checkpoint.cs" id="10_x66tp"]
-[ext_resource type="Texture2D" uid="uid://dkeoykq3vjrur" path="res://TestPallete.png" id="12_mu6p3"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_uwl4j"]
-size = Vector2(960, 257)
+size = Vector2(896, 320)
 
 [sub_resource type="Curve2D" id="Curve2D_lcaoo"]
 _data = {
-"points": PackedVector2Array(0, 0, 0, 0, -450, 0, 0, 0, 0, 0, 250, 0)
+"points": PackedVector2Array(0, 0, 0, 0, -250, 0, 0, 0, 0, 0, 250, 0)
 }
 point_count = 2
 
-[sub_resource type="Curve2D" id="Curve2D_qgdhx"]
-_data = {
-"points": PackedVector2Array(0, 0, 0, 0, -64, 0, 0, 0, 0, 0, 160, 0)
-}
-point_count = 2
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_d3wlr"]
+size = Vector2(80, 56)
 
-[sub_resource type="Curve2D" id="Curve2D_mesv6"]
-_data = {
-"points": PackedVector2Array(0, 0, 0, 0, -80, 0, 0, 0, 0, 0, 144, 0)
-}
-point_count = 2
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_00a10"]
+size = Vector2(80, 56)
 
-[sub_resource type="Curve2D" id="Curve2D_axupc"]
-_data = {
-"points": PackedVector2Array(0, 0, 0, 0, -48, 0, 0, 0, 0, 0, 96, 0)
-}
-point_count = 2
-
-[sub_resource type="Curve2D" id="Curve2D_seimi"]
-_data = {
-"points": PackedVector2Array(0, 0, 0, 0, -63.9999, 32.0002, 0, 0, 0, 0, 64.0001, 31.9998, 0, 0, 0, 0, 63.9999, -32.0002, 0, 0, 0, 0, -64.0001, -31.9998, 0, 0, 0, 0, -63.9999, 32.0002)
-}
-point_count = 5
-
-[sub_resource type="RectangleShape2D" id="RectangleShape2D_lqoda"]
-size = Vector2(29, 64)
-
-[sub_resource type="RectangleShape2D" id="RectangleShape2D_wm45k"]
-size = Vector2(30.5, 96)
-
-[sub_resource type="RectangleShape2D" id="RectangleShape2D_lfv4g"]
-size = Vector2(558.546, 204.8)
-
-[sub_resource type="RectangleShape2D" id="RectangleShape2D_w6g0i"]
-size = Vector2(128, 64)
-
-[node name="Connector_2" type="Area2D" node_paths=PackedStringArray("PAST_OBJECTS", "FUTURE_OBJECTS")]
+[node name="Connector_2" type="Area2D" node_paths=PackedStringArray("PAST_OBJECT_REFERENCE", "FUTURE_OBJECT_REFERENCE", "MiscTimeShifters")]
 collision_layer = 16
 collision_mask = 16
 script = ExtResource("1_1rp3e")
 PAST_TILESET = ExtResource("2_aas30")
 FUTURE_TILESET = ExtResource("3_34sm5")
-PAST_OBJECTS = NodePath("PAST_OBJECTS")
-FUTURE_OBJECTS = NodePath("FUTURE_OBJECTS")
+PAST_OBJECT_REFERENCE = NodePath("PAST_OBJECTS")
+FUTURE_OBJECT_REFERENCE = NodePath("FUTURE_OBJECTS")
+MiscTimeShifters = [NodePath("MovingPlatforms/Wagon")]
 onTimeShift = ExtResource("4_m5lnm")
 
 [node name="Bounds" type="CollisionShape2D" parent="."]
-position = Vector2(-32, 0.5)
+position = Vector2(-64, -32)
 shape = SubResource("RectangleShape2D_uwl4j")
 debug_color = Color(0.395669, 0.469853, 1, 0.42)
 
@@ -76,7 +45,7 @@ debug_color = Color(0.395669, 0.469853, 1, 0.42)
 metadata/_edit_lock_ = true
 
 [node name="Ground" type="TileMapLayer" parent="Tilesets"]
-tile_map_data = PackedByteArray("AAD8//3/AAAAAAUAAAD9//3/AAABAAUAAAD+//3/AAACAAUAAAD7/wEAAAAAAAYAAAD8/wEAAAABAAYAAAD9/wEAAAACAAYAAAD+/wIAAAAJAAIAAAD//wIAAAAIAAMAAAAAAAIAAAACAAYAAAABAAIAAAAAAAYAAAACAAIAAAABAAYAAAADAAIAAAACAAYAAAD+/wEAAAACAAYAAAD//wAAAAAAAAAAAAD//wEAAAAGAAMAABAAAAAAAAACAAEAAAAAAAEAAAABAAEAAAABAAAAAAAAAAAAAAABAAEAAAAAAAEAAAACAAAAAAABAAAAABACAAEAAAAAAAEAAAADAAAAAAABAAAAAAADAAEAAAABAAEAAAD///7/AAAAAAAAAAD/////AAAAAAEAAAAAAP7/AAABAAAAAAAAAP//AAABAAEAAAABAP7/AAAAAAAAAAABAP//AAACAAAAAAACAP7/AAABAAAAABACAP//AAABAAEAABD9////AAAAAAEAACD+////AAABAAEAACD9//7/AAAAAAEAACD+//7/AAABAAEAACD8//7/AAAAAAEAADD7//7/AAABAAEAADD8////AAABAAAAAAD7////AAAAAAAAAAADAP//AAAAAAEAABADAP7/AAAAAAAAABD8/wAAAAACAAEAAAD7/wAAAAAAAAEAAAD9/wAAAAAAAAAAACD+/wAAAAABAAAAACD7//3/AAABAAUAAAD///3/AAABAAUAAAAAAP3/AAAGAAMAADABAP3/AAABAAEAAAACAP3/AAABAAUAAAADAP3/AAABAAUAAAD6////AAAGAAAAAAD6/wAAAAAGAAEAAAD6//3/AAAIAAIAAAD6//7/AAAGAAEAAAD6/wEAAAAIAAMAAAAEAAEAAAABAAAAAAAFAAEAAAABAAAAAAAFAAIAAAABAAYAAAAEAAIAAAABAAYAAAD///z/AAAJAAMAAAAAAPz/AAABAAYAAFABAPz/AAABAAAAAAD+//z/AAAAAAUAADD9//z/AAAAAAUAADD8//z/AAAAAAUAADD7//z/AAAAAAUAADD6//z/AAAAAAUAADD6/wIAAAAAAAUAAAD7/wIAAAAAAAUAAAD8/wIAAAAAAAUAAAD+/wMAAAAGAAYAAAD//wMAAAAAAAUAAAAAAAMAAAAAAAUAAAABAAMAAAAAAAUAAAACAAMAAAAAAAUAAAADAAMAAAAAAAUAAAAEAAMAAAAAAAUAAAAFAAMAAAAAAAUAAAD9/wIAAAAAAAUAAAD3//z/AAABAAUAAHD3//3/AAAJAAAAADD3//7/AAABAAEAAAD3////AAAAAAEAAAD3/wAAAAABAAEAAAD3/wEAAAAJAAAAAGD3/wIAAAABAAYAAGD2/wIAAAABAAUAAGD2/wEAAAACAAUAAGD2/wAAAAAJAAAAAAD2////AAAAAAEAAAD2//7/AAAAAAEAAAD2//3/AAAJAAAAAFD2//z/AAABAAYAAHD2/wMAAAACAAYAAHD3/wMAAAACAAUAAHAKAPz/AAAAAAYAAGAKAP3/AAAAAAYAAGAKAP7/AAAAAAYAAGAKAP//AAAAAAYAAGAKAAAAAAAAAAYAAGAKAAEAAAAAAAYAAGAKAAIAAAAJAAMAAAAJAAIAAAAAAAUAADAJAAEAAAAAAAAAACAJAAAAAAAAAAAAACAJAP//AAAAAAAAACAJAP7/AAAAAAAAACAJAP3/AAAAAAAAACAJAPz/AAAAAAAAACD4/wIAAAAIAAIAAAD4/wMAAAAAAAUAAGD1/wIAAAAAAAUAAFD1/wMAAAAAAAUAAFD1//z/AAAAAAUAACD0//z/AAAAAAUAACDz//z/AAAAAAUAACDy//z/AAAAAAUAACD5//z/AAAAAAUAADD4//z/AAAIAAMAAAD5/wIAAAAAAAUAAAD0/wEAAAAAAAUAAADz/wEAAAAAAAUAAADy/wEAAAAAAAUAAAD1/wEAAAAJAAIAAAD0////AAAAAAAAAAD0/wAAAAAGAAAAAGD1////AAABAAAAAAD1/wAAAAAGAAEAAGDy//7/AAAAAAAAAGDy//3/AAAGAAEAAFDz//7/AAAAAAEAAGDz//3/AAAGAAAAAFD0//7/AAABAAAAAED1//7/AAABAAEAAED0//3/AAAGAAEAAFD1//3/AAAGAAAAAFDz////AAACAAEAAADy////AAAAAAEAAFDz/wAAAAAGAAEAAGDy/wAAAAAGAAAAAGD4/wEAAAAJAAMAAAD4/wAAAAACAAYAAGD4////AAACAAYAAGD4//7/AAACAAYAAGD4//3/AAAJAAIAAAAJAAMAAAAAAAUAAAAKAAMAAAAAAAUAAAALAAIAAAAAAAUAAGALAAEAAAAAAAUAAGALAAAAAAAAAAUAAGALAP//AAAAAAUAAGALAP7/AAAAAAUAAGALAAMAAAAAAAUAAGALAP3/AAAAAAUAAGALAPz/AAAIAAIAAADw/wAAAAAAAAYAAADw////AAABAAEAACDx//3/AAACAAYAACDw//3/AAABAAYAACDx//7/AAAAAAAAADDw//7/AAAFAAEAAADx////AAABAAAAAADx/wAAAAACAAYAAADw/wEAAAAAAAUAAADx/wEAAAAAAAUAAADw//z/AAAAAAUAACDx//z/AAAAAAUAACA=")
+tile_map_data = PackedByteArray("AAD8//3/AAAAAAUAAAD9//3/AAABAAUAAAD+//3/AAACAAUAAAD7/wEAAAAAAAYAAAD8/wEAAAABAAYAAAD9/wEAAAACAAYAAAD+/wIAAAAJAAIAAAD//wIAAAAIAAMAAAAAAAIAAAACAAYAAAABAAIAAAAAAAYAAAACAAIAAAAJAAAAAAADAAIAAAAAAAAAAAD+/wEAAAACAAYAAAD//wAAAAAAAAAAAAD//wEAAAAGAAMAABAAAAAAAAACAAEAAAAAAAEAAAABAAEAAAABAAAAAAAAAAAAAAABAAEAAAAAAAEAAAACAAAAAAABAAAAABACAAEAAAAAAAEAAAADAAAAAAABAAAAAAADAAEAAAABAAEAAAD///7/AAAAAAAAAAD/////AAAAAAEAAAAAAP7/AAABAAAAAAAAAP//AAABAAEAAAABAP7/AAAAAAAAAAABAP//AAACAAAAAAACAP7/AAABAAAAABACAP//AAABAAEAABD9////AAAAAAEAACD+////AAABAAEAACD9//7/AAAAAAEAACD+//7/AAABAAEAACD8//7/AAAAAAEAADD7//7/AAABAAEAADD8////AAABAAAAAAD7////AAAAAAAAAAADAP//AAAAAAEAABADAP7/AAAAAAAAABD8/wAAAAAFAAEAAAD7/wAAAAAAAAEAAAD9/wAAAAAAAAAAACD+/wAAAAABAAAAACD7//3/AAABAAUAAAD///3/AAABAAUAAAAAAP3/AAAGAAMAADABAP3/AAABAAEAAAACAP3/AAAFAAEAAAADAP3/AAADAAAAAAD6////AAAFAAEAAAD6/wAAAAAAAAAAAAD6//3/AAACAAUAAAD6//7/AAAAAAAAAAD6/wEAAAACAAYAAAAEAAEAAAABAAAAAAAFAAEAAAABAAAAAAAFAAIAAAAIAAAAAAAEAAIAAAAAAAEAAAD///z/AAAJAAMAAAAAAPz/AAAIAAIAAAABAPz/AAAHAAAAAGD+//z/AAAAAAUAADD9//z/AAAAAAUAADD8//z/AAAAAAUAADD7//z/AAAAAAUAADD6//z/AAAAAAUAADD6/wIAAAAAAAUAAAD7/wIAAAAAAAUAAAD8/wIAAAAAAAUAAAD+/wMAAAAGAAYAAAD//wMAAAAAAAUAAAAAAAMAAAAAAAUAAAABAAMAAAAJAAIAAAD9/wIAAAAAAAUAAAD3//z/AAAGAAIAAAD3//3/AAAJAAEAAAD3//7/AAABAAEAAAD3////AAAAAAEAAAD3/wAAAAABAAEAAAD3/wEAAAAJAAAAAAD3/wIAAAAGAAAAAAD2/wIAAAAJAAIAAAD2/wEAAAAIAAMAAAD2/wAAAAAJAAAAAAD2////AAAAAAEAAAD2//7/AAAAAAEAAAD2//3/AAABAAUAAAD2//z/AAAJAAMAAAAKAPz/AAAHAAAAAAAKAP3/AAAHAAEAAAAKAP7/AAAHAAIAAAAKAP//AAAHAAAAAAAKAAAAAAAHAAEAAAAKAAEAAAAHAAIAAAAKAAIAAAAJAAMAAAAJAAIAAAAAAAUAADAJAAEAAAAAAAAAACAJAAAAAAAAAAAAACAJAP//AAAAAAAAACAJAP7/AAAAAAAAACAJAP3/AAAAAAAAACAJAPz/AAAAAAAAACD4/wIAAAAHAAAAAAD1/wIAAAAIAAEAAAD1//z/AAAAAAUAACD0//z/AAAAAAUAACDz//z/AAAAAAUAACDy//z/AAAAAAUAACD5//z/AAAIAAMAAAD4//z/AAAHAAIAAAD5/wIAAAAIAAIAAAD0/wEAAAAAAAUAAADz/wEAAAAAAAUAAADy/wEAAAAAAAUAAAD1/wEAAAAJAAIAAAD0////AAAAAAAAAAD0/wAAAAAGAAAAAGD1////AAABAAAAAAD1/wAAAAAGAAEAAGDy//7/AAAAAAAAAGDy//3/AAAGAAEAAFDz//7/AAAAAAEAAGDz//3/AAAGAAAAAFD0//7/AAABAAAAAED1//7/AAABAAEAAED0//3/AAAGAAEAAFD1//3/AAAGAAAAAFDz////AAACAAEAAADy////AAAAAAEAAFDz/wAAAAAGAAEAAGDy/wAAAAAGAAAAAGD4/wEAAAAIAAAAAAD4/wAAAAAFAAEAAAD4////AAAFAAEAAAD4//7/AAAAAAAAAAD4//3/AAAIAAEAAAAJAAMAAAAAAAUAAAAKAAMAAAAAAAUAAAALAAIAAAAGAAIAAAALAAEAAAAGAAIAAAALAAAAAAAGAAIAAAALAP//AAAGAAIAAAALAP7/AAAGAAIAAAALAAMAAAAJAAEAAAALAP3/AAAGAAIAAAALAPz/AAAGAAIAAADw/wAAAAAAAAYAAADw////AAABAAEAACDx//3/AAACAAYAACDw//3/AAABAAYAACDx//7/AAAAAAAAADDw//7/AAAFAAEAAADx////AAABAAAAAADx/wAAAAACAAYAAADw/wEAAAAAAAUAAADx/wEAAAAAAAUAAADw//z/AAAAAAUAACDx//z/AAAAAAUAACD5/wAAAAAAAAAAAAD5////AAAFAAEAAAD5/wEAAAABAAYAAAD5//3/AAABAAUAAAAEAAMAAAAAAAEAAAADAAMAAAAAAAEAAAACAAMAAAAGAAEAAAAFAAMAAAAHAAEAAAAGAAIAAAABAAYAAAAHAAIAAAABAAYAAAAIAAIAAAACAAYAAAAHAAMAAAAAAAUAAAAIAAMAAAAAAAUAAAAGAAMAAAAIAAIAAAAGAAEAAAADAAEAAAAHAAEAAAAAAAEAAAAIAAEAAAABAAEAAAAIAAAAAAABAAAAAAAHAAAAAAAAAAAAAAAGAAAAAAAFAAEAAAAFAAAAAAAFAAEAAAAEAAAAAAAFAAEAAAAEAP//AAAAAAEAAAAFAP//AAAFAAEAAAAGAP//AAAFAAEAAAAHAP//AAAFAAEAAAAIAP//AAAFAAEAAAAIAP7/AAAFAAEAAAAHAP7/AAAFAAEAAAAGAP7/AAAFAAEAAAAFAP7/AAAFAAEAAAAEAP7/AAAFAAEAAAAEAP3/AAAFAAEAAAAFAP3/AAAAAAAAAAAGAP3/AAABAAAAAAAHAP3/AAAFAAEAAAAIAP3/AAAAAAEAAAAIAPz/AAAFAAEAAAAHAPz/AAAFAAEAAAAGAPz/AAAJAAEAAAAFAPz/AAAHAAIAAGAEAPz/AAAHAAEAAGADAPz/AAAHAAAAAGACAPz/AAAHAAEAAGD5//7/AAAAAAEAAAD3//r/AAAGAAAAAAD3//v/AAAGAAEAAAD4//r/AAAHAAAAAAD4//v/AAAHAAEAAAD5//v/AAAGAAIAAAD5//r/AAAGAAIAAAD2//v/AAAHAAIAAAD2//r/AAAHAAIAAAD///v/AAAIAAAAAAAAAPv/AAAAAAYAAAABAPv/AAAAAAYAAAACAPv/AAAAAAYAAAADAPv/AAAAAAYAAAAEAPv/AAAAAAYAAAALAPv/AAAGAAIAAAALAPr/AAAGAAIAAAAFAPv/AAAJAAMAAAAFAPr/AAAHAAIAAAAGAPr/AAAGAAAAAAAGAPv/AAAGAAEAAAAKAPr/AAAHAAAAAAAKAPv/AAAHAAEAAAAHAPr/AAAAAAAAAAAHAPv/AAAFAAEAAAAIAPv/AAAFAAEAAAAJAPv/AAAFAAEAAAAJAPr/AAAFAAEAAAAIAPr/AAAFAAEAAAD3/wMAAAAGAAEAAAD4/wMAAAAHAAEAAAD5/wMAAAAGAAIAAAD2/wMAAAAHAAIAAAA=")
 tile_set = ExtResource("5_lheta")
 rendering_quadrant_size = 32
 collision_enabled = false
@@ -88,6 +57,7 @@ metadata/KillPlayer = false
 metadata/_edit_lock_ = true
 
 [node name="Wall" type="TileMapLayer" parent="Tilesets"]
+tile_map_data = PackedByteArray("AAD2/wIAAAALAAQAABD5/wIAAAALAAQAAAD2/wMAAAAJAAcAAED5/wMAAAAJAAcAAFAFAPv/AAALAAQAADALAP7/AAAKAAcAAFALAP3/AAAJAAcAAFALAPz/AAAIAAcAAFALAAEAAAAJAAcAAFALAAAAAAAIAAcAAFALAP//AAAIAAcAAFALAAIAAAAKAAcAAFAIAAMAAAAKAAcAADAJAAMAAAAJAAcAADAKAAMAAAAIAAcAADD//wMAAAAKAAcAADAAAAMAAAAJAAcAADABAAMAAAALAAQAAFD7/wIAAAAJAAcAADD8/wIAAAAIAAcAADD9/wIAAAAIAAcAADD6/wIAAAAKAAcAADD+/wIAAAALAAQAAFAGAAMAAAALAAQAAAALAAMAAAALAAUAADAHAAMAAAAJAAcAADD+/wMAAAALAAUAAGD9/wMAAAAKAAUAAAD8/wMAAAAKAAUAAAD7/wMAAAAKAAUAAAD6/wMAAAAKAAUAAAAEAPr/AAAKAAUAAAADAPr/AAAKAAUAAAACAPr/AAAKAAUAAAABAPr/AAAKAAUAAAAAAPr/AAAKAAUAAAD///r/AAAKAAUAAAD+//r/AAAKAAUAAAD9//r/AAAKAAUAAAD8//r/AAAKAAUAAAD7//r/AAAKAAUAAAD6//r/AAAKAAUAAAD5//r/AAAIAAcAAFD2//r/AAAJAAcAAGD1//r/AAAKAAUAAAD0//r/AAAKAAUAAADz//r/AAAKAAUAAADy//r/AAAKAAUAAADx//r/AAAKAAUAAADw//r/AAAKAAUAAAALAPv/AAAJAAcAAFALAPr/AAAIAAcAAFAFAPr/AAAJAAcAAGACAPv/AAAKAAcAAAADAPv/AAAJAAcAAAAEAPv/AAAKAAcAAAAAAPv/AAAIAAcAAAABAPv/AAAJAAcAAAD8//z/AAAIAAcAAAD9//z/AAAJAAcAAAD+//z/AAAKAAcAAAD5//z/AAALAAQAAGD6//z/AAAJAAcAAAD7//z/AAAKAAcAAAD0//z/AAAIAAcAAAD1//z/AAAJAAcAAAD2//z/AAALAAQAADDx//z/AAAJAAcAAADy//z/AAAKAAcAAADz//z/AAAKAAcAAADw//z/AAAIAAcAAAD5//v/AAAJAAcAAFD2//v/AAAIAAcAAGD6//v/AAAKAAUAAAD7//v/AAAKAAUAAAD8//v/AAAKAAUAAAD9//v/AAAKAAUAAAD+//v/AAAKAAUAAAD1//v/AAAKAAUAAAD0//v/AAAKAAUAAADz//v/AAAKAAUAAADy//v/AAAKAAUAAADx//v/AAAKAAUAAADw//v/AAAKAAUAAAD///z/AAALAAQAADD///v/AAALAAUAAAD3/wIAAAADAAQAAAD4/wEAAAAFAAQAAADw/wEAAAAKAAcAADDx/wEAAAAJAAcAADDy/wEAAAAIAAcAADDz/wEAAAAKAAcAADD0/wEAAAAJAAcAADD1/wEAAAALAAQAAFD1/wIAAAALAAUAAGDw/wMAAAAKAAUAAADx/wMAAAAKAAUAAADy/wMAAAAKAAUAAADz/wMAAAAKAAUAAAD0/wMAAAAKAAUAAAD1/wMAAAAKAAUAAAD0/wIAAAAKAAUAAADz/wIAAAAKAAUAAADy/wIAAAAKAAUAAADx/wIAAAAKAAUAAADw/wIAAAAKAAUAAAD3//z/AAAFAAUAAAD4//v/AAAFAAUAAAA=")
 tile_set = ExtResource("5_lheta")
 metadata/_edit_lock_ = true
 
@@ -96,103 +66,48 @@ script = ExtResource("6_mgtsm")
 metadata/_edit_lock_ = true
 
 [node name="Wagon" type="Path2D" parent="MovingPlatforms"]
-position = Vector2(-288, -16)
+position = Vector2(-256, -16)
 rotation = 1.5708
 curve = SubResource("Curve2D_lcaoo")
 script = ExtResource("7_lagke")
 vehicles = ExtResource("8_xbsts")
-count = 2
-interval = 3.0
+count = 1
 overrideLoopBehavior = true
 Loop = true
 
-[node name="BoatPath0" type="Path2D" parent="MovingPlatforms"]
-position = Vector2(176, -176)
-curve = SubResource("Curve2D_qgdhx")
-script = ExtResource("7_lagke")
-vehicles = ExtResource("9_fhqyr")
-count = 1
-speedMultipler = 1.5
+[node name="PAST_OBJECTS" type="Node2D" parent="."]
+metadata/_edit_lock_ = true
 
-[node name="BoatPath2" type="Path2D" parent="MovingPlatforms"]
-position = Vector2(272, -64)
-rotation = -1.5708
-curve = SubResource("Curve2D_mesv6")
-script = ExtResource("7_lagke")
-vehicles = ExtResource("9_fhqyr")
-count = 1
-
-[node name="BoatPath3" type="Path2D" parent="MovingPlatforms"]
-position = Vector2(160, 48)
-curve = SubResource("Curve2D_axupc")
-script = ExtResource("7_lagke")
-vehicles = ExtResource("9_fhqyr")
-count = 1
-
-[node name="BoatPath4" type="Path2D" parent="MovingPlatforms"]
-position = Vector2(-208, -16)
-rotation = 1.5708
-curve = SubResource("Curve2D_seimi")
-script = ExtResource("7_lagke")
-vehicles = ExtResource("9_fhqyr")
-count = 1
-Loop = true
+[node name="FUTURE_OBJECTS" type="Node2D" parent="."]
+metadata/_edit_lock_ = true
 
 [node name="Checkpoints" type="Node2D" parent="."]
 metadata/_edit_lock_ = true
 
+[node name="Checkpoint_0" type="Area2D" parent="Checkpoints" node_paths=PackedStringArray("Point")]
+position = Vector2(-376, -40)
+rotation = 1.5708
+collision_layer = 0
+script = ExtResource("10_x66tp")
+Point = NodePath("RespawnPoint")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Checkpoints/Checkpoint_0"]
+scale = Vector2(2, 2)
+shape = SubResource("RectangleShape2D_d3wlr")
+
+[node name="RespawnPoint" type="Marker2D" parent="Checkpoints/Checkpoint_0"]
+position = Vector2(-8, -8)
+
 [node name="Checkpoint_1" type="Area2D" parent="Checkpoints" node_paths=PackedStringArray("Point")]
-position = Vector2(-481, -32)
+position = Vector2(-160, -16)
+rotation = -1.5708
 collision_layer = 0
 script = ExtResource("10_x66tp")
 Point = NodePath("RespawnPoint")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Checkpoints/Checkpoint_1"]
 scale = Vector2(2, 2)
-shape = SubResource("RectangleShape2D_lqoda")
+shape = SubResource("RectangleShape2D_00a10")
 
 [node name="RespawnPoint" type="Marker2D" parent="Checkpoints/Checkpoint_1"]
-position = Vector2(17, -16)
-
-[node name="Checkpoint_2" type="Area2D" parent="Checkpoints" node_paths=PackedStringArray("Point")]
-position = Vector2(-112, -16)
-collision_layer = 0
-script = ExtResource("10_x66tp")
-Point = NodePath("RespawnPoint")
-
-[node name="CollisionShape2D" type="CollisionShape2D" parent="Checkpoints/Checkpoint_2"]
-scale = Vector2(2, 2)
-shape = SubResource("RectangleShape2D_wm45k")
-
-[node name="RespawnPoint" type="Marker2D" parent="Checkpoints/Checkpoint_2"]
-
-[node name="PAST_OBJECTS" type="Node2D" parent="."]
-visible = false
-metadata/_edit_lock_ = true
-
-[node name="Area2D" type="Area2D" parent="PAST_OBJECTS"]
-position = Vector2(0, -64)
-scale = Vector2(0.34375, 0.3125)
-
-[node name="CollisionShape2D" type="CollisionShape2D" parent="PAST_OBJECTS/Area2D"]
-shape = SubResource("RectangleShape2D_lfv4g")
-
-[node name="Sprite2D" type="Sprite2D" parent="PAST_OBJECTS/Area2D"]
-position = Vector2(0, 1.90735e-05)
-scale = Vector2(1.09091, 0.8)
-texture = ExtResource("2_aas30")
-
-[node name="FUTURE_OBJECTS" type="Node2D" parent="."]
-visible = false
-metadata/_edit_lock_ = true
-
-[node name="Area2D" type="Area2D" parent="FUTURE_OBJECTS"]
-position = Vector2(80, 80)
-
-[node name="CollisionShape2D" type="CollisionShape2D" parent="FUTURE_OBJECTS/Area2D"]
-position = Vector2(-16, -16)
-shape = SubResource("RectangleShape2D_w6g0i")
-
-[node name="Sprite2D" type="Sprite2D" parent="FUTURE_OBJECTS/Area2D"]
-position = Vector2(-16, -16)
-texture = ExtResource("12_mu6p3")
+position = Vector2(-5.79198e-05, 16)

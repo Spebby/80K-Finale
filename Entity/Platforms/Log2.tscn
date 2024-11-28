@@ -1,0 +1,28 @@
+[gd_scene load_steps=5 format=3 uid="uid://dj2oxnqy33dc5"]
+
+[ext_resource type="Script" path="res://Scripts/MovingObject.cs" id="1_ukr6m"]
+[ext_resource type="Texture2D" uid="uid://7nglxe2bjepn" path="res://Entity/Platforms/FuturePlatform2.bmp" id="3_x4ijr"]
+[ext_resource type="Texture2D" uid="uid://dwf50x845u4b8" path="res://Entity/Platforms/Log2.png" id="4_n3b0r"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_prfgr"]
+size = Vector2(48, 16)
+
+[node name="Boat" type="PathFollow2D" node_paths=PackedStringArray("Bounds")]
+loop = false
+script = ExtResource("1_ukr6m")
+Speed = 1.0
+Bounds = NodePath("Bounds")
+PAST_SPRITE = ExtResource("4_n3b0r")
+FUTURE_SPRITE = ExtResource("3_x4ijr")
+
+[node name="Bounds" type="Area2D" parent="."]
+collision_layer = 2
+collision_mask = 2
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Bounds"]
+shape = SubResource("RectangleShape2D_prfgr")
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+scale = Vector2(0.5, 0.5)
+texture = ExtResource("4_n3b0r")
+flip_h = true

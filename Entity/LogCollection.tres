@@ -1,0 +1,10 @@
+[gd_resource type="Resource" load_steps=5 format=3 uid="uid://c3d83v5g2tpxw"]
+
+[ext_resource type="PackedScene" uid="uid://dj8uyiscfio5k" path="res://Entity/Platforms/Log1.tscn" id="1_ccqtc"]
+[ext_resource type="PackedScene" uid="uid://dj2oxnqy33dc5" path="res://Entity/Platforms/Log2.tscn" id="2_0nb1m"]
+[ext_resource type="Script" path="res://Scripts/ObjectContainer.cs" id="2_5e3l0"]
+[ext_resource type="PackedScene" uid="uid://dp04emu8ucjqg" path="res://Entity/Platforms/Log3.tscn" id="3_bkch4"]
+
+[resource]
+script = ExtResource("2_5e3l0")
+Container = Array[PackedScene]([ExtResource("1_ccqtc"), ExtResource("2_0nb1m"), ExtResource("3_bkch4")])

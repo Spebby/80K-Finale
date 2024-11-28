@@ -1,6 +1,6 @@
 [gd_resource type="Resource" load_steps=3 format=3 uid="uid://ij18v8xdbwpk"]
 
-[ext_resource type="PackedScene" uid="uid://bo7i4mclo41dp" path="res://Entity/Platforms/Wagon.tscn" id="1_lj08k"]
+[ext_resource type="PackedScene" uid="uid://bo7i4mclo41dp" path="res://Entity/Platforms/Vehicle.tscn" id="1_lj08k"]
 [ext_resource type="Script" path="res://Scripts/ObjectContainer.cs" id="2_pepxa"]
 
 [resource]

@@ -1,19 +1,19 @@
-[gd_scene load_steps=5 format=3 uid="uid://6x8mqejx7fde"]
+[gd_scene load_steps=5 format=3 uid="uid://dj8uyiscfio5k"]
 
-[ext_resource type="Script" path="res://Scripts/MovingObject.cs" id="1_m2seb"]
-[ext_resource type="Texture2D" uid="uid://ble7bph2y0qc5" path="res://Entity/Platforms/Boat.png" id="2_kfohi"]
-[ext_resource type="Texture2D" uid="uid://cu80jpa33fuer" path="res://Entity/Platforms/FuturePlatform1.bmp" id="3_xkvmd"]
+[ext_resource type="Script" path="res://Scripts/MovingObject.cs" id="1_nml6x"]
+[ext_resource type="Texture2D" uid="uid://dvd6e3tfw132s" path="res://Entity/Platforms/Log1.png" id="2_2bhxd"]
+[ext_resource type="Texture2D" uid="uid://cu80jpa33fuer" path="res://Entity/Platforms/FuturePlatform1.bmp" id="3_a8aw7"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_prfgr"]
 size = Vector2(64, 16)
 
 [node name="Boat" type="PathFollow2D" node_paths=PackedStringArray("Bounds")]
 loop = false
-script = ExtResource("1_m2seb")
+script = ExtResource("1_nml6x")
 Speed = 1.0
 Bounds = NodePath("Bounds")
-PAST_SPRITE = ExtResource("2_kfohi")
-FUTURE_SPRITE = ExtResource("3_xkvmd")
+PAST_SPRITE = ExtResource("2_2bhxd")
+FUTURE_SPRITE = ExtResource("3_a8aw7")
 
 [node name="Bounds" type="Area2D" parent="."]
 collision_layer = 2
@@ -24,5 +24,5 @@ shape = SubResource("RectangleShape2D_prfgr")
 
 [node name="Sprite2D" type="Sprite2D" parent="."]
 scale = Vector2(0.5, 0.5)
-texture = ExtResource("2_kfohi")
+texture = ExtResource("2_2bhxd")
 flip_h = true
