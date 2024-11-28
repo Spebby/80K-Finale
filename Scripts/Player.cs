@@ -158,10 +158,10 @@ public partial class Player : CharacterBody2D, IPauseable {
 
 	IPlatform _platform;
 	public void EnteredPlatform(IPlatform platform) {
-		//await ToSignal(this, SignalName.PlayerNotMoving);
-		if (_platform != null) return;
+		if (_platform != null || platform is not Node2D plat) return; 
 		PlayStepAudio(platformSFX);
-		_platform =  platform;
+		_platform = platform;
+		_nextMove = platform.GetClosestAnchor(_nextMove);
 		if (platform is MovingObject obj) {
 			obj.Moved += OnPlatformMoved;
 		}

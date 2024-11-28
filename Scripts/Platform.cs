@@ -27,4 +27,8 @@ public partial class Platform : Area2D, IPlatform, ITimeShiftable {
 		if (body is not Player player) return;
 		player.ExitPlatform(this);
 	}
+
+	public Vector2 GetClosestAnchor(Vector2 pos) {
+		return GlobalPosition;
+	}
 }

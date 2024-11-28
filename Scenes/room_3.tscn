@@ -67,14 +67,13 @@ size = Vector2(558.546, 204.8)
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_w6g0i"]
 size = Vector2(128, 64)
 
-[node name="Room" type="Area2D" node_paths=PackedStringArray("PAST_OBJECTS", "FUTURE_OBJECTS")]
+[node name="Room" type="Area2D" node_paths=PackedStringArray("MiscTimeShifters")]
 collision_layer = 16
 collision_mask = 16
 script = ExtResource("1_rrnh3")
 PAST_TILESET = ExtResource("2_qkm0a")
 FUTURE_TILESET = ExtResource("3_ukrj2")
-PAST_OBJECTS = NodePath("PAST_OBJECTS")
-FUTURE_OBJECTS = NodePath("FUTURE_OBJECTS")
+MiscTimeShifters = []
 onTimeShift = ExtResource("4_lqcal")
 
 [node name="Bounds" type="CollisionShape2D" parent="."]

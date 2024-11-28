@@ -36,7 +36,7 @@ public partial class Room : Area2D, ITimeShiftable, IPauseable {
                 SwapPalette.Add(timeShiftableNode);
                 continue;
             }
-            GD.PrintErr($"Error: Node {node.Name} does not implement ITimeShiftable.");
+            GD.PrintErr($"{Name} - Error: Node {node.Name} does not implement ITimeShiftable.");
             throw new InvalidOperationException($"Node {node.Name} does not implement ITimeShiftable.");
         }
         

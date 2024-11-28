@@ -1,4 +1,4 @@
-[gd_scene load_steps=8 format=3 uid="uid://breyy1oi0hki3"]
+[gd_scene load_steps=9 format=3 uid="uid://breyy1oi0hki3"]
 
 [ext_resource type="PackedScene" uid="uid://ckjx4d1rclmw4" path="res://Scenes/Player.tscn" id="1_v74hx"]
 [ext_resource type="PackedScene" uid="uid://bj20fq6xks87p" path="res://Scenes/TallRoom.tscn" id="3_kxhoc"]
@@ -7,11 +7,12 @@
 [ext_resource type="PackedScene" uid="uid://de0hwg8lmfu5x" path="res://Scenes/Gauntlet_0.tscn" id="5_vb720"]
 [ext_resource type="PackedScene" uid="uid://kximdgaxk1nu" path="res://Scenes/Connector_2.tscn" id="6_gpn3j"]
 [ext_resource type="PackedScene" uid="uid://nbk5lm3mtlv3" path="res://Scenes/FinalRoom.tscn" id="7_ykscy"]
+[ext_resource type="PackedScene" uid="uid://dm77nc7nvapeb" path="res://Scenes/Island.tscn" id="8_vgavg"]
 
 [node name="TestWorld" type="Node2D"]
 
 [node name="Player" parent="." instance=ExtResource("1_v74hx")]
-position = Vector2(288, -1264)
+position = Vector2(1952, -1824)
 slide_on_ceiling = false
 
 [node name="Room" parent="." instance=ExtResource("3_n7778")]
@@ -31,3 +32,6 @@ position = Vector2(1232, -976)
 
 [node name="Final" parent="." instance=ExtResource("7_ykscy")]
 position = Vector2(272, -1584)
+
+[node name="Island" parent="." instance=ExtResource("8_vgavg")]
+position = Vector2(1616, -1360)

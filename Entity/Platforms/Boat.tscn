@@ -26,3 +26,9 @@ shape = SubResource("RectangleShape2D_prfgr")
 scale = Vector2(0.5, 0.5)
 texture = ExtResource("2_kfohi")
 flip_h = true
+
+[node name="AnchorL" type="Marker2D" parent="."]
+position = Vector2(-16, 0)
+
+[node name="AnchorR" type="Marker2D" parent="."]
+position = Vector2(16, 0)
