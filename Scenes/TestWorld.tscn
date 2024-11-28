@@ -11,7 +11,7 @@
 [node name="TestWorld" type="Node2D"]
 
 [node name="Player" parent="." instance=ExtResource("1_v74hx")]
-position = Vector2(384, -208)
+position = Vector2(288, -1264)
 slide_on_ceiling = false
 
 [node name="Room" parent="." instance=ExtResource("3_n7778")]
@@ -21,10 +21,10 @@ position = Vector2(16, 16)
 position = Vector2(240, -816)
 
 [node name="StarterRoom" parent="." instance=ExtResource("4_kxxct")]
-position = Vector2(1360, 400)
+position = Vector2(1520, 560)
 
 [node name="Guantlet_0" parent="." instance=ExtResource("5_vb720")]
-position = Vector2(1264, -80)
+position = Vector2(1424, 80)
 
 [node name="Connector_2" parent="." instance=ExtResource("6_gpn3j")]
 position = Vector2(1232, -976)
