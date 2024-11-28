@@ -11,7 +11,7 @@
 [node name="TestWorld" type="Node2D"]
 
 [node name="Player" parent="." instance=ExtResource("1_v74hx")]
-position = Vector2(272, -1424)
+position = Vector2(384, -208)
 slide_on_ceiling = false
 
 [node name="Room" parent="." instance=ExtResource("3_n7778")]

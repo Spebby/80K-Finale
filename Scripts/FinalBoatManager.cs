@@ -1,17 +1,20 @@
 using Godot;
 
 public partial class FinalBoatManager : Path2D, IPauseable, ITimeShiftable {
-	[Export] MovingObject boat;
+	[Export] PackedScene boatScene;
+	MovingObject boat;
 	[Export] float speedMultipler = 1f;
 	bool isFutureRef;
-	float orgSpeedMult;
+	float oldSpeed;
 
 	Player player;
 	public override async void _Ready() {
-		orgSpeedMult   = speedMultipler;
-		speedMultipler = 0;
+		boat           =  boatScene.Instantiate<MovingObject>();
+		boat.Speed     *= speedMultipler;
+		oldSpeed       =  boat.Speed;
+		boat.Speed     =  0;
+		speedMultipler =  0;
 		GD.Randomize();
-		boat.Speed *= speedMultipler;
 		AddChild(boat);
 		boat.TimeShiftChange(isFutureRef);
 		
@@ -24,8 +27,7 @@ public partial class FinalBoatManager : Path2D, IPauseable, ITimeShiftable {
 		this.player = player;
 		player.EnteredPlatform(boat);
 		player.Pause();
-		speedMultipler                 =  orgSpeedMult;
-		boat.Speed                     *= speedMultipler;
+		boat.Speed = oldSpeed;
 		
 		// unsubscribe from future events so we can't retrigger start sequence.
 		boat.GetCollider().BodyEntered -= StartSequence;
@@ -33,8 +35,7 @@ public partial class FinalBoatManager : Path2D, IPauseable, ITimeShiftable {
 
 	void EndSequence() {
 		player.Unpause();
-		speedMultipler =  0;
-		boat.Speed     *= speedMultipler;
+		boat.Speed = 0;
 	}
 
 	public void TimeShiftChange(bool isFuture) {

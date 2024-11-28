@@ -156,18 +156,24 @@ public partial class Player : CharacterBody2D, IPauseable {
 		return true;
 	}
 
-	public void EnteredPlatform(MovingObject platform) {
+	IPlatform _platform;
+	public void EnteredPlatform(IPlatform platform) {
 		//await ToSignal(this, SignalName.PlayerNotMoving);
 		if (_platform != null) return;
 		PlayStepAudio(platformSFX);
-		_platform  =  platform;
-		platform.Moved += OnPlatformMoved;
+		_platform =  platform;
+		if (platform is MovingObject obj) {
+			obj.Moved += OnPlatformMoved;
+		}
 	}
 
 	// if make enteredplatform async again, add signal to this function so we don't get as many weird interleavings
-	public void ExitPlatform(MovingObject platform) {
+	public void ExitPlatform(IPlatform platform) {
 		if (_platform == platform) {
-			_platform.Moved -= OnPlatformMoved;
+			if (_platform is MovingObject obj) {
+				obj.Moved -= OnPlatformMoved;
+			}
+
 			_platform       =  null;
 		}
 	}
@@ -183,7 +189,6 @@ public partial class Player : CharacterBody2D, IPauseable {
 		_sprite.Play();
 	}
 
-	MovingObject _platform;
 	void OnPlatformMoved(Vector2 mov) {
 		if (moving) return;
 		GlobalPosition += mov;

@@ -198,6 +198,7 @@ position = Vector2(-0.000104396, 32)
 
 [node name="TimePiece" parent="." instance=ExtResource("11_3hacx")]
 position = Vector2(80, -688)
+_layer = 1
 
 [node name="PAST_OBJECTS" type="Node2D" parent="."]
 metadata/_edit_lock_ = true

@@ -5,7 +5,7 @@
 [ext_resource type="Texture2D" uid="uid://cu80jpa33fuer" path="res://Entity/Platforms/FuturePlatform1.bmp" id="3_tigxe"]
 [ext_resource type="Texture2D" uid="uid://dmqqqxvxrydxt" path="res://Entity/Platforms/boat2.png" id="4_yo3hr"]
 
-[sub_resource type="RectangleShape2D" id="RectangleShape2D_prfgr"]
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_ce7ru"]
 size = Vector2(64, 26)
 
 [node name="Boat" type="PathFollow2D" node_paths=PackedStringArray("Bounds")]
@@ -21,7 +21,7 @@ collision_layer = 2
 collision_mask = 2
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Bounds"]
-shape = SubResource("RectangleShape2D_prfgr")
+shape = SubResource("RectangleShape2D_ce7ru")
 
 [node name="Sprite2D" type="Sprite2D" parent="."]
 scale = Vector2(0.5, 0.5)

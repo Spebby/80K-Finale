@@ -2,6 +2,9 @@
 
 public partial class Pickup : Area2D {
 	AudioStreamPlayer2D _player;
+	[Export] BitEventChannel onPickup;
+	[Export(PropertyHint.Layers2DPhysics)] uint _layer { get; set; } = 0;
+	
 	public override void _Ready() {
 		_player     ??= GetNode<AudioStreamPlayer2D>("AudioStreamPlayer2D");
 		BodyEntered +=  Area2D_BodyEntered;
@@ -11,6 +14,7 @@ public partial class Pickup : Area2D {
 		if (body is not Player player) return;
 		
 		_player?.Play();
-		Hide();
+		onPickup.TriggerEvent(_layer);
+		QueueFree();
 	}
 }

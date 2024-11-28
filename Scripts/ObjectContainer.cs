@@ -6,7 +6,11 @@ public partial class ObjectContainer : Resource {
 	[Export] Array<PackedScene> Container;
 	
 	public PackedScene Get(int index) => this[index];
-	public PackedScene GetRandom() => this[(int)GD.Randi() % Count()];
+	public PackedScene GetRandom() {
+		Random random      = new Random();
+		int    randomIndex = random.Next(Count());
+		return this[randomIndex];
+	}
 
 	public PackedScene this[int index] {
 		get {

@@ -1,6 +1,6 @@
 ﻿using Godot;
 
-public partial class MovingObject : PathFollow2D, ITimeShiftable, IPauseable {
+public partial class MovingObject : PathFollow2D, IPlatform, ITimeShiftable, IPauseable {
 	[ExportGroup("Object Settings")]
 	const float TOLERANCE = 0.1f;
 	[Export] public float Speed = 32f;
@@ -13,9 +13,7 @@ public partial class MovingObject : PathFollow2D, ITimeShiftable, IPauseable {
 
 	[Signal] public delegate void MovedEventHandler(Vector2 mov);
 	[Signal] public delegate void OnProgressCompleteEventHandler();
-
-	bool canBeStoodOn;
-
+	
 	public override void _Ready() {
 		Bounds    ??= GetNode<Area2D>("Bounds");
 		spriteRef   = GetNode<Sprite2D>("Sprite2D");
@@ -24,6 +22,8 @@ public partial class MovingObject : PathFollow2D, ITimeShiftable, IPauseable {
 			Bounds.BodyEntered += StandingOn;
 			Bounds.BodyExited  += NotStandingOn;
 		}
+
+		ProgressRatio = 0.001f;
 
 		prevPos = Position;
 	}
@@ -34,7 +34,7 @@ public partial class MovingObject : PathFollow2D, ITimeShiftable, IPauseable {
 	Vector2 prevPos;
 	public override void _PhysicsProcess(double delta) {
 		ProgressRatio += (float)delta * Speed * progress * 0.175f;
-		if (ProgressRatio is >= 1.0f or <= 0f) {
+		if (ProgressRatio is >= 1.0f or <= 0) {
 			EmitSignal(SignalName.OnProgressComplete);
 			if (!Loop) {
 				progress = -progress;

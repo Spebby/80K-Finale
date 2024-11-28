@@ -1,4 +1,4 @@
-[gd_scene load_steps=13 format=4 uid="uid://dhw0334v7pmxq"]
+[gd_scene load_steps=12 format=4 uid="uid://dhw0334v7pmxq"]
 
 [ext_resource type="Script" path="res://Scripts/Room.cs" id="1_7tbsu"]
 [ext_resource type="Texture2D" uid="uid://o20aq1o4bdfb" path="res://PastTileset.png" id="2_iol0f"]
@@ -8,7 +8,6 @@
 [ext_resource type="Texture2D" uid="uid://df5txc44qbnkn" path="res://Entity/Platforms/Vehicle_Past.png" id="8_ylevl"]
 [ext_resource type="Texture2D" uid="uid://c3ed7pvi8rpru" path="res://Entity/CtrlPrompt.png" id="9_0xkqp"]
 [ext_resource type="Script" path="res://Scripts/Checkpoint.cs" id="10_auo4u"]
-[ext_resource type="PackedScene" uid="uid://bvomsu52de8ng" path="res://Entity/time_piece.tscn" id="11_8vd0h"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_uwl4j"]
 size = Vector2(544, 512)
@@ -71,9 +70,6 @@ scale = Vector2(5, 5)
 shape = SubResource("RectangleShape2D_agoa4")
 
 [node name="RespawnPoint" type="Marker2D" parent="Checkpoints/Checkpoint_0"]
-
-[node name="TimePiece" parent="." instance=ExtResource("11_8vd0h")]
-position = Vector2(113, -206)
 
 [node name="PAST_OBJECTS" type="Node2D" parent="."]
 metadata/_edit_lock_ = true

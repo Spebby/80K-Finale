@@ -1,7 +1,8 @@
-[gd_scene load_steps=5 format=3 uid="uid://bvomsu52de8ng"]
+[gd_scene load_steps=6 format=3 uid="uid://bvomsu52de8ng"]
 
 [ext_resource type="Script" path="res://Scripts/Pickup.cs" id="1_qcn10"]
 [ext_resource type="AudioStream" uid="uid://bnrbsymeux0qw" path="res://Audio/PickupTime.wav" id="2_6u58u"]
+[ext_resource type="Resource" uid="uid://b6r1y62dhajbv" path="res://Scenes/OnTimePieceCollect.tres" id="2_vl0jy"]
 [ext_resource type="SpriteFrames" uid="uid://ds1tm6vnr5kjo" path="res://Hourglass.tres" id="3_l2m6i"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_ma3bu"]
@@ -10,6 +11,7 @@ size = Vector2(32, 32)
 [node name="TimePiece" type="Area2D"]
 collision_layer = 0
 script = ExtResource("1_qcn10")
+onPickup = ExtResource("2_vl0jy")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
 position = Vector2(1, 0)

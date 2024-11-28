@@ -1,4 +1,4 @@
-[gd_scene load_steps=19 format=4 uid="uid://bj20fq6xks87p"]
+[gd_scene load_steps=21 format=4 uid="uid://bj20fq6xks87p"]
 
 [ext_resource type="Script" path="res://Scripts/Room.cs" id="1_f2w6f"]
 [ext_resource type="Texture2D" uid="uid://o20aq1o4bdfb" path="res://PastTileset.png" id="2_q3qdm"]
@@ -10,7 +10,10 @@
 [ext_resource type="Resource" uid="uid://ij18v8xdbwpk" path="res://Entity/VehicleCollection.tres" id="8_pi50p"]
 [ext_resource type="Script" path="res://Scripts/Checkpoint.cs" id="10_vccjg"]
 [ext_resource type="PackedScene" uid="uid://bvomsu52de8ng" path="res://Entity/time_piece.tscn" id="11_yydfo"]
-[ext_resource type="Texture2D" uid="uid://dkeoykq3vjrur" path="res://TestPallete.png" id="12_re1xl"]
+[ext_resource type="Script" path="res://Scripts/Platform.cs" id="12_g7v3k"]
+[ext_resource type="Texture2D" uid="uid://c4k5meaq5r1g3" path="res://Entity/Platforms/FuturePlatform3.bmp" id="12_q61yb"]
+[ext_resource type="Script" path="res://Scenes/PieceBridge.cs" id="12_siffr"]
+[ext_resource type="Resource" uid="uid://b6r1y62dhajbv" path="res://Scenes/OnTimePieceCollect.tres" id="13_d34is"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_uwl4j"]
 size = Vector2(752, 992)
@@ -30,11 +33,7 @@ size = Vector2(12.8, 22.8)
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_ldceg"]
 size = Vector2(32, 17.8)
 
-[sub_resource type="RectangleShape2D" id="RectangleShape2D_lfv4g"]
-size = Vector2(558.546, 204.8)
-
-[sub_resource type="RectangleShape2D" id="RectangleShape2D_w6g0i"]
-size = Vector2(128, 64)
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_fmofs"]
 
 [node name="TallRoom" type="Area2D" node_paths=PackedStringArray("PAST_OBJECT_REFERENCE", "FUTURE_OBJECT_REFERENCE", "MiscTimeShifters")]
 collision_layer = 16
@@ -138,32 +137,64 @@ visible = false
 position = Vector2(113, -208)
 
 [node name="PAST_OBJECTS" type="Node2D" parent="."]
-visible = false
 metadata/_edit_lock_ = true
-
-[node name="Area2D" type="Area2D" parent="PAST_OBJECTS"]
-position = Vector2(0, -64)
-scale = Vector2(0.34375, 0.3125)
-
-[node name="CollisionShape2D" type="CollisionShape2D" parent="PAST_OBJECTS/Area2D"]
-shape = SubResource("RectangleShape2D_lfv4g")
-
-[node name="Sprite2D" type="Sprite2D" parent="PAST_OBJECTS/Area2D"]
-position = Vector2(0, 1.90735e-05)
-scale = Vector2(1.09091, 0.8)
-texture = ExtResource("2_q3qdm")
 
 [node name="FUTURE_OBJECTS" type="Node2D" parent="."]
-visible = false
 metadata/_edit_lock_ = true
 
-[node name="Area2D" type="Area2D" parent="FUTURE_OBJECTS"]
-position = Vector2(80, 80)
+[node name="Bridge" type="Node2D" parent="."]
+script = ExtResource("12_siffr")
+offByDefault = true
+Channel = ExtResource("13_d34is")
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="FUTURE_OBJECTS/Area2D"]
-position = Vector2(-16, -16)
-shape = SubResource("RectangleShape2D_w6g0i")
+[node name="Piece0" type="Area2D" parent="Bridge"]
+position = Vector2(48, -272)
+collision_layer = 2
+collision_mask = 2
+script = ExtResource("12_g7v3k")
+staticSprite = true
 
-[node name="Sprite2D" type="Sprite2D" parent="FUTURE_OBJECTS/Area2D"]
-position = Vector2(-16, -16)
-texture = ExtResource("12_re1xl")
+[node name="Sprite2D" type="Sprite2D" parent="Bridge/Piece0"]
+texture = ExtResource("12_q61yb")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Bridge/Piece0"]
+shape = SubResource("RectangleShape2D_fmofs")
+
+[node name="Piece1" type="Area2D" parent="Bridge"]
+position = Vector2(48, -304)
+collision_layer = 2
+collision_mask = 2
+script = ExtResource("12_g7v3k")
+staticSprite = true
+
+[node name="Sprite2D" type="Sprite2D" parent="Bridge/Piece1"]
+texture = ExtResource("12_q61yb")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Bridge/Piece1"]
+shape = SubResource("RectangleShape2D_fmofs")
+
+[node name="Piece2" type="Area2D" parent="Bridge"]
+position = Vector2(48, -336)
+collision_layer = 2
+collision_mask = 2
+script = ExtResource("12_g7v3k")
+staticSprite = true
+
+[node name="Sprite2D" type="Sprite2D" parent="Bridge/Piece2"]
+texture = ExtResource("12_q61yb")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Bridge/Piece2"]
+shape = SubResource("RectangleShape2D_fmofs")
+
+[node name="Piece3" type="Area2D" parent="Bridge"]
+position = Vector2(48, -368)
+collision_layer = 2
+collision_mask = 2
+script = ExtResource("12_g7v3k")
+staticSprite = true
+
+[node name="Sprite2D" type="Sprite2D" parent="Bridge/Piece3"]
+texture = ExtResource("12_q61yb")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Bridge/Piece3"]
+shape = SubResource("RectangleShape2D_fmofs")
