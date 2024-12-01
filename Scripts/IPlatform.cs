@@ -1,5 +1,5 @@
 ﻿using Godot;
 
 public interface IPlatform {
-    public Vector2 GetClosestAnchor(Vector2 pos);
+    public Marker2D GetClosestAnchor(Vector2 pos);
 }

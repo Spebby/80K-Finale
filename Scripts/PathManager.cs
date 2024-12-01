@@ -15,6 +15,9 @@ public partial class PathManager : Path2D, IPauseable, ITimeShiftable {
 		GD.Randomize();
 		objectPool = new MovingObject[count];
 		for (int i = 0; i < count; i++) {
+			await ToSignal(GetTree().CreateTimer(interval), "timeout");
+			GD.Print($"Waited for {interval} seconds.");
+			
 			objectPool[i] = vehicles.GetRandom().Instantiate<MovingObject>();
 			if (!overrideLoopBehavior && !objectPool[i].Loop && count > 1) {
 				GD.PrintErr($"{this.Name} - Path Manager does not support ping-pong behaviour with more than 1 Moving Object. Object {objectPool[i]}; {objectPool[i].Name} responsible.");
@@ -27,10 +30,6 @@ public partial class PathManager : Path2D, IPauseable, ITimeShiftable {
 			objectPool[i].Speed *= speedMultipler;
 			AddChild(objectPool[i]);
 			objectPool[i].TimeShiftChange(isFutureRef);
-
-			if (!(interval > 0) || i == count - 1) continue;
-			await ToSignal(GetTree().CreateTimer(interval), "timeout");
-			GD.Print($"Waited for {interval} seconds.");
 		}
 	}
 

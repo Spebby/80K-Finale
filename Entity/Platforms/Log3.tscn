@@ -5,7 +5,7 @@
 [ext_resource type="Texture2D" uid="uid://4ysduxx8k6s0" path="res://Entity/Platforms/Log3.bmp" id="4_i7g6i"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_prfgr"]
-size = Vector2(16, 16)
+size = Vector2(22, 16)
 
 [node name="Boat" type="PathFollow2D" node_paths=PackedStringArray("Bounds")]
 loop = false
@@ -28,3 +28,8 @@ texture = ExtResource("4_i7g6i")
 flip_h = true
 
 [node name="Anchor" type="Marker2D" parent="."]
+
+[node name="Timer" type="Timer" parent="."]
+one_shot = true
+
+[connection signal="timeout" from="Timer" to="." method="OnExitDelayTimeout"]

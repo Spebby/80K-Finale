@@ -60,7 +60,8 @@ public partial class Player : CharacterBody2D, IPauseable {
 	[ExportGroup("Event Channels")]
 	[Export] EventChannel OnPlayerDeath;
 	[Export] BoolEventChannel OnTimeShift;
-	
+
+	Timer _deathTimer;
 	public override void _Ready() {
 		_nextMove         = GlobalPosition;
 		_sprite.Animation = "Idle";
@@ -70,6 +71,8 @@ public partial class Player : CharacterBody2D, IPauseable {
 		//_sprite.SetSpriteFrames(PAST_SPRITE);
 		_ray         = GetNode<RayCast2D>("RayCast2D");
 		_ray.Enabled = true;
+		_deathTimer  = GetNode<Timer>("DeathTimer");
+
 		if (OnPlayerDeath == null) {
 			throw new Exception($"{Name} -- OnPlayerDeath Event Channel not configured!");
 		}
@@ -140,8 +143,9 @@ public partial class Player : CharacterBody2D, IPauseable {
 
 		// platform shouldn't affect us while we're moving
 		moving = true;
-		SetAnimationState(AnimationState.Moving);
 		SetCollision(false);
+		
+		SetAnimationState(AnimationState.Moving);
 		PlayStepAudio(groundSFX);
 		// will eventually need to revise this code to be more consistent when players jump while moving
 		// some frogger games can be pretty inconsistent w/ this so we'll want to make sure we have it down.
@@ -157,27 +161,37 @@ public partial class Player : CharacterBody2D, IPauseable {
 	}
 
 	IPlatform _platform;
-	public void EnteredPlatform(IPlatform platform) {
-		if (_platform != null || platform is not Node2D plat) return; 
+	public void EnteredPlatform(IPlatform platform, Vector2 anchor) {
+		if (_platform != null) return;
+		
+		//GD.Print("On Platform");
+		_platform      = platform;
+		GlobalPosition = anchor;
+		_nextMove      = anchor;
 		PlayStepAudio(platformSFX);
-		_platform = platform;
-		_nextMove = platform.GetClosestAnchor(_nextMove);
 		if (platform is MovingObject obj) {
 			obj.Moved += OnPlatformMoved;
 		}
 	}
+	
+	// It may make more sense to simply snap frog to anchor every frame instead of incrementally moving...
+	// examine based on our needs.
 
 	// if make enteredplatform async again, add signal to this function so we don't get as many weird interleavings
 	public void ExitPlatform(IPlatform platform) {
-		if (_platform == platform) {
-			if (_platform is MovingObject obj) {
-				obj.Moved -= OnPlatformMoved;
-			}
+		if (_platform != platform) return;
+		if (_platform is MovingObject obj) obj.Moved -= OnPlatformMoved;
+		//GD.Print("Left");
 
-			_platform       =  null;
-		}
+		_platform = null;
 	}
 
+	void OnPlatformMoved(Vector2 mov) {
+		if (moving) return;
+		GlobalPosition += mov;
+		_nextMove      += mov;
+	}
+	
 	void SetAnimationState(AnimationState state) {
 		// ReSharper disable once ArrangeMethodOrOperatorBody
 		_sprite.Animation = state switch {
@@ -187,12 +201,6 @@ public partial class Player : CharacterBody2D, IPauseable {
 		};
 
 		_sprite.Play();
-	}
-
-	void OnPlatformMoved(Vector2 mov) {
-		if (moving) return;
-		GlobalPosition += mov;
-		_nextMove      += mov;
 	}
 	
 	void ShiftTime() {
@@ -237,6 +245,7 @@ public partial class Player : CharacterBody2D, IPauseable {
 		// update this check to account for being moved by a platform
 		// get position
 		if (GlobalPosition.DistanceTo(_nextMove) < TOLERANCE) {
+			//GD.Print("start of");
 			if (ShouldIDie) {
 				Kill();
 				return;
@@ -248,6 +257,7 @@ public partial class Player : CharacterBody2D, IPauseable {
 			if (!UpdateMovementVector()) {
 				SetCollision(true);
 				moving = false;
+				//GD.Print("Re-enabled Collision");
 			}
 		}
 
@@ -271,14 +281,25 @@ public partial class Player : CharacterBody2D, IPauseable {
 		_sprite.Play();
 	}
 
-	// KILL THE FROG!
+	bool waiting;
 	public void Kill() {
+		if (waiting) return;
+
+		waiting = true;
+		_deathTimer.Start();
+	}
+	
+	// KILL THE FROG!
+	public void KillTimer() {
+		waiting = false;
+		if (!ShouldIDie) return;
 		GD.Print("I should be dead right now!");
 		markedForDeath = false;
+		_platform      = null;
+		moving         = false;
 		OnPlayerDeath.TriggerEvent();
 		_nextMove      = checkpoint.GlobalPosition;
 		GlobalPosition = checkpoint.GlobalPosition;
-		moving         = false;
 		SetCollision(true);
 	}
 

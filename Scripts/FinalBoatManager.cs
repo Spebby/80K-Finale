@@ -25,7 +25,7 @@ public partial class FinalBoatManager : Path2D, IPauseable, ITimeShiftable {
 	void StartSequence(Node2D body) {
 		if (body is not Player player) return;
 		this.player = player;
-		player.EnteredPlatform(boat);
+		player.EnteredPlatform(boat, GlobalPosition);
 		player.Pause();
 		boat.Speed = oldSpeed;
 		

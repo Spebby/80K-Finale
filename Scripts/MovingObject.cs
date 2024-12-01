@@ -16,7 +16,9 @@ public partial class MovingObject : PathFollow2D, IPlatform, ITimeShiftable, IPa
 	[Signal] public delegate void MovedEventHandler(Vector2 mov);
 	[Signal] public delegate void OnProgressCompleteEventHandler();
 
+	Marker2D markerOfInterest;
 	List<Marker2D> _anchors;
+	Timer exitTimer;
 	public override void _Ready() {
 		Bounds    ??= GetNode<Area2D>("Bounds");
 		spriteRef   = GetNode<Sprite2D>("Sprite2D");
@@ -28,13 +30,22 @@ public partial class MovingObject : PathFollow2D, IPlatform, ITimeShiftable, IPa
 		
 		_anchors = GetChildren().OfType<Marker2D>().ToList();
 
-		ProgressRatio = 0.001f;
-		prevPos       = Position;
+		ProgressRatio    = 0.001f;
+		if (_anchors.Count == 0) {
+			markerOfInterest                = new Marker2D();
+			markerOfInterest.GlobalPosition = GlobalPosition;
+		} else {
+			markerOfInterest = _anchors[0];
+		}
+		prevPos = markerOfInterest.GlobalPosition;
+
+		exitTimer = GetNode<Timer>("Timer");
 	}
 	
 	public void TimeShiftChange(bool isFuture) => spriteRef.SetTexture(isFuture ? FUTURE_SPRITE : PAST_SPRITE);
 
 	float progress = 1f;
+	// when player 
 	Vector2 prevPos;
 	public override void _PhysicsProcess(double delta) {
 		ProgressRatio += (float)delta * Speed * progress * 0.175f;
@@ -45,18 +56,41 @@ public partial class MovingObject : PathFollow2D, IPlatform, ITimeShiftable, IPa
 			}
 		}
 
-		EmitSignal(SignalName.Moved, GlobalPosition - prevPos);
-		prevPos = GlobalPosition;
+		EmitSignal(SignalName.Moved, markerOfInterest.GlobalPosition - prevPos);
+		prevPos = markerOfInterest.GlobalPosition;
 	}
 
 	void StandingOn(Node2D body) {
 		if (body is not Player player) return;
-		player.EnteredPlatform(this);
+		markerOfInterest = GetClosestAnchor(player.GlobalPosition);
+		prevPos          = markerOfInterest.GlobalPosition;
+		player.EnteredPlatform(this, markerOfInterest.GlobalPosition);
 	}
 
+	Player exitingPlayer;
 	void NotStandingOn(Node2D body) {
 		if (body is not Player player) return;
-		player.ExitPlatform(this);
+		exitingPlayer = player;
+		exitTimer.Start();
+	}
+
+	void OnExitDelayTimeout() {
+		GD.Print("Ooops");
+		if (!IsPlayerOnPlatform(exitingPlayer)) {
+			exitingPlayer.ExitPlatform(this);
+		}
+	}
+	
+	bool IsPlayerOnPlatform(Player player) {
+		if (Bounds == null) return false;
+
+		CollisionShape2D collisionShape = Bounds.GetNode<CollisionShape2D>("CollisionShape2D");
+		if (collisionShape?.Shape is RectangleShape2D rectShape) {
+			// Get the extents of the rectangle shape
+			return rectShape.GetRect().HasPoint(player.GlobalPosition);
+		}
+
+		return false;
 	}
 
 	public void Pause() {
@@ -71,21 +105,19 @@ public partial class MovingObject : PathFollow2D, IPlatform, ITimeShiftable, IPa
 		SetProcessUnhandledInput(true);
 	}
 
-	public Vector2 GetClosestAnchor(Vector2 pos) {
-		return GlobalPosition;
-		// Everything below works but it's too unstable right now.
-		
+	public Marker2D GetClosestAnchor(Vector2 pos) {
 		if (_anchors.Count == 0) {
 			GD.PrintErr($"No anchors defined for {Name}. Falling back on global position.");
-			return GlobalPosition;
+			return markerOfInterest;
 		}
-		Vector2 closest                = _anchors[0].GlobalPosition;
-		float   closestDistanceSquared = pos.DistanceSquaredTo(closest);
+		
+		Marker2D closest                = _anchors[0];
+		float   closestDistanceSquared = pos.DistanceSquaredTo(closest.GlobalPosition);
 
 		foreach (var anchor in _anchors) {
 			float distanceSquared = pos.DistanceSquaredTo(anchor.GlobalPosition);
 			if (distanceSquared < closestDistanceSquared) {
-				closest                = anchor.GlobalPosition;
+				closest                = anchor;
 				closestDistanceSquared = distanceSquared;
 			}
 		}

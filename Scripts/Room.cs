@@ -9,7 +9,7 @@ public partial class Room : Area2D, ITimeShiftable, IPauseable {
     // the player camera will interpolate its position from the closest anchor in
     // the old room to the closest anchor in the new room.
     List<IPauseable> Pauseables;
-    CollisionShape2D bounds;
+    CollisionShape2D Bounds;
 
     [ExportGroup("Time Shift Settings")]
     Node2D TILESETS;
@@ -47,7 +47,7 @@ public partial class Room : Area2D, ITimeShiftable, IPauseable {
 
 
         TILESETS                   =  GetNode<Node2D>("Tilesets");
-        bounds                     =  GetNode<CollisionShape2D>("Bounds");
+        Bounds                     =  GetNode<CollisionShape2D>("Bounds");
         onTimeShift.OnEventTrigger += TimeShiftChange;
         BodyEntered                += Area2D_BodyEntered;
         
@@ -103,13 +103,13 @@ public partial class Room : Area2D, ITimeShiftable, IPauseable {
         }
     }
 
-    public Vector2 GetDiagonal() => bounds.Shape.GetRect().Size;
-    public Vector2 GetHalfDiagonal() => bounds.Shape.GetRect().End;
+    public Vector2 GetDiagonal() => Bounds.Shape.GetRect().Size;
+    public Vector2 GetHalfDiagonal() => Bounds.Shape.GetRect().End;
 
     public void Pause() => Pauseables.ForEach(p => p.Pause());
     public void Unpause() => Pauseables.ForEach(p => p.Unpause());
 
-    public new Vector2 GetGlobalPosition() => bounds.GlobalPosition;
+    public new Vector2 GetGlobalPosition() => Bounds.GlobalPosition;
     
     /// <summary>
     /// Returns Cardinal Bounds of the Room's bounds in order Top, Bottom, Left, Right. Useful for setting camera boundries.

@@ -5,7 +5,7 @@
 [ext_resource type="Texture2D" uid="uid://cu80jpa33fuer" path="res://Entity/Platforms/FuturePlatform1.bmp" id="3_a8aw7"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_prfgr"]
-size = Vector2(64, 16)
+size = Vector2(68, 16)
 
 [node name="Boat" type="PathFollow2D" node_paths=PackedStringArray("Bounds")]
 loop = false
@@ -32,3 +32,8 @@ position = Vector2(-16, 0)
 
 [node name="AnchorR" type="Marker2D" parent="."]
 position = Vector2(16, 0)
+
+[node name="Timer" type="Timer" parent="."]
+one_shot = true
+
+[connection signal="timeout" from="Timer" to="." method="OnExitDelayTimeout"]
