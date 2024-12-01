@@ -25,7 +25,7 @@ size = Vector2(80, 56)
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_00a10"]
 size = Vector2(80, 56)
 
-[node name="Connector_2" type="Area2D" node_paths=PackedStringArray("PAST_OBJECT_REFERENCE", "FUTURE_OBJECT_REFERENCE", "MiscTimeShifters")]
+[node name="Connector_2" type="Area2D" node_paths=PackedStringArray("PAST_OBJECT_REFERENCE", "FUTURE_OBJECT_REFERENCE")]
 collision_layer = 16
 collision_mask = 16
 script = ExtResource("1_1rp3e")
@@ -33,11 +33,10 @@ PAST_TILESET = ExtResource("2_aas30")
 FUTURE_TILESET = ExtResource("3_34sm5")
 PAST_OBJECT_REFERENCE = NodePath("PAST_OBJECTS")
 FUTURE_OBJECT_REFERENCE = NodePath("FUTURE_OBJECTS")
-MiscTimeShifters = [NodePath("MovingPlatforms/Wagon")]
 onTimeShift = ExtResource("4_m5lnm")
 
 [node name="Bounds" type="CollisionShape2D" parent="."]
-position = Vector2(-64, 48)
+position = Vector2(-64, 47)
 shape = SubResource("RectangleShape2D_uwl4j")
 debug_color = Color(0.395669, 0.469853, 1, 0.42)
 
@@ -76,6 +75,7 @@ interval = 3.5
 overrideLoopBehavior = true
 Loop = true
 speedMultipler = 1.5
+metadata/IsTimeShiftable = false
 
 [node name="PAST_OBJECTS" type="Node2D" parent="."]
 metadata/_edit_lock_ = true

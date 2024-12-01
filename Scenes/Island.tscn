@@ -79,7 +79,7 @@ size = Vector2(120, 672)
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_634n0"]
 size = Vector2(96, 608)
 
-[node name="Island" type="Area2D" node_paths=PackedStringArray("PAST_OBJECT_REFERENCE", "FUTURE_OBJECT_REFERENCE", "MiscTimeShifters")]
+[node name="Island" type="Area2D" node_paths=PackedStringArray("PAST_OBJECT_REFERENCE", "FUTURE_OBJECT_REFERENCE")]
 collision_layer = 16
 collision_mask = 16
 script = ExtResource("1_1qrab")
@@ -87,7 +87,6 @@ PAST_TILESET = ExtResource("2_fiu1g")
 FUTURE_TILESET = ExtResource("3_lxqmj")
 PAST_OBJECT_REFERENCE = NodePath("PAST_OBJECTS")
 FUTURE_OBJECT_REFERENCE = NodePath("FUTURE_OBJECTS")
-MiscTimeShifters = [NodePath("MovingPlatforms/Circuit"), NodePath("MovingPlatforms/BoatPath0"), NodePath("MovingPlatforms/BoatPath1"), NodePath("MovingPlatforms/BoatPath2"), NodePath("MovingPlatforms/BoatPath3"), NodePath("MovingPlatforms/BoatPath4"), NodePath("MovingPlatforms/BoatPath5"), NodePath("MovingPlatforms/BoatPath6"), NodePath("MovingPlatforms/BoatPath7"), NodePath("MovingPlatforms/BoatPath8")]
 onTimeShift = ExtResource("4_muds1")
 
 [node name="Bounds" type="CollisionShape2D" parent="."]

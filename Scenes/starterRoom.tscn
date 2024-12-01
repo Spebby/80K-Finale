@@ -18,7 +18,7 @@ size = Vector2(44.8, 32)
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_lfv4g"]
 size = Vector2(170.667, 96)
 
-[node name="StarterRoom" type="Area2D" node_paths=PackedStringArray("PAST_OBJECT_REFERENCE", "FUTURE_OBJECT_REFERENCE", "MiscTimeShifters")]
+[node name="StarterRoom" type="Area2D" node_paths=PackedStringArray("PAST_OBJECT_REFERENCE", "FUTURE_OBJECT_REFERENCE")]
 collision_layer = 16
 collision_mask = 16
 script = ExtResource("1_7tbsu")
@@ -26,7 +26,6 @@ PAST_TILESET = ExtResource("2_iol0f")
 FUTURE_TILESET = ExtResource("3_80c4c")
 PAST_OBJECT_REFERENCE = NodePath("PAST_OBJECTS")
 FUTURE_OBJECT_REFERENCE = NodePath("FUTURE_OBJECTS")
-MiscTimeShifters = []
 onTimeShift = ExtResource("4_lkk8o")
 metadata/_edit_horizontal_guides_ = [176.0]
 

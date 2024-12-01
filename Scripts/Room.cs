@@ -21,7 +21,6 @@ public partial class Room : Area2D, ITimeShiftable, IPauseable {
     List<Node> PastObjects;
     List<Node> FutureObjects;
 
-    [Export] Array<Node2D> MiscTimeShifters;
     List<ITimeShiftable> SwapPalette;
 
     [ExportGroup("Event Groups")]
@@ -29,17 +28,14 @@ public partial class Room : Area2D, ITimeShiftable, IPauseable {
 
     public override void _Ready() {
         SwapPalette = new List<ITimeShiftable>();
-        GD.Print(MiscTimeShifters);
-        foreach (var node in MiscTimeShifters) {
-            if (node is ITimeShiftable timeShiftableNode) {
-                GD.Print(node.Name, timeShiftableNode);
-                SwapPalette.Add(timeShiftableNode);
-                continue;
-            }
-            GD.PrintErr($"{Name} - Error: Node {node.Name} does not implement ITimeShiftable.");
-            throw new InvalidOperationException($"Node {node.Name} does not implement ITimeShiftable.");
+        InitSwapPalette(this);
+        string s = "[";
+        foreach (Node node in SwapPalette) {
+            s += node.Name + ' ';
         }
-        
+        s += "]";
+        GD.Print(s);
+
         Pauseables = new List<IPauseable>();
         Pauseables.AddRange(GetNodeOrNull<MovingPlatformManager>("MovingPlatforms")?
                             .GetChildren()
@@ -59,6 +55,17 @@ public partial class Room : Area2D, ITimeShiftable, IPauseable {
         
         if (TILESETS == null) {
             GD.PrintErr($"{this.Name} is missing child 'Tileset'!");
+        }
+    }
+
+    void InitSwapPalette(Node parent) {
+        foreach (Node child in parent.GetChildren()) {
+            if (child is ITimeShiftable timeShiftable) {
+                SwapPalette.Add(timeShiftable);
+            }
+
+            // Recursively call the method for each child node
+            InitSwapPalette(child);
         }
     }
 

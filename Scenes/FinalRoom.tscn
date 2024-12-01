@@ -40,7 +40,7 @@ _data = {
 }
 point_count = 2
 
-[node name="Final" type="Area2D" node_paths=PackedStringArray("PAST_OBJECT_REFERENCE", "FUTURE_OBJECT_REFERENCE", "MiscTimeShifters")]
+[node name="Final" type="Area2D" node_paths=PackedStringArray("PAST_OBJECT_REFERENCE", "FUTURE_OBJECT_REFERENCE")]
 collision_layer = 16
 collision_mask = 16
 script = ExtResource("1_yp7es")
@@ -48,7 +48,6 @@ PAST_TILESET = ExtResource("2_m5rwl")
 FUTURE_TILESET = ExtResource("3_572ct")
 PAST_OBJECT_REFERENCE = NodePath("PAST_OBJECTS")
 FUTURE_OBJECT_REFERENCE = NodePath("FUTURE_OBJECTS")
-MiscTimeShifters = [NodePath("MovingPlatforms/Vehicle"), NodePath("MovingPlatforms/Vehicle2"), NodePath("MovingPlatforms/Vehicle3"), NodePath("MovingPlatforms/BoatPath0"), NodePath("MovingPlatforms/BoatPath1"), NodePath("MovingPlatforms/BoatPath2"), NodePath("MovingPlatforms/BoatPath3"), NodePath("MovingPlatforms/BoatPath4"), NodePath("MovingPlatforms/FinalBoat")]
 onTimeShift = ExtResource("4_c04v8")
 
 [node name="Bounds" type="CollisionShape2D" parent="."]
