@@ -9,13 +9,12 @@
 size = Vector2(114, 60)
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_lmths"]
-size = Vector2(118, 52)
+size = Vector2(128, 52)
 
-[node name="Vehicle" type="PathFollow2D" node_paths=PackedStringArray("Bounds")]
+[node name="Vehicle" type="PathFollow2D"]
 loop = false
 script = ExtResource("1_s81nj")
 Speed = 1.0
-Bounds = NodePath("Collision")
 PAST_SPRITE = ExtResource("2_whid8")
 FUTURE_SPRITE = ExtResource("3_6k4y3")
 

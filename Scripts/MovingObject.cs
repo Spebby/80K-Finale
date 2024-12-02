@@ -20,7 +20,7 @@ public partial class MovingObject : PathFollow2D, IPlatform, ITimeShiftable, IPa
 	List<Marker2D> _anchors;
 	Timer exitTimer;
 	public override void _Ready() {
-		Bounds    ??= GetNode<Area2D>("Bounds");
+		Bounds    ??= GetNodeOrNull<Area2D>("Bounds");
 		spriteRef   = GetNode<Sprite2D>("Sprite2D");
 		// Sometimes we want platforms that *cant* be stood on, so we'll allow this behaviour.
 		if (Bounds != null) {
@@ -106,7 +106,7 @@ public partial class MovingObject : PathFollow2D, IPlatform, ITimeShiftable, IPa
 	}
 
 	public Marker2D GetClosestAnchor(Vector2 pos) {
-		if (_anchors.Count == 0) {
+		if (_anchors.Count == 0 || Bounds == null) {
 			GD.PrintErr($"No anchors defined for {Name}. Falling back on global position.");
 			return markerOfInterest;
 		}

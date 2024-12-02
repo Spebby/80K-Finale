@@ -285,15 +285,16 @@ public partial class Player : CharacterBody2D, IPauseable {
 	public void Kill() {
 		if (waiting) return;
 
-		waiting = true;
+		waiting             =  true;
+		_deathTimer.Timeout += () => KillTimer(true);
 		_deathTimer.Start();
 	}
 	
 	// KILL THE FROG!
-	public void KillTimer() {
+	public void KillTimer(bool bypass) {
 		waiting = false;
-		if (!ShouldIDie) return;
-		GD.Print("I should be dead right now!");
+		if (!ShouldIDie && !bypass) return;
+		GD.PrintErr("I should be dead right now!");
 		markedForDeath = false;
 		_platform      = null;
 		moving         = false;

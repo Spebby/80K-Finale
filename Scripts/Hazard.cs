@@ -7,6 +7,7 @@ public partial class Hazard : Area2D {
 
 	void Area2D_BodyEntered(Node2D body) {
 		if (body is not Player player) return;
-		player.Kill();
+		GD.PrintErr("Wooo");
+		player.KillTimer(true);
 	}
 }
