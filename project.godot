@@ -10,10 +10,11 @@ config_version=5
 
 [application]
 
-config/name="80K Finale"
+config/name="Back to the Frog"
 run/main_scene="res://Scenes/TestWorld.tscn"
 config/features=PackedStringArray("4.3", "C#", "Forward Plus")
-config/icon="res://icon.svg"
+config/icon="res://AppIcon.png"
+config/windows_native_icon="res://AppIcon256.ico"
 
 [display]
 
