@@ -1,4 +1,4 @@
-[gd_scene load_steps=19 format=4 uid="uid://nbk5lm3mtlv3"]
+[gd_scene load_steps=23 format=4 uid="uid://nbk5lm3mtlv3"]
 
 [ext_resource type="Script" path="res://Scripts/Room.cs" id="1_yp7es"]
 [ext_resource type="Texture2D" uid="uid://o20aq1o4bdfb" path="res://PastTileset.png" id="2_m5rwl"]
@@ -12,6 +12,8 @@
 [ext_resource type="Resource" uid="uid://cp0ydq576hgc4" path="res://Entity/WaterCollection.tres" id="9_srhuf"]
 [ext_resource type="Script" path="res://Scripts/FinalBoatManager.cs" id="11_r5aqg"]
 [ext_resource type="PackedScene" uid="uid://cdqxa7xr75y28" path="res://Entity/Platforms/BoatFinal.tscn" id="12_148s8"]
+[ext_resource type="Texture2D" uid="uid://yp6vgkxkw73c" path="res://credits.png" id="13_l2n3i"]
+[ext_resource type="Script" path="res://Scripts/Hazard.cs" id="14_d0vvs"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_uwl4j"]
 size = Vector2(512, 1728)
@@ -39,6 +41,12 @@ _data = {
 "points": PackedVector2Array(0, 0, 0, 0, -304, -1.00001, 0, 0, 0, 0, 48, -0.999998)
 }
 point_count = 2
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_8i788"]
+size = Vector2(87.9999, 1312)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_35yod"]
+size = Vector2(88, 1344)
 
 [node name="Final" type="Area2D" node_paths=PackedStringArray("PAST_OBJECT_REFERENCE", "FUTURE_OBJECT_REFERENCE")]
 collision_layer = 16
@@ -207,3 +215,23 @@ rotation = -1.5708
 curve = SubResource("Curve2D_rv0wp")
 script = ExtResource("11_r5aqg")
 boatScene = ExtResource("12_148s8")
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+position = Vector2(0, -1192)
+scale = Vector2(0.75, 0.75)
+texture = ExtResource("13_l2n3i")
+metadata/_edit_group_ = true
+
+[node name="KillZone" type="Area2D" parent="."]
+rotation = 1.5708
+script = ExtResource("14_d0vvs")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="KillZone"]
+position = Vector2(-912, -308)
+rotation = 1.5708
+shape = SubResource("RectangleShape2D_8i788")
+
+[node name="CollisionShape2D2" type="CollisionShape2D" parent="KillZone"]
+position = Vector2(-896, 308)
+rotation = 1.5708
+shape = SubResource("RectangleShape2D_35yod")

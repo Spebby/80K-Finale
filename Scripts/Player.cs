@@ -294,6 +294,8 @@ public partial class Player : CharacterBody2D, IPauseable {
 	public void KillTimer(bool bypass) {
 		waiting = false;
 		if (!ShouldIDie && !bypass) return;
+		if (_platform is MovingObject plat) plat.Moved -= OnPlatformMoved;
+		
 		GD.PrintErr("I should be dead right now!");
 		markedForDeath = false;
 		_platform      = null;

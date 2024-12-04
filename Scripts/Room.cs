@@ -81,6 +81,7 @@ public partial class Room : Area2D, ITimeShiftable, IPauseable {
     public void TimeShiftChange(bool isFuture) {
         CompressedTexture2D newSet = isFuture ? FUTURE_TILESET : PAST_TILESET;
         SetTilesets(newSet);
+        GD.PrintErr(Name);
         foreach (Node2D node in PastObjects) {
             node.Visible = !isFuture;
             node.SetProcessMode(!isFuture  ? ProcessModeEnum.Inherit : ProcessModeEnum.Disabled);

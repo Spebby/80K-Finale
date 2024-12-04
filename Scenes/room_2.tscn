@@ -1,0 +1,275 @@
+[gd_scene load_steps=27 format=4 uid="uid://b825x5oti1hk4"]
+
+[ext_resource type="Script" path="res://Scripts/Room.cs" id="1_rrnh3"]
+[ext_resource type="Texture2D" uid="uid://o20aq1o4bdfb" path="res://PastTileset.png" id="2_qkm0a"]
+[ext_resource type="Texture2D" uid="uid://bh741o7rtt1r3" path="res://FutureTileset.png" id="3_ukrj2"]
+[ext_resource type="Resource" uid="uid://3vu64pc40tin" path="res://Scenes/OnTimeShift.tres" id="4_lqcal"]
+[ext_resource type="TileSet" uid="uid://bly4ojx5jnbn8" path="res://Tileset.tres" id="5_cy80s"]
+[ext_resource type="Script" path="res://Scripts/MovingPlatformManager.cs" id="6_0ii5g"]
+[ext_resource type="Script" path="res://Scripts/PathManager.cs" id="7_0bfor"]
+[ext_resource type="Resource" uid="uid://ij18v8xdbwpk" path="res://Entity/VehicleCollection.tres" id="8_orlsp"]
+[ext_resource type="Resource" uid="uid://6incnm885h52" path="res://Entity/BoatCollection.tres" id="9_rwhqk"]
+[ext_resource type="Script" path="res://Scripts/Checkpoint.cs" id="10_tx03u"]
+[ext_resource type="PackedScene" uid="uid://bvomsu52de8ng" path="res://Entity/time_piece.tscn" id="11_0sgiw"]
+[ext_resource type="Script" path="res://Scripts/Hazard.cs" id="12_1blbq"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_uwl4j"]
+size = Vector2(1216, 384)
+
+[sub_resource type="Curve2D" id="Curve2D_4lvk8"]
+_data = {
+"points": PackedVector2Array(0, 0, 0, 0, -600, 0, 0, 0, 0, 0, 600, 0)
+}
+point_count = 2
+
+[sub_resource type="Curve2D" id="Curve2D_qgdhx"]
+_data = {
+"points": PackedVector2Array(0, 0, 0, 0, -72, -0.000183105, 0, 0, 0, 0, 144, 0)
+}
+point_count = 2
+
+[sub_resource type="Curve2D" id="Curve2D_mesv6"]
+_data = {
+"points": PackedVector2Array(0, 0, 0, 0, -72, -0.000259399, 0, 0, 0, 0, 144, 0.000518799)
+}
+point_count = 2
+
+[sub_resource type="Curve2D" id="Curve2D_jhuvt"]
+_data = {
+"points": PackedVector2Array(0, 0, 0, 0, -71.9998, 64.0003, 0, 0, 0, 0, -72, 0.000259399, 0, 0, 0, 0, 104, 0)
+}
+point_count = 3
+
+[sub_resource type="Curve2D" id="Curve2D_0b3x5"]
+_data = {
+"points": PackedVector2Array(0, 0, 0, 0, -72, -0.000183105, 0, 0, 0, 0, 144, 0)
+}
+point_count = 2
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_lqoda"]
+size = Vector2(30.5, 80)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_y0fa3"]
+size = Vector2(126.5, 64)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_wm45k"]
+size = Vector2(31.25, 96)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_sd55k"]
+size = Vector2(16, 64)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_nccfi"]
+size = Vector2(16, 16)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_ej5wc"]
+size = Vector2(31.25, 72)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_462ib"]
+size = Vector2(96, 960)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_qd7g7"]
+size = Vector2(96, 384)
+
+[node name="Room_2" type="Area2D" node_paths=PackedStringArray("PAST_OBJECT_REFERENCE", "FUTURE_OBJECT_REFERENCE")]
+collision_layer = 16
+collision_mask = 16
+script = ExtResource("1_rrnh3")
+PAST_TILESET = ExtResource("2_qkm0a")
+FUTURE_TILESET = ExtResource("3_ukrj2")
+PAST_OBJECT_REFERENCE = NodePath("PAST_OBJECTS")
+FUTURE_OBJECT_REFERENCE = NodePath("FUTURE_OBJECTS")
+onTimeShift = ExtResource("4_lqcal")
+
+[node name="Bounds" type="CollisionShape2D" parent="."]
+position = Vector2(-160, -64)
+shape = SubResource("RectangleShape2D_uwl4j")
+debug_color = Color(0.395669, 0.469853, 1, 0.42)
+
+[node name="Tilesets" type="Node2D" parent="."]
+metadata/_edit_lock_ = true
+
+[node name="Ground" type="TileMapLayer" parent="Tilesets"]
+tile_map_data = PackedByteArray("AAANAAAAAAACAAYAAAANAP3/AAACAAUAAAAMAP3/AAABAAUAAAALAP3/AAAIAAEAAAAMAAAAAAABAAYAAAAKAAAAAAAIAAMAAAALAAAAAAACAAYAAAAKAAEAAAAIAAIAAAALAAEAAAAAAAUAAAAMAAEAAAAAAAUAAAANAAEAAAAAAAUAAAAJAAAAAAAHAAIAAAAJAP//AAAHAAIAAAAJAP7/AAAHAAIAAAAHAPv/AAAHAAIAAAAHAPr/AAAHAAIAAAAHAPn/AAAHAAIAAAAJAPz/AAAIAAMAAAAIAPv/AAAKAAMAAAAIAPr/AAAEAAIAAAAJAPv/AAAAAAIAAFAKAPv/AAAGAAEAAFALAPv/AAAJAAIAAAALAPz/AAAHAAEAAAAKAP3/AAAGAAAAAAAKAP7/AAAGAAEAAAAKAP//AAAGAAIAAAAKAPz/AAAJAAAAAAAJAP3/AAAJAAIAAAAIAPz/AAAJAAIAAAAIAP3/AAAIAAEAAAAHAPz/AAAIAAEAAAAJAAEAAAAIAAEAAAAMAP7/AAAAAAAAAAAMAP//AAAAAAEAAAANAP7/AAABAAAAAAANAP//AAABAAEAAAALAP7/AAACAAAAAAALAP//AAAFAAEAAAAMAPz/AAAIAAMAAAAJAPr/AAAIAAMAAAAJAPn/AAAJAAAAAAAIAPn/AAAAAAYAAAAKAPr/AAAAAAYAAAALAPr/AAAAAAYAAAANAPz/AAAAAAYAAAAMAPv/AAAGAAIAAAAMAPr/AAAJAAAAAAD///z/AAAGAAIAAAD///v/AAAGAAIAAAD///r/AAAGAAIAAAD///n/AAAGAAIAAAD///j/AAAGAAIAAAD+//z/AAAJAAIAAAD+//v/AAAJAAMAAAD+//r/AAAHAAIAAAD+//n/AAAHAAIAAAD+//j/AAAHAAIAAAD///3/AAAIAAMAAAAAAAAAAAAIAAMAAAAAAAEAAAAFAAMAAAD///7/AAAJAAIAAAD+//7/AAAGAAQAAAD+//3/AAAHAAEAAAD/////AAAHAAEAAAD//wAAAAAHAAEAAAD//wEAAAAAAAIAAGD//wIAAAAAAAUAAAAAAAIAAAAAAAUAAAABAAIAAAAAAAUAAAABAAEAAAAGAAIAAAABAAAAAAAJAAAAAAAAAP3/AAAJAAAAAAAAAP7/AAAGAAIAAAAAAP//AAAGAAIAAAD9////AAAAAAAAAAD9/wAAAAAAAAEAAAD+////AAABAAAAAAD+/wAAAAABAAEAAAD7//7/AAAAAAAAAGD7//3/AAACAAUAAAD8//7/AAAAAAEAAGD8//3/AAABAAUAAAD7/wEAAAABAAEAAFD7/wAAAAABAAEAAAD8/wEAAAAIAAAAAAD8/wAAAAAAAAAAAFD6/wAAAAAAAAEAAAD6////AAAAAAAAAAD7////AAABAAAAAAD8////AAAFAAEAAAD9/wEAAAABAAYAAAD+/wEAAAACAAYAAAD9/wIAAAAIAAIAAAD8/wIAAAAJAAMAAAD7/wIAAAACAAYAAAD6/wIAAAABAAYAAAD6/wEAAAAFAAEAAAD9//7/AAAFAAEAAAD9//3/AAAJAAEAAAD9//z/AAAIAAIAAAD6//3/AAABAAUAAAD6//7/AAAFAAEAAAD8//z/AAAJAAMAAAD8//v/AAAIAAAAAAD9//v/AAABAAYAAAD7//z/AAAAAAYAAAD6//z/AAAIAAMAAAD6/wMAAAAAAAUAAAD7/wMAAAAAAAUAAAD8/wMAAAAAAAUAAAD9/wMAAAAJAAEAAAD+/wIAAAAAAAUAAAD4//3/AAAAAAAAAAD4//7/AAAAAAEAAAD5//3/AAAIAAEAAAD5//7/AAABAAEAAAD2////AAAAAAAAAAD2/wAAAAAAAAEAAAD3////AAABAAAAAAD3/wAAAAABAAEAAAD0//3/AAAAAAAAAAD0//7/AAAAAAEAAAD1//3/AAABAAAAAAD1//7/AAABAAEAAADy////AAAAAAAAAADy/wAAAAAJAAAAAADz////AAABAAAAAADz/wAAAAABAAEAAADw//3/AAABAAUAAADw//7/AAAAAAEAAADx//3/AAACAAUAAADx//7/AAABAAEAAADu/wAAAAAAAAEAAADv////AAABAAAAAADv/wAAAAAIAAAAAADu/wIAAAAIAAMAAADv/wIAAAAJAAMAAADt//z/AAAIAAIAAADv//z/AAAJAAIAAADv//3/AAAIAAEAAADw//z/AAAIAAMAAADr/wAAAAAJAAMAAADs//3/AAAJAAMAAADt/wIAAAAJAAIAAADw/wEAAAAIAAIAAADx/wEAAAAJAAIAAADx//z/AAAJAAMAAADs//v/AAAIAAAAAADr//3/AAAIAAAAAADq/wAAAAAIAAAAAADq/wIAAAAIAAEAAADw//v/AAAJAAAAAADr/wIAAAAAAAUAAADs/wIAAAAAAAUAAADq/wEAAAAHAAIAAADr////AAAHAAIAAADr//7/AAAHAAIAAADs//z/AAAHAAIAAADt//v/AAAAAAYAAADu//v/AAAAAAYAAADv//v/AAAAAAYAAADx//v/AAAHAAIAAADx//r/AAAHAAIAAADx//n/AAAHAAIAAADx//j/AAAHAAIAAAD6//v/AAAGAAIAAAD6//r/AAAGAAIAAAD6//n/AAAGAAIAAAD6//j/AAAGAAIAAAD5//r/AAAHAAIAAAD5//v/AAAHAAEAAAD5//z/AAAHAAEAAAD5//j/AAAHAAAAAAD5//n/AAAHAAEAAADy//n/AAAGAAAAAADy//r/AAAGAAEAAADy//v/AAAGAAIAAADy//z/AAAGAAAAAADy//j/AAAGAAAAAADy//3/AAAJAAEAAADw/wAAAAABAAYAAADx/wAAAAACAAYAAADv/wEAAAAHAAEAAADu/wEAAAAJAAAAAADr/wEAAAADAAMAAADs/wEAAAAJAAUAAADt/wEAAAABAAYAAADs////AAAGAAAAAADs/wAAAAAGAAEAAADs//7/AAAIAAIAAADt//3/AAAGAAEAAADu//z/AAACAAUAAADt//7/AAAJAAEAAADt////AAAAAAEAAADt/wAAAAAFAAEAAADu//3/AAACAAAAAADu//7/AAAFAAEAAADv//7/AAAFAAEAAADw////AAAFAAEAAADx////AAAFAAEAAADy//7/AAAFAAEAAADy/wEAAAAGAAEAAADy/wIAAAAGAAAAAADy/wMAAAAGAAEAAADw/wIAAAAGAAIAAADx/wIAAAAHAAIAAADw/wMAAAAGAAIAAADx/wMAAAAHAAIAAADt/wMAAAAIAAEAAADu/wMAAAAAAAUAAADv/wMAAAAAAAUAAAD1/wIAAAAAAAAAAGD1/wEAAAABAAAAAGD2/wIAAAAAAAEAAGD2/wEAAAABAAEAAGD2//r/AAABAAEAAFD2//n/AAAAAAEAAFD3//r/AAABAAAAAFD3//n/AAAAAAAAAFDz//n/AAAAAAEAAADz//j/AAAAAAAAAAD0//n/AAABAAEAAAD0//j/AAABAAAAAAD0//v/AAACAAEAAAD3//7/AAADAAEAAADz/wIAAAADAAAAAGDz/wEAAAAFAAEAAAD0/wEAAAAFAAEAAAD0////AAAFAAEAAAD1////AAAFAAEAAAD1/wAAAAAFAAEAAADz//3/AAAFAAEAAADz//z/AAAFAAEAAAD2//3/AAAFAAEAAAD3//3/AAAFAAEAAADz//r/AAAFAAEAAAD0//r/AAAFAAEAAAD1//r/AAAFAAEAAAD1//v/AAAFAAEAAAD2//v/AAAFAAEAAAD3//v/AAAFAAEAAAD4//j/AAAFAAEAAAD3//j/AAAFAAEAAAD2//j/AAAFAAEAAAD4//n/AAAFAAEAAAD4//r/AAAFAAEAAAD4//v/AAAFAAEAAAD1//z/AAAFAAEAAAD2//z/AAAFAAEAAAD3//z/AAAFAAEAAAD4//z/AAAFAAEAAAD4/wAAAAAFAAEAAAD5/wAAAAACAAEAADD5/wEAAAAFAAEAAAD4/wEAAAAFAAEAAAD4/wIAAAAFAAEAAAD2/wMAAAAFAAEAAAD1/wMAAAAFAAEAAAD0/wMAAAAFAAEAAAD4/wMAAAAFAAEAAAD5/wMAAAAFAAEAAAD3/wIAAAAFAAEAAAD3/wMAAAABAAEAAADz//7/AAABAAEAAADz//v/AAABAAEAAGD0//z/AAAAAAEAAAD1//j/AAAAAAEAAGD1//n/AAAAAAEAADD4////AAAAAAEAAFD5////AAAAAAEAAAD2//7/AAAAAAEAAAD3/wEAAAAAAAAAAGDz/wMAAAABAAAAAAD0/wAAAAAAAAEAAAD0/wIAAAAAAAEAAGD5/wIAAAAAAAEAADDu////AAAAAAAAAAA=")
+tile_set = ExtResource("5_cy80s")
+rendering_quadrant_size = 32
+collision_enabled = false
+metadata/_edit_lock_ = true
+
+[node name="Water" type="TileMapLayer" parent="Tilesets"]
+tile_map_data = PackedByteArray("AAAKAAEAAAANAAMAAAAJAAEAAAAOAAcAAAAJAAAAAAAOAAQAAAAJAP//AAAOAAQAAAAJAP7/AAAOAAQAAAAJAP3/AAAOAAMAAAAHAPr/AAAOAAQAAAAHAPv/AAAOAAQAAAAIAP3/AAAOAAcAAAAIAPz/AAAOAAMAAAAHAPz/AAAOAAcAAAAHAPn/AAAOAAYAAAAKAAIAAAANAAQAAAAJAAIAAAANAAQAAAAIAAIAAAANAAQAAAAHAAIAAAANAAQAAAAGAAIAAAANAAQAAAAFAAIAAAANAAQAAAAFAAEAAAANAAQAAAAGAAEAAAANAAQAAAAHAAEAAAANAAQAAAAIAAEAAAANAAQAAAAIAAAAAAANAAQAAAAIAP//AAANAAQAAAAIAP7/AAANAAQAAAAHAP7/AAANAAQAAAAGAP7/AAANAAQAAAAFAP7/AAANAAQAAAAFAP//AAANAAQAAAAFAAAAAAANAAQAAAAGAAAAAAANAAQAAAAHAAAAAAANAAQAAAAHAP//AAANAAQAAAAGAP//AAANAAQAAAAFAPv/AAANAAQAAAAFAPr/AAANAAQAAAAFAPn/AAANAAQAAAAGAPn/AAANAAQAAAAGAPr/AAANAAQAAAAGAPv/AAANAAQAAAAGAPz/AAANAAQAAAAGAP3/AAANAAQAAAAFAP3/AAANAAQAAAAFAPz/AAANAAQAAAAHAP3/AAANAAQAAAAEAPr/AAANAAQAAAADAPr/AAANAAQAAAADAPn/AAANAAQAAAAEAPn/AAANAAQAAAADAPv/AAANAAQAAAADAPz/AAANAAQAAAAEAPv/AAANAAQAAAAEAPz/AAANAAQAAAAEAP3/AAANAAQAAAAEAAIAAAANAAQAAAAIAPn/AAANAAUAAAD///v/AAAMAAQAAAD///z/AAAMAAQAAAD///3/AAAMAAUAAAAAAP3/AAAPAAYAAAAAAP7/AAAMAAQAAAAAAP//AAAMAAQAAAAAAAAAAAAMAAUAAAABAAAAAAAPAAYAAAABAAEAAAAMAAQAAAABAAIAAAAMAAQAAAACAAIAAAANAAQAAAADAAIAAAANAAQAAAAEAAEAAAANAAQAAAAEAAAAAAANAAQAAAADAAAAAAANAAQAAAADAAEAAAANAAQAAAACAAEAAAANAAQAAAACAAAAAAANAAQAAAACAP//AAANAAQAAAABAP//AAANAAQAAAABAP7/AAANAAQAAAABAP3/AAANAAQAAAABAPz/AAANAAQAAAABAPv/AAANAAQAAAACAPv/AAANAAQAAAAAAPv/AAANAAQAAAAAAPz/AAANAAQAAAACAPz/AAANAAQAAAACAP3/AAANAAQAAAACAP7/AAANAAQAAAADAP//AAANAAQAAAAEAP//AAANAAQAAAAEAP7/AAANAAQAAAADAP3/AAANAAQAAAADAP7/AAANAAQAAAACAPr/AAANAAQAAAABAPr/AAANAAQAAAAAAPr/AAANAAQAAAAAAPn/AAANAAQAAAABAPn/AAANAAQAAAACAPn/AAANAAQAAAD///r/AAAMAAQAAAD///n/AAAMAAQAAAD///j/AAAMAAQAAAABAPj/AAANAAQAAAACAPj/AAANAAQAAAADAPj/AAANAAQAAAAEAPj/AAANAAQAAAAFAPj/AAANAAQAAAAGAPj/AAANAAQAAAAHAPj/AAANAAQAAAAIAPj/AAANAAQAAAAAAPj/AAANAAQAAAAJAPn/AAANAAQAAAAJAPj/AAANAAQAAAA=")
+tile_set = ExtResource("5_cy80s")
+metadata/_edit_lock_ = true
+metadata/KillPlayer = false
+
+[node name="Wall" type="TileMapLayer" parent="Tilesets"]
+tile_map_data = PackedByteArray("AAAKAAEAAAALAAQAAAAMAPz/AAALAAQAAGAJAPr/AAALAAQAAGAMAPr/AAALAAUAAFAMAPv/AAAJAAcAAFAKAPr/AAAIAAcAAAALAPr/AAAJAAcAAAALAAEAAAAKAAcAADAMAAEAAAAJAAcAADANAAEAAAAIAAcAADAIAAIAAAAKAAcAADAJAAIAAAAJAAcAADAKAAIAAAALAAUAADAFAAIAAAALAAUAAGAGAAIAAAAJAAcAADAHAAIAAAAIAAcAADACAAEAAAAKAAcAADADAAEAAAAJAAcAADAEAAEAAAAIAAcAADAFAAEAAAALAAQAAFAJAPn/AAAKAAcAAFAEAAIAAAAKAAUAAAADAAIAAAAKAAUAAAACAAIAAAAKAAUAAAALAAIAAAAKAAUAAAAMAAIAAAAKAAUAAAANAAIAAAAKAAUAAAANAPv/AAAKAAUAAAANAPr/AAAKAAUAAAANAPn/AAAKAAUAAAAMAPn/AAAKAAUAAAALAPn/AAAKAAUAAAAKAPn/AAAKAAUAAAACAAMAAAAKAAUAAAADAAMAAAAKAAUAAAAEAAMAAAAKAAUAAAAFAAMAAAAKAAUAAAAGAAMAAAAKAAUAAAAHAAMAAAAKAAUAAAAIAAMAAAAKAAUAAAAJAAMAAAAKAAUAAAAKAAMAAAAKAAUAAAALAAMAAAAKAAUAAAAMAAMAAAAKAAUAAAANAAMAAAAKAAUAAAANAPj/AAAKAAUAAAAMAPj/AAAKAAUAAAALAPj/AAAKAAUAAAAKAPj/AAAKAAUAAAAJAPj/AAAJAAcAAFABAAMAAAAKAAUAAAAAAAMAAAAKAAUAAAD//wMAAAAKAAUAAAABAAEAAAALAAQAAAD//wIAAAAJAAcAADAAAAIAAAAIAAcAADABAAIAAAALAAUAADD8//v/AAALAAUAAAD9//v/AAAJAAcAAAD+//v/AAALAAQAADD6//z/AAALAAQAAGD7//z/AAAJAAcAAAD8//z/AAALAAQAADANAPz/AAAJAAcAAAD+//n/AAAKAAcAAGD+//j/AAAJAAcAAGD+//r/AAAJAAcAAGD6/wMAAAALAAQAAAD7/wMAAAAJAAcAADD8/wMAAAAIAAcAADD+/wIAAAAJAAcAADD9/wMAAAALAAUAADD9/wIAAAALAAQAAAD+/wMAAAAKAAUAAAD7//v/AAAKAAUAAAD6//v/AAAKAAcAAFD6//r/AAAJAAcAAFD7//r/AAAKAAUAAAD8//r/AAAKAAUAAAD9//r/AAAKAAUAAAD9//n/AAAKAAUAAAD8//n/AAAKAAUAAAD7//n/AAAKAAUAAAD6//n/AAAIAAcAAFD6//j/AAAKAAUAAAD9//j/AAAKAAUAAAD8//j/AAAKAAUAAAD7//j/AAAKAAUAAADx//z/AAALAAQAADDx//v/AAAJAAcAAGDx//r/AAAKAAcAAGDx/wMAAAAIAAcAAGDx/wIAAAAJAAcAAGDx/wEAAAALAAQAAFDw/wIAAAAJAAcAAFDw/wMAAAALAAUAADDw//v/AAALAAUAAFDw//r/AAAKAAUAAADw//n/AAAKAAUAAADw//j/AAAKAAUAAADv//j/AAAKAAUAAADv//n/AAAKAAUAAADv//r/AAAKAAUAAADv//v/AAAKAAcAAADu//v/AAAJAAcAAADt//v/AAAIAAcAAADt//r/AAAKAAUAAADt//n/AAAKAAUAAADu//n/AAAKAAUAAADu//j/AAAKAAUAAADu//r/AAAKAAUAAADt//j/AAAKAAUAAADs//3/AAALAAQAADDr/wAAAAALAAQAADDt/wIAAAALAAQAAFDq/wIAAAALAAUAAGDr/wIAAAAJAAcAADDs/wIAAAAIAAcAADDq/wMAAAAKAAUAAADq/wEAAAAKAAcAAGDr////AAAIAAcAAGDr//7/AAAJAAcAAGDr//3/AAALAAUAAADs//z/AAAIAAcAAGDs//v/AAALAAUAAADs//r/AAAKAAUAAADt/wMAAAALAAUAAGDu/wMAAAAJAAcAADDv/wMAAAAIAAcAADDw/wEAAAALAAQAAADq/wAAAAALAAUAAADs//n/AAAKAAUAAADs//j/AAAKAAUAAADr//j/AAAKAAUAAADr//n/AAAKAAUAAADs/wMAAAAKAAUAAADr/wMAAAAKAAUAAADp/wMAAAAKAAUAAADp/wIAAAAKAAUAAADp/wEAAAAKAAUAAADp/wAAAAAKAAUAAADp////AAAKAAUAAADo/wMAAAAKAAUAAADo/wIAAAAKAAUAAADo/wEAAAAKAAUAAADo/wAAAAAKAAUAAADo////AAAKAAUAAADq////AAAKAAUAAADq//7/AAAKAAUAAADq//3/AAAKAAUAAADp//3/AAAKAAUAAADo//7/AAAKAAUAAADp//7/AAAKAAUAAADo//3/AAAKAAUAAADo//z/AAAKAAUAAADp//z/AAAKAAUAAADp//v/AAAKAAUAAADq//z/AAAKAAUAAADr//z/AAAKAAUAAADq//v/AAAKAAUAAADo//v/AAAKAAUAAADr//v/AAAKAAUAAADr//r/AAAKAAUAAADq//r/AAAKAAUAAADp//r/AAAKAAUAAADo//r/AAAKAAUAAADo//n/AAAKAAUAAADp//n/AAAKAAUAAADp//j/AAAKAAUAAADq//j/AAAKAAUAAADq//n/AAAKAAUAAADo//j/AAAKAAUAAADw//z/AAALAAQAAGDx//n/AAAJAAcAAGDx//j/AAAKAAcAAGA=")
+tile_set = ExtResource("5_cy80s")
+metadata/_edit_lock_ = true
+
+[node name="MovingPlatforms" type="Node2D" parent="."]
+script = ExtResource("6_0ii5g")
+metadata/_edit_lock_ = true
+
+[node name="Wagon3" type="Path2D" parent="MovingPlatforms"]
+position = Vector2(-224, -8)
+rotation = 1.5708
+curve = SubResource("Curve2D_4lvk8")
+script = ExtResource("7_0bfor")
+vehicles = ExtResource("8_orlsp")
+count = 3
+interval = 3.5
+overrideLoopBehavior = true
+Loop = true
+
+[node name="Wagon2" type="Path2D" parent="MovingPlatforms"]
+position = Vector2(-320, -16)
+rotation = -1.5708
+curve = SubResource("Curve2D_4lvk8")
+script = ExtResource("7_0bfor")
+vehicles = ExtResource("8_orlsp")
+count = 2
+interval = 4.0
+overrideLoopBehavior = true
+Loop = true
+speedMultipler = 1.1
+
+[node name="Wagon" type="Path2D" parent="MovingPlatforms"]
+position = Vector2(-416, -24)
+rotation = 1.5708
+curve = SubResource("Curve2D_4lvk8")
+script = ExtResource("7_0bfor")
+vehicles = ExtResource("8_orlsp")
+count = 3
+interval = 3.5
+overrideLoopBehavior = true
+Loop = true
+
+[node name="BoatPath0" type="Path2D" parent="MovingPlatforms"]
+position = Vector2(80, -208)
+rotation = 6.28316
+curve = SubResource("Curve2D_qgdhx")
+script = ExtResource("7_0bfor")
+vehicles = ExtResource("9_rwhqk")
+count = 1
+speedMultipler = 1.5
+
+[node name="BoatPath2" type="Path2D" parent="MovingPlatforms"]
+position = Vector2(240, -144)
+rotation = -1.5708
+curve = SubResource("Curve2D_mesv6")
+script = ExtResource("7_0bfor")
+vehicles = ExtResource("9_rwhqk")
+count = 1
+speedMultipler = 1.2
+
+[node name="BoatPath3" type="Path2D" parent="MovingPlatforms"]
+position = Vector2(144, -104)
+rotation = 1.5708
+curve = SubResource("Curve2D_jhuvt")
+script = ExtResource("7_0bfor")
+vehicles = ExtResource("9_rwhqk")
+count = 1
+
+[node name="BoatPath1" type="Path2D" parent="MovingPlatforms"]
+position = Vector2(88, 16)
+curve = SubResource("Curve2D_0b3x5")
+script = ExtResource("7_0bfor")
+vehicles = ExtResource("9_rwhqk")
+count = 1
+speedMultipler = 1.5
+
+[node name="Checkpoints" type="Node2D" parent="."]
+metadata/_edit_lock_ = true
+
+[node name="Checkpoint_1" type="Area2D" parent="Checkpoints" node_paths=PackedStringArray("Point")]
+position = Vector2(352, -96)
+collision_layer = 0
+script = ExtResource("10_tx03u")
+Point = NodePath("RespawnPoint")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Checkpoints/Checkpoint_1"]
+position = Vector2(1.5, 48)
+scale = Vector2(2, 2)
+shape = SubResource("RectangleShape2D_lqoda")
+
+[node name="CollisionShape2D2" type="CollisionShape2D" parent="Checkpoints/Checkpoint_1"]
+position = Vector2(-31.25, -64)
+shape = SubResource("RectangleShape2D_y0fa3")
+
+[node name="RespawnPoint" type="Marker2D" parent="Checkpoints/Checkpoint_1"]
+position = Vector2(-80, -80)
+
+[node name="Checkpoint_2" type="Area2D" parent="Checkpoints" node_paths=PackedStringArray("Point")]
+position = Vector2(-64, -32)
+collision_layer = 0
+script = ExtResource("10_tx03u")
+Point = NodePath("RespawnPoint")
+
+[node name="RespawnPoint" type="Marker2D" parent="Checkpoints/Checkpoint_2"]
+position = Vector2(-16, 16)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Checkpoints/Checkpoint_2"]
+position = Vector2(0.75, 0)
+scale = Vector2(2, 2)
+shape = SubResource("RectangleShape2D_wm45k")
+
+[node name="CollisionShape2D2" type="CollisionShape2D" parent="Checkpoints/Checkpoint_2"]
+position = Vector2(48, 32)
+scale = Vector2(2, 2)
+shape = SubResource("RectangleShape2D_sd55k")
+
+[node name="CollisionShape2D3" type="CollisionShape2D" parent="Checkpoints/Checkpoint_2"]
+position = Vector2(80, 80)
+scale = Vector2(2, 2)
+shape = SubResource("RectangleShape2D_nccfi")
+
+[node name="Checkpoint_3" type="Area2D" parent="Checkpoints" node_paths=PackedStringArray("Point")]
+position = Vector2(-160, 0)
+collision_layer = 0
+script = ExtResource("10_tx03u")
+Point = NodePath("RespawnPoint")
+
+[node name="RespawnPoint" type="Marker2D" parent="Checkpoints/Checkpoint_3"]
+position = Vector2(16, -16)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Checkpoints/Checkpoint_3"]
+position = Vector2(0.75, 0)
+scale = Vector2(2, 2)
+shape = SubResource("RectangleShape2D_wm45k")
+
+[node name="Checkpoint_4" type="Area2D" parent="Checkpoints" node_paths=PackedStringArray("Point")]
+position = Vector2(-480, -32)
+collision_layer = 0
+script = ExtResource("10_tx03u")
+Point = NodePath("RespawnPoint")
+
+[node name="RespawnPoint" type="Marker2D" parent="Checkpoints/Checkpoint_4"]
+position = Vector2(-16, -16)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Checkpoints/Checkpoint_4"]
+position = Vector2(0.75, 0)
+scale = Vector2(2, 2)
+shape = SubResource("RectangleShape2D_ej5wc")
+
+[node name="TimePiece" parent="." instance=ExtResource("11_0sgiw")]
+position = Vector2(-560, -16)
+_layer = 8
+
+[node name="PAST_OBJECTS" type="Node2D" parent="."]
+metadata/_edit_lock_ = true
+
+[node name="FUTURE_OBJECTS" type="Node2D" parent="."]
+metadata/_edit_lock_ = true
+
+[node name="KillZone" type="Area2D" parent="."]
+script = ExtResource("12_1blbq")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="KillZone"]
+position = Vector2(-32, -304)
+rotation = 1.5708
+shape = SubResource("RectangleShape2D_462ib")
+
+[node name="CollisionShape2D2" type="CollisionShape2D" parent="KillZone"]
+position = Vector2(-320, 176)
+rotation = 1.5708
+shape = SubResource("RectangleShape2D_qd7g7")
